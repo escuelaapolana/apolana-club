@@ -267,6 +267,10 @@
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
       Fotos del club
     </button>
+    <button class="sb-item" onclick="showPanel('noticias-admin')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      Noticias
+    </button>
     <button class="sb-item" onclick="showPanel('contenido')">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
       Contenido web
@@ -658,6 +662,25 @@
         </div>
       </div>
 
+      <!-- PANEL NOTICIAS -->
+      <div class="panel" id="panel-noticias-admin">
+        <div class="table-wrap">
+          <div class="table-header">
+            <span class="table-title">Noticias</span>
+            <button class="btn btn-p" onclick="abrirModalNoticia()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Nueva noticia
+            </button>
+          </div>
+          <div style="overflow-x:auto;">
+            <table>
+              <thead><tr><th>Portada</th><th>Título</th><th>Categoría</th><th>Fecha</th><th>Estado</th><th>Acciones</th></tr></thead>
+              <tbody id="tbody-noticias"><tr><td colspan="6" class="table-empty">Cargando...</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
       <!-- PANEL CONTENIDO WEB -->
       <div class="panel" id="panel-contenido">
         <div style="font-size:0.85rem;color:var(--texto-suave);margin-bottom:1.25rem;">Edita el contenido de cada sección que aparece en la web pública. Los cambios se guardan al pulsar el botón.</div>
@@ -693,6 +716,72 @@
         </div>
       </div>
 
+    </div>
+  </div>
+</div>
+
+<!-- MODAL NOTICIA -->
+<div class="modal-overlay" id="modal-noticia">
+  <div class="modal" style="max-width:640px;">
+    <div class="modal-head">
+      <h2 id="modal-noticia-titulo">Nueva noticia</h2>
+      <button class="modal-close" onclick="cerrarModal('modal-noticia')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal-body" style="max-height:70vh;overflow-y:auto;">
+      <input type="hidden" id="n-id">
+      <div class="mf"><label>Título <span class="req">*</span></label><input type="text" id="n-titulo" placeholder="Título de la noticia"></div>
+      <div class="mf2">
+        <div class="mf"><label>Categoría</label>
+          <select id="n-categoria">
+            <option value="temporada">Temporada</option>
+            <option value="competicion">Competición</option>
+            <option value="club">Club</option>
+            <option value="actividad">Actividad</option>
+            <option value="resultado">Resultado</option>
+            <option value="otro">Otro</option>
+          </select>
+        </div>
+        <div class="mf"><label>Fecha publicación</label><input type="date" id="n-fecha"></div>
+      </div>
+      <div class="mf"><label>Resumen <span style="color:var(--texto-suave);font-weight:400;font-size:0.78rem;">(se muestra en el listado)</span></label>
+        <textarea id="n-excerpt" style="width:100%;padding:8px 10px;border:1px solid var(--gris-borde);border-radius:7px;font-size:0.87rem;min-height:70px;resize:vertical;" placeholder="Breve descripción de la noticia..."></textarea>
+      </div>
+      <div class="mf"><label>Contenido completo</label>
+        <textarea id="n-contenido" style="width:100%;padding:8px 10px;border:1px solid var(--gris-borde);border-radius:7px;font-size:0.87rem;min-height:140px;resize:vertical;" placeholder="Texto completo de la noticia..."></textarea>
+      </div>
+      <div class="mf">
+        <label>Foto de portada</label>
+        <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;">
+          <label style="display:inline-flex;align-items:center;gap:6px;padding:8px 14px;background:var(--gris);border:1px solid var(--gris-borde);border-radius:7px;cursor:pointer;font-size:0.83rem;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            Subir portada
+            <input type="file" accept="image/jpeg,image/png,image/webp" id="n-portada-input" style="display:none" onchange="seleccionarFotoNoticia(this,'portada')">
+          </label>
+          <img id="n-portada-preview" style="height:60px;border-radius:6px;display:none;object-fit:cover;" alt="">
+          <span id="n-portada-url" style="display:none;font-size:0.75rem;color:var(--exito);">✓ Foto cargada</span>
+        </div>
+      </div>
+      <div class="mf">
+        <label>Fotos del evento <span style="color:var(--texto-suave);font-weight:400;font-size:0.78rem;">(hasta 10, galería)</span></label>
+        <label style="display:inline-flex;align-items:center;gap:6px;padding:8px 14px;background:var(--gris);border:1px solid var(--gris-borde);border-radius:7px;cursor:pointer;font-size:0.83rem;margin-bottom:0.75rem;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Añadir fotos
+          <input type="file" accept="image/jpeg,image/png,image/webp" id="n-galeria-input" style="display:none" multiple onchange="seleccionarFotosGaleria(this)">
+        </label>
+        <div id="n-galeria-preview" style="display:flex;flex-wrap:wrap;gap:8px;"></div>
+      </div>
+      <div class="mf">
+        <label style="display:flex;align-items:center;gap:8px;cursor:pointer;">
+          <input type="checkbox" id="n-publicada" style="width:16px;height:16px;accent-color:var(--azul);">
+          <span style="font-size:0.85rem;">Publicar noticia (visible en la web)</span>
+        </label>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-s" onclick="cerrarModal('modal-noticia')">Cancelar</button>
+      <button class="btn btn-p" id="btn-guardar-noticia" onclick="guardarNoticia()">Guardar noticia</button>
     </div>
   </div>
 </div>
@@ -991,7 +1080,7 @@ async function doLogout() {
 // =====================
 // NAVEGACIÓN
 // =====================
-const PANEL_TITLES = { inicio:'Inicio', atletas:'Inscritos', grupos:'Grupos', prueba:'En prueba', ropa:'Control de ropa', pagos:'Pagos', fotos:'Fotos del club', eventos:'Eventos y calendario', tienda:'Tienda', usuarios:'Usuarios del sistema', contenido:'Contenido web' };
+const PANEL_TITLES = { inicio:'Inicio', atletas:'Inscritos', grupos:'Grupos', prueba:'En prueba', ropa:'Control de ropa', pagos:'Pagos', fotos:'Fotos del club', 'noticias-admin':'Noticias', eventos:'Eventos y calendario', tienda:'Tienda', usuarios:'Usuarios del sistema', contenido:'Contenido web' };
 
 function showPanel(id) {
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('activo'));
@@ -1005,6 +1094,7 @@ function showPanel(id) {
   if (id === 'ropa') cargarRopa();
   if (id === 'pagos') cargarPagos();
   if (id === 'eventos') cargarEventos();
+  if (id === 'noticias-admin') cargarNoticiasAdmin();
   if (id === 'tienda') cargarTienda();
   if (id === 'usuarios') cargarUsuarios();
 }
@@ -1305,85 +1395,292 @@ async function marcarPagado(id) {
 // FOTOS
 // =====================
 // =====================
-// FOTOS CON RECORTE
+// FOTOS CON RECORTE (CORREGIDO)
 // =====================
 let cropperInstance = null;
-let cropPendiente = { bucket: null, filename: null, slotId: null };
+let cropPendiente = { bucket: null, filename: null, slotId: null, callback: null };
 
 function subirFoto(input, bucket, filename, slotId) {
   if (!input.files[0]) return;
   const file = input.files[0];
-  // Validar formato
-  if (!file.type.startsWith('image/') || file.type === 'image/heic') {
-    alert('Por favor, usa formato JPEG o PNG. Los archivos HEIC del iPhone deben convertirse primero.');
+  if (file.type === 'image/heic' || file.name.toLowerCase().endsWith('.heic')) {
+    alert('Formato HEIC no soportado. Exporta la foto como JPEG desde Vista Previa.');
     return;
   }
-  cropPendiente = { bucket, filename, slotId };
+  cropPendiente = { bucket, filename, slotId, callback: null };
+  abrirCropper(file);
+}
+
+function abrirCropper(file) {
   const reader = new FileReader();
   reader.onload = e => {
+    // Destruir instancia anterior
+    if (cropperInstance) { try { cropperInstance.destroy(); } catch(e) {} cropperInstance = null; }
+    const overlay = document.getElementById('crop-overlay');
     const cropImg = document.getElementById('crop-img');
-    cropImg.src = e.target.result;
-    document.getElementById('crop-overlay').classList.add('v');
-    // Destruir instancia anterior si existe
-    if (cropperInstance) { cropperInstance.destroy(); cropperInstance = null; }
-    cropImg.onload = () => {
-      cropperInstance = new Cropper(cropImg, {
-        viewMode: 1,
-        autoCropArea: 1,
-        movable: true,
-        zoomable: true,
-        rotatable: false,
-        scalable: false,
-        responsive: true,
-        background: false,
-        guides: true,
-        center: true,
-      });
-    };
+    // Resetear imagen
+    cropImg.removeAttribute('src');
+    overlay.classList.add('v');
+    // Esperar a que el overlay sea visible antes de cargar la imagen
+    requestAnimationFrame(() => {
+      cropImg.src = e.target.result;
+      cropImg.onload = () => {
+        try {
+          cropperInstance = new Cropper(cropImg, {
+            viewMode: 1,
+            autoCropArea: 0.95,
+            movable: true,
+            zoomable: true,
+            rotatable: false,
+            scalable: false,
+            responsive: true,
+            background: true,
+            guides: true,
+            center: true,
+            highlight: true,
+          });
+        } catch(err) {
+          console.error('Cropper error:', err);
+          alert('Error al iniciar el editor. Intenta con otra imagen.');
+          overlay.classList.remove('v');
+        }
+      };
+    });
   };
   reader.readAsDataURL(file);
 }
 
 function cancelarRecorte() {
   document.getElementById('crop-overlay').classList.remove('v');
-  if (cropperInstance) { cropperInstance.destroy(); cropperInstance = null; }
+  if (cropperInstance) { try { cropperInstance.destroy(); } catch(e) {} cropperInstance = null; }
+  cropPendiente = { bucket: null, filename: null, slotId: null, callback: null };
 }
 
 async function confirmarRecorte() {
-  if (!cropperInstance) return;
+  if (!cropperInstance) { alert('El editor no está listo. Intenta de nuevo.'); return; }
   const btn = document.getElementById('crop-btn-confirmar');
   btn.disabled = true;
   btn.innerHTML = '<span class="spinner"></span>Subiendo...';
 
-  const canvas = cropperInstance.getCroppedCanvas({ maxWidth: 1920, maxHeight: 1080, fillColor: '#fff' });
-  const { bucket, filename, slotId } = cropPendiente;
-  const isJpg = filename.endsWith('.jpg') || filename.endsWith('.jpeg');
-  const mimeType = isJpg ? 'image/jpeg' : 'image/png';
+  try {
+    const canvas = cropperInstance.getCroppedCanvas({ maxWidth: 1920, maxHeight: 1080, fillColor: '#fff' });
+    const { bucket, filename, slotId, callback } = cropPendiente;
+    const isJpg = !filename || filename.endsWith('.jpg') || filename.endsWith('.jpeg');
+    const mimeType = isJpg ? 'image/jpeg' : 'image/png';
 
-  canvas.toBlob(async (blob) => {
-    const { error } = await db.storage.from(bucket).upload(filename, blob, { upsert: true, contentType: mimeType });
-    if (!error) {
-      const { data: urlData } = db.storage.from(bucket).getPublicUrl(filename);
-      const slot = document.getElementById(slotId);
-      if (slot) {
-        const placeholder = slot.querySelector('.img-slot-placeholder');
-        let img = slot.querySelector('img:not(.foto-preview)');
-        if (!img) {
-          img = document.createElement('img');
-          img.style.cssText = 'width:100%;height:180px;object-fit:cover;display:block;';
-          slot.insertBefore(img, placeholder);
-        }
-        img.src = urlData.publicUrl + '?t=' + Date.now();
-        if (placeholder) placeholder.style.display = 'none';
-        slot.style.borderColor = 'var(--exito)';
+    canvas.toBlob(async (blob) => {
+      if (!blob) { alert('Error al procesar la imagen.'); btn.disabled = false; btn.innerHTML = 'Subir foto recortada'; return; }
+
+      if (callback) {
+        // Modo callback (para noticias)
+        callback(blob, mimeType);
+        cancelarRecorte();
+        btn.disabled = false; btn.innerHTML = 'Subir foto recortada';
+        return;
       }
-      cancelarRecorte();
-    } else {
-      alert('Error al subir la foto: ' + error.message);
-    }
-    btn.disabled = false;
-    btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:4px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Subir foto recortada';
-  }, mimeType, 0.92);
+
+      // Modo directo (para slots de fotos)
+      const { error } = await db.storage.from(bucket).upload(filename, blob, { upsert: true, contentType: mimeType });
+      if (!error) {
+        const { data: urlData } = db.storage.from(bucket).getPublicUrl(filename);
+        const slot = document.getElementById(slotId);
+        if (slot) {
+          const placeholder = slot.querySelector('.img-slot-placeholder');
+          let img = slot.querySelector('img:not(.foto-preview)');
+          if (!img) { img = document.createElement('img'); img.style.cssText = 'width:100%;height:180px;object-fit:cover;display:block;'; slot.insertBefore(img, placeholder); }
+          img.src = urlData.publicUrl + '?t=' + Date.now();
+          if (placeholder) placeholder.style.display = 'none';
+          slot.style.borderColor = 'var(--exito)';
+        }
+        cancelarRecorte();
+      } else {
+        alert('Error al subir: ' + error.message);
+      }
+      btn.disabled = false; btn.innerHTML = 'Subir foto recortada';
+    }, mimeType, 0.92);
+  } catch(err) {
+    console.error(err);
+    alert('Error al procesar la imagen.');
+    btn.disabled = false; btn.innerHTML = 'Subir foto recortada';
+  }
+}
+
+// =====================
+// NOTICIAS ADMIN
+// =====================
+let noticiaPortadaBlob = null;
+let noticiaGaleriaBlobs = [];
+let noticiaGaleriaExistentes = [];
+
+async function cargarNoticiasAdmin() {
+  const { data } = await db.from('noticias').select('*').order('fecha_publicacion', { ascending: false });
+  const tbody = document.getElementById('tbody-noticias');
+  const CATS = { temporada:'Temporada', competicion:'Competición', club:'Club', actividad:'Actividad', resultado:'Resultado', otro:'Otro' };
+  tbody.innerHTML = data?.length ? data.map(n => `
+    <tr>
+      <td>${n.foto_portada ? `<img src="${n.foto_portada}?t=1" style="width:48px;height:36px;border-radius:5px;object-fit:cover;">` : '—'}</td>
+      <td><strong>${n.titulo}</strong><br><small style="color:var(--texto-suave);font-size:0.75rem;">${(n.excerpt||'').slice(0,60)}${n.excerpt?.length>60?'...':''}</small></td>
+      <td><span class="tag">${CATS[n.categoria]||n.categoria}</span></td>
+      <td>${n.fecha_publicacion||'—'}</td>
+      <td><span class="badge ${n.publicada?'badge-activo':'badge-pendiente'}">${n.publicada?'Publicada':'Borrador'}</span></td>
+      <td>
+        <button class="action-btn" onclick="editarNoticia('${n.id}')" title="Editar">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        </button>
+        <button class="action-btn" onclick="eliminarNoticia('${n.id}')" title="Eliminar">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg>
+        </button>
+      </td>
+    </tr>`).join('')
+    : '<tr><td colspan="6" class="table-empty">No hay noticias. Crea la primera.</td></tr>';
+}
+
+function abrirModalNoticia() {
+  noticiaPortadaBlob = null;
+  noticiaGaleriaBlobs = [];
+  noticiaGaleriaExistentes = [];
+  document.getElementById('n-id').value = '';
+  document.getElementById('n-titulo').value = '';
+  document.getElementById('n-excerpt').value = '';
+  document.getElementById('n-contenido').value = '';
+  document.getElementById('n-fecha').value = new Date().toISOString().split('T')[0];
+  document.getElementById('n-categoria').value = 'club';
+  document.getElementById('n-publicada').checked = false;
+  document.getElementById('n-portada-preview').style.display = 'none';
+  document.getElementById('n-portada-url').style.display = 'none';
+  document.getElementById('n-galeria-preview').innerHTML = '';
+  document.getElementById('modal-noticia-titulo').textContent = 'Nueva noticia';
+  document.getElementById('modal-noticia').classList.add('v');
+}
+
+async function editarNoticia(id) {
+  const { data: n } = await db.from('noticias').select('*').eq('id', id).single();
+  if (!n) return;
+  noticiaPortadaBlob = null;
+  noticiaGaleriaBlobs = [];
+  noticiaGaleriaExistentes = n.fotos_galeria || [];
+  document.getElementById('n-id').value = n.id;
+  document.getElementById('n-titulo').value = n.titulo || '';
+  document.getElementById('n-excerpt').value = n.excerpt || '';
+  document.getElementById('n-contenido').value = n.contenido || '';
+  document.getElementById('n-fecha').value = n.fecha_publicacion || '';
+  document.getElementById('n-categoria').value = n.categoria || 'club';
+  document.getElementById('n-publicada').checked = n.publicada || false;
+  // Portada existente
+  if (n.foto_portada) {
+    const prev = document.getElementById('n-portada-preview');
+    prev.src = n.foto_portada; prev.style.display = 'block';
+    document.getElementById('n-portada-url').style.display = 'inline';
+  }
+  // Galería existente
+  renderGaleriaPreview();
+  document.getElementById('modal-noticia-titulo').textContent = 'Editar noticia';
+  document.getElementById('modal-noticia').classList.add('v');
+}
+
+function seleccionarFotoNoticia(input, tipo) {
+  if (!input.files[0]) return;
+  const file = input.files[0];
+  cropPendiente = { bucket: 'noticias', filename: null, slotId: null, callback: (blob, mime) => {
+    noticiaPortadaBlob = { blob, mime };
+    const prev = document.getElementById('n-portada-preview');
+    prev.src = URL.createObjectURL(blob); prev.style.display = 'block';
+    document.getElementById('n-portada-url').style.display = 'inline';
+  }};
+  abrirCropper(file);
+}
+
+function seleccionarFotosGaleria(input) {
+  const files = Array.from(input.files).slice(0, 10 - noticiaGaleriaExistentes.length - noticiaGaleriaBlobs.length);
+  files.forEach(file => {
+    cropPendiente = { bucket: 'noticias', filename: null, slotId: null, callback: (blob, mime) => {
+      noticiaGaleriaBlobs.push({ blob, mime });
+      renderGaleriaPreview();
+    }};
+    abrirCropper(file);
+  });
+}
+
+function renderGaleriaPreview() {
+  const wrap = document.getElementById('n-galeria-preview');
+  const existentes = noticiaGaleriaExistentes.map((url, i) => `
+    <div style="position:relative;">
+      <img src="${url}" style="width:72px;height:54px;border-radius:6px;object-fit:cover;">
+      <button onclick="quitarFotoGaleriaExistente(${i})" style="position:absolute;top:-4px;right:-4px;width:18px;height:18px;border-radius:50%;background:var(--error);color:white;border:none;cursor:pointer;font-size:11px;line-height:1;display:flex;align-items:center;justify-content:center;">×</button>
+    </div>`).join('');
+  const nuevas = noticiaGaleriaBlobs.map((b, i) => `
+    <div style="position:relative;">
+      <img src="${URL.createObjectURL(b.blob)}" style="width:72px;height:54px;border-radius:6px;object-fit:cover;">
+      <button onclick="quitarFotoGaleriaNueva(${i})" style="position:absolute;top:-4px;right:-4px;width:18px;height:18px;border-radius:50%;background:var(--error);color:white;border:none;cursor:pointer;font-size:11px;line-height:1;display:flex;align-items:center;justify-content:center;">×</button>
+    </div>`).join('');
+  wrap.innerHTML = existentes + nuevas;
+  if (!existentes && !nuevas) wrap.innerHTML = '<span style="font-size:0.8rem;color:var(--texto-suave);">Sin fotos de galería</span>';
+}
+
+function quitarFotoGaleriaExistente(i) { noticiaGaleriaExistentes.splice(i, 1); renderGaleriaPreview(); }
+function quitarFotoGaleriaNueva(i) { noticiaGaleriaBlobs.splice(i, 1); renderGaleriaPreview(); }
+
+async function guardarNoticia() {
+  const titulo = document.getElementById('n-titulo').value.trim();
+  if (!titulo) { alert('El título es obligatorio'); return; }
+  const btn = document.getElementById('btn-guardar-noticia');
+  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Guardando...';
+
+  const id = document.getElementById('n-id').value;
+  let portadaUrl = null;
+
+  // Subir portada si hay nueva
+  if (noticiaPortadaBlob) {
+    const fname = `portada-${Date.now()}.jpg`;
+    await db.storage.from('noticias').upload(fname, noticiaPortadaBlob.blob, { upsert: true, contentType: noticiaPortadaBlob.mime });
+    const { data: u } = db.storage.from('noticias').getPublicUrl(fname);
+    portadaUrl = u.publicUrl;
+  } else if (id) {
+    const { data: existente } = await db.from('noticias').select('foto_portada').eq('id', id).single();
+    portadaUrl = existente?.foto_portada || null;
+  }
+
+  // Subir fotos de galería nuevas
+  const nuevasUrls = [];
+  for (const fb of noticiaGaleriaBlobs) {
+    const fname = `galeria-${Date.now()}-${Math.random().toString(36).slice(2)}.jpg`;
+    await db.storage.from('noticias').upload(fname, fb.blob, { upsert: true, contentType: fb.mime });
+    const { data: u } = db.storage.from('noticias').getPublicUrl(fname);
+    nuevasUrls.push(u.publicUrl);
+  }
+
+  const datos = {
+    titulo,
+    excerpt: document.getElementById('n-excerpt').value.trim() || null,
+    contenido: document.getElementById('n-contenido').value.trim() || null,
+    categoria: document.getElementById('n-categoria').value,
+    fecha_publicacion: document.getElementById('n-fecha').value,
+    publicada: document.getElementById('n-publicada').checked,
+    foto_portada: portadaUrl,
+    fotos_galeria: [...noticiaGaleriaExistentes, ...nuevasUrls],
+    updated_at: new Date().toISOString(),
+  };
+
+  let error;
+  if (id) {
+    ({ error } = await db.from('noticias').update(datos).eq('id', id));
+  } else {
+    ({ error } = await db.from('noticias').insert([datos]));
+  }
+
+  if (!error) {
+    cerrarModal('modal-noticia');
+    cargarNoticiasAdmin();
+  } else {
+    alert('Error al guardar: ' + error.message);
+  }
+  btn.disabled = false; btn.innerHTML = 'Guardar noticia';
+}
+
+async function eliminarNoticia(id) {
+  if (!confirm('¿Eliminar esta noticia?')) return;
+  await db.from('noticias').delete().eq('id', id);
+  cargarNoticiasAdmin();
 }
 
 function previewFoto(input, previewId, labelId) {

@@ -235,6 +235,23 @@ async function cargarNoticias() {
 }
 
 cargarNoticias();
+
+// NAV
+function toggleDropdown() {
+  const m = document.getElementById('nav-dropdown-menu');
+  if (m) m.classList.toggle('visible');
+}
+function toggleMenu() {
+  const l = document.getElementById('nav-links');
+  if (l) l.classList.toggle('open');
+}
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.nav-dropdown')) {
+    const m = document.getElementById('nav-dropdown-menu');
+    if (m) m.classList.remove('visible');
+  }
+});
+
 </script>
 </body>
 </html>
