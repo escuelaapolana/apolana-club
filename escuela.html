@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Escuela de atletismo · Club Apolana</title>
+  <title>Escuela de Atletismo · Club Apolana</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -23,19 +23,19 @@
     .nav-link { color: rgba(255,255,255,0.8); text-decoration: none; padding: 6px 11px; border-radius: 6px; font-size: 0.85rem; transition: all 0.12s; background: none; border: none; cursor: pointer; display: flex; align-items: center; gap: 5px; font-family: inherit; }
     .nav-link:hover, .nav-link.activo { background: rgba(255,255,255,0.12); color: white; }
     .nav-ig { padding: 6px 8px; }
-    .nav-btn { background: white; color: var(--azul); padding: 6px 16px; border-radius: 6px; font-size: 0.85rem; font-weight: 600; text-decoration: none; margin-left: 4px; transition: all 0.12s; }
-    .nav-btn:hover { background: #e8f2fa; }
+    .nav-btn { background: white; color: var(--azul); padding: 6px 16px; border-radius: 6px; font-size: 0.85rem; font-weight: 600; text-decoration: none; margin-left: 4px; }
+    .nav-btn:hover { background: var(--azul-bg); }
     .nav-dropdown { position: relative; }
     .nav-dropdown-menu { display: none; position: absolute; top: calc(100% + 8px); left: 0; background: white; border-radius: 12px; border: 1px solid #dde2e8; box-shadow: 0 8px 24px rgba(0,0,0,0.12); min-width: 220px; overflow: hidden; z-index: 200; }
     .nav-dropdown-menu.visible { display: block; }
-    .nav-dropdown-item { display: flex; align-items: center; gap: 10px; padding: 10px 16px; color: #1a1d23; text-decoration: none; font-size: 0.85rem; transition: background 0.1s; }
-    .nav-dropdown-item:hover { background: #e8f2fa; color: #1a5f8f; }
-    .nav-dropdown-item svg { flex-shrink: 0; color: #4a90c4; }
+    .nav-dropdown-item { display: flex; align-items: center; gap: 10px; padding: 10px 16px; color: var(--texto); text-decoration: none; font-size: 0.85rem; transition: background 0.1s; }
+    .nav-dropdown-item:hover { background: var(--azul-bg); color: var(--azul); }
+    .nav-dropdown-item svg { flex-shrink: 0; color: var(--azul-claro); }
     .nav-hamburger { display: none; background: none; border: none; color: white; cursor: pointer; padding: 4px; }
     @media (max-width: 768px) {
       nav { padding: 0 1rem; }
       .nav-hamburger { display: flex; }
-      .nav-links { display: none; position: absolute; top: 60px; left: 0; right: 0; background: #123f60; flex-direction: column; align-items: stretch; padding: 0.5rem 0; gap: 0; z-index: 99; }
+      .nav-links { display: none; position: absolute; top: 60px; left: 0; right: 0; background: var(--azul-oscuro); flex-direction: column; align-items: stretch; padding: 0.5rem 0; gap: 0; z-index: 99; }
       .nav-links.open { display: flex; }
       .nav-link { border-radius: 0; padding: 10px 1.5rem; }
       .nav-btn { margin: 0.5rem 1rem; text-align: center; padding: 10px; }
@@ -43,114 +43,121 @@
       .nav-dropdown-menu { position: static; box-shadow: none; border: none; border-radius: 0; background: rgba(0,0,0,0.2); display: none; }
       .nav-dropdown-menu.visible { display: block; }
       .nav-dropdown-item { color: rgba(255,255,255,0.8); padding: 9px 2.5rem; }
-      .nav-dropdown-item:hover { background: rgba(255,255,255,0.08); color: white; }
       .nav-ig { display: none; }
     }
-    /* HERO SECCIÓN */
-    .hero-seccion {
-      position: relative; height: 420px; background: var(--azul-oscuro);
-      display: flex; align-items: flex-end; overflow: hidden;
-    }
-    .hero-seccion-bg { position: absolute; inset: 0; background-size: cover; background-position: center; opacity: 0.4; }
-    .hero-seccion-content { position: relative; padding: 2.5rem 3rem; max-width: 760px; }
+
+    /* HERO */
+    .hero { position: relative; height: 460px; background: var(--azul-oscuro); display: flex; align-items: flex-end; overflow: hidden; }
+    .hero-bg { position: absolute; inset: 0; background-size: cover; background-position: center; opacity: 0.45; transition: opacity 0.3s; }
+    .hero-content { position: relative; padding: 2.5rem 3rem; max-width: 760px; }
     .hero-breadcrumb { color: rgba(255,255,255,0.6); font-size: 0.8rem; margin-bottom: 0.75rem; }
     .hero-breadcrumb a { color: rgba(255,255,255,0.6); text-decoration: none; }
     .hero-breadcrumb a:hover { color: white; }
-    .hero-seccion h1 { color: white; font-size: 2.8rem; font-weight: 700; line-height: 1.15; margin-bottom: 0.75rem; }
-    .hero-seccion-meta { color: rgba(255,255,255,0.75); font-size: 1rem; line-height: 1.6; max-width: 560px; }
+    .hero h1 { color: white; font-size: 2.8rem; font-weight: 700; line-height: 1.15; margin-bottom: 0.75rem; }
+    .hero-sub { color: rgba(255,255,255,0.8); font-size: 1rem; max-width: 540px; line-height: 1.6; }
     .hero-tag { display: inline-block; background: rgba(255,255,255,0.2); color: white; font-size: 0.78rem; padding: 4px 12px; border-radius: 20px; margin-top: 1rem; }
+    @media (max-width: 640px) { .hero { height: 320px; } .hero h1 { font-size: 2rem; } .hero-content { padding: 1.5rem; } }
 
-    /* CONTENIDO */
-    .page-wrap { max-width: 1040px; margin: 0 auto; padding: 0 2rem; }
+    /* WRAP */
+    .wrap { max-width: 1040px; margin: 0 auto; padding: 0 2rem; }
 
     /* INFO RÁPIDA */
-    .info-rapida { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1px; background: var(--gris-borde); border: 1px solid var(--gris-borde); border-radius: 12px; overflow: hidden; margin: 2.5rem 0; }
+    .info-strip { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--gris-borde); border-radius: 12px; overflow: hidden; margin: 2.5rem 0; background: var(--gris-borde); gap: 1px; }
     .info-item { background: white; padding: 1.25rem 1.5rem; }
-    .info-item-label { font-size: 0.72rem; font-weight: 600; color: var(--azul-claro); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
-    .info-item-val { font-size: 0.95rem; font-weight: 600; color: var(--texto); line-height: 1.4; white-space: pre-line; }
+    .info-label { font-size: 0.7rem; font-weight: 600; color: var(--azul-claro); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 5px; }
+    .info-val { font-size: 0.92rem; font-weight: 600; color: var(--texto); line-height: 1.5; }
+
+    /* SECCIONES */
+    .sec { padding: 3rem 0; }
+    .sec-title { font-size: 1.4rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .sec-sub { color: var(--texto-suave); font-size: 0.92rem; margin-bottom: 1.75rem; line-height: 1.6; }
+    .sec-divider { border: none; border-top: 2px solid var(--azul-bg); margin: 3rem 0; }
 
     /* DESCRIPCIÓN */
-    .seccion-desc { font-size: 1.05rem; line-height: 1.8; color: var(--texto-suave); margin-bottom: 3rem; max-width: 720px; white-space: pre-line; }
+    .descripcion { font-size: 1rem; line-height: 1.85; color: var(--texto-suave); max-width: 800px; }
+    .descripcion p { margin-bottom: 1.1rem; }
+    .descripcion p:last-child { margin-bottom: 0; }
 
-    /* DESTACADOS */
-    .destacados { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.875rem; margin-bottom: 3rem; }
-    .destacado-item { display: flex; align-items: flex-start; gap: 12px; padding: 1.1rem; background: var(--gris); border-radius: 10px; border: 1px solid var(--gris-borde); }
-    .destacado-check { width: 22px; height: 22px; border-radius: 50%; background: var(--azul-bg); display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
-    .destacado-check svg { color: var(--azul); }
-    .destacado-text { font-size: 0.88rem; font-weight: 500; line-height: 1.4; }
+    /* INCLUYE */
+    .incluye-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.875rem; }
+    .incluye-item { display: flex; align-items: flex-start; gap: 12px; padding: 1.1rem; background: var(--azul-bg); border-radius: 10px; border: 1px solid #c8dff0; }
+    .incluye-check { width: 24px; height: 24px; border-radius: 50%; background: var(--azul); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .incluye-check svg { color: white; }
+    .incluye-text { font-size: 0.88rem; font-weight: 500; padding-top: 2px; line-height: 1.4; }
 
-    /* GRUPOS */
-    .grupos-section { margin-bottom: 3rem; }
-    .section-title { font-size: 1.3rem; font-weight: 700; margin-bottom: 0.5rem; }
-    .section-sub { color: var(--texto-suave); font-size: 0.9rem; margin-bottom: 1.5rem; }
-    .grupos-texto { font-size: 0.92rem; color: var(--texto-suave); line-height: 1.8; white-space: pre-line; background: var(--gris); border-radius: 10px; padding: 1.25rem 1.5rem; border: 1px solid var(--gris-borde); }
+    /* HORARIOS */
+    .horarios-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .horario-card { background: var(--gris); border-radius: 12px; border: 1px solid var(--gris-borde); padding: 1.5rem; }
+    .horario-grupo { font-size: 0.72rem; font-weight: 600; color: var(--azul-claro); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.5rem; }
+    .horario-edad { font-size: 0.88rem; color: var(--texto-suave); margin-bottom: 1rem; }
+    .horario-opcion { display: flex; align-items: flex-start; gap: 8px; font-size: 0.88rem; margin-bottom: 6px; }
+    .horario-opcion:last-child { margin-bottom: 0; }
+    .horario-opcion::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--azul); flex-shrink: 0; margin-top: 6px; }
+    .horario-tiempo { font-weight: 600; color: var(--azul); font-size: 1rem; margin-bottom: 4px; }
+    @media (max-width: 600px) { .horarios-grid { grid-template-columns: 1fr; } }
 
-    /* PRECIO */
-    .precio-section { margin-bottom: 3rem; }
-    .precio-card { background: var(--azul); border-radius: 14px; padding: 2rem 2.5rem; display: flex; align-items: center; justify-content: space-between; gap: 2rem; flex-wrap: wrap; }
-    .precio-texto { color: rgba(255,255,255,0.85); font-size: 1rem; line-height: 1.7; white-space: pre-line; }
-    .precio-cta { text-align: center; flex-shrink: 0; }
-    .precio-cta a { display: block; background: white; color: var(--azul); padding: 12px 28px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.92rem; white-space: nowrap; }
-    .precio-cta a:hover { background: var(--azul-bg); }
-    .precio-cta p { color: rgba(255,255,255,0.6); font-size: 0.75rem; margin-top: 8px; }
+    /* CUOTAS */
+    .cuotas-header { background: var(--azul); color: white; border-radius: 12px 12px 0 0; padding: 1.25rem 1.5rem; }
+    .cuotas-header h3 { font-size: 1rem; font-weight: 600; }
+    .cuotas-header p { font-size: 0.82rem; opacity: 0.75; margin-top: 3px; }
+    .cuotas-grid { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--gris-borde); border-top: none; border-radius: 0 0 12px 12px; overflow: hidden; margin-bottom: 1rem; }
+    .cuota-col { }
+    .cuota-col-header { background: var(--gris); padding: 0.875rem 1.25rem; border-bottom: 1px solid var(--gris-borde); }
+    .cuota-col-header .cuota-num { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--azul-claro); }
+    .cuota-col-header .cuota-when { font-size: 0.85rem; font-weight: 600; color: var(--texto); margin-top: 2px; }
+    .cuota-col + .cuota-col { border-left: 1px solid var(--gris-borde); }
+    .cuota-fila { display: flex; justify-content: space-between; align-items: center; padding: 0.875rem 1.25rem; border-bottom: 1px solid var(--gris-borde); font-size: 0.85rem; }
+    .cuota-fila:last-child { border-bottom: none; }
+    .cuota-edad { color: var(--texto-suave); font-size: 0.82rem; }
+    .cuota-precio { font-weight: 700; font-size: 1rem; color: var(--azul); }
+    .cuota-nota { font-size: 0.82rem; color: var(--texto-suave); background: var(--gris); border-radius: 8px; padding: 0.875rem 1.1rem; margin-top: 0.75rem; line-height: 1.6; }
+    .cuota-nota strong { color: var(--texto); }
+    @media (max-width: 500px) { .cuotas-grid { grid-template-columns: 1fr; } .cuota-col + .cuota-col { border-left: none; border-top: 1px solid var(--gris-borde); } }
+
+    /* SOCIO */
+    .socio-banner { background: linear-gradient(135deg, var(--azul-oscuro), var(--azul)); border-radius: 14px; padding: 2rem 2.5rem; display: flex; justify-content: space-between; align-items: center; gap: 2rem; flex-wrap: wrap; margin-bottom: 1rem; }
+    .socio-banner h3 { color: white; font-size: 1.15rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .socio-banner p { color: rgba(255,255,255,0.75); font-size: 0.88rem; line-height: 1.6; max-width: 520px; }
+    .socio-precio { text-align: center; flex-shrink: 0; }
+    .socio-precio-num { color: white; font-size: 2rem; font-weight: 700; line-height: 1; }
+    .socio-precio-label { color: rgba(255,255,255,0.6); font-size: 0.75rem; margin-top: 3px; }
+    .socio-beneficios { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.75rem; }
+    .socio-ben { display: flex; align-items: center; gap: 10px; padding: 0.875rem 1rem; background: white; border-radius: 8px; border: 1px solid var(--gris-borde); font-size: 0.85rem; font-weight: 500; }
+    .socio-ben svg { color: var(--azul); flex-shrink: 0; }
 
     /* GALERÍA */
-    .galeria-section { margin-bottom: 3rem; }
     .galeria-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 0.875rem; }
     .galeria-item { border-radius: 10px; overflow: hidden; aspect-ratio: 4/3; background: var(--gris); }
-    .galeria-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s; }
+    .galeria-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s; display: block; }
     .galeria-item:hover img { transform: scale(1.04); }
-
-    /* INSTAGRAM */
-    .instagram-section { background: var(--gris); padding: 3rem 0; margin-bottom: 0; }
-    .instagram-inner { max-width: 1040px; margin: 0 auto; padding: 0 2rem; }
-    .instagram-header { display: flex; align-items: center; gap: 12px; margin-bottom: 1.5rem; }
-    .instagram-header a { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--texto); }
-    .instagram-header a:hover { color: var(--azul); }
-    .ig-icon { width: 32px; height: 32px; background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); border-radius: 8px; display: flex; align-items: center; justify-content: center; }
-    .instagram-handle { font-size: 1rem; font-weight: 600; }
-    .instagram-feed { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; }
-    .ig-post { aspect-ratio: 1; border-radius: 6px; overflow: hidden; background: var(--gris-borde); }
-    .ig-embed-wrap { background: white; border: 1px solid var(--gris-borde); border-radius: 12px; padding: 1rem; text-align: center; color: var(--texto-suave); font-size: 0.85rem; }
-
-    /* CONTACTO */
-    .contacto-section { padding: 3rem 0; background: var(--azul-oscuro); }
-    .contacto-inner { max-width: 1040px; margin: 0 auto; padding: 0 2rem; }
-    .contacto-inner h2 { color: white; font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem; }
-    .contacto-inner p { color: rgba(255,255,255,0.6); font-size: 0.9rem; margin-bottom: 1.5rem; }
-    .contacto-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
-    .contacto-item { background: rgba(255,255,255,0.08); border-radius: 10px; padding: 1.1rem 1.25rem; display: flex; align-items: center; gap: 12px; text-decoration: none; transition: background 0.12s; }
-    .contacto-item:hover { background: rgba(255,255,255,0.14); }
-    .contacto-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .contacto-item-text span { display: block; font-size: 0.7rem; color: rgba(255,255,255,0.5); }
-    .contacto-item-text strong { color: white; font-size: 0.88rem; }
+    .galeria-empty { color: var(--texto-suave); font-size: 0.85rem; padding: 1rem 0; }
 
     /* CTA */
-    .cta-section { background: var(--azul); padding: 4rem 2rem; text-align: center; }
-    .cta-section h2 { color: white; font-size: 1.6rem; font-weight: 700; margin-bottom: 0.75rem; }
-    .cta-section p { color: rgba(255,255,255,0.7); margin-bottom: 2rem; }
-    .cta-btn { background: white; color: var(--azul); padding: 12px 32px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.95rem; display: inline-block; }
-    .cta-btn:hover { background: var(--azul-bg); }
+    .cta { background: var(--azul); padding: 4rem 2rem; text-align: center; }
+    .cta h2 { color: white; font-size: 1.6rem; font-weight: 700; margin-bottom: 0.75rem; }
+    .cta p { color: rgba(255,255,255,0.7); margin-bottom: 2rem; font-size: 0.92rem; }
+    .cta-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .btn-w { background: white; color: var(--azul); padding: 12px 28px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.92rem; }
+    .btn-w:hover { background: var(--azul-bg); }
+    .btn-o { background: transparent; color: white; padding: 12px 28px; border-radius: 8px; text-decoration: none; font-weight: 500; font-size: 0.92rem; border: 1.5px solid rgba(255,255,255,0.4); }
+    .btn-o:hover { border-color: white; background: rgba(255,255,255,0.08); }
 
-    /* FOOTER */
+    /* CONTACTO */
+    .contacto { background: var(--azul-oscuro); padding: 3rem 2rem; }
+    .contacto-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; max-width: 1040px; margin: 0 auto; }
+    .contacto-item { background: rgba(255,255,255,0.08); border-radius: 10px; padding: 1rem 1.25rem; display: flex; align-items: center; gap: 12px; text-decoration: none; transition: background 0.12s; }
+    .contacto-item:hover { background: rgba(255,255,255,0.14); }
+    .c-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .contacto-item span { display: block; font-size: 0.7rem; color: rgba(255,255,255,0.5); }
+    .contacto-item strong { color: white; font-size: 0.88rem; display: block; }
+
     footer { background: #0d2d42; padding: 2rem; }
     .footer-inner { max-width: 1040px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
     .footer-logo { display: flex; align-items: center; gap: 8px; }
     .footer-logo img { width: 26px; height: 26px; border-radius: 50%; background: white; padding: 2px; object-fit: contain; }
     .footer-logo span { color: white; font-weight: 600; font-size: 0.85rem; }
-    .footer-links { display: flex; gap: 1.25rem; flex-wrap: wrap; }
-    .footer-links a { color: rgba(255,255,255,0.45); text-decoration: none; font-size: 0.78rem; }
+    .footer-links a { color: rgba(255,255,255,0.45); text-decoration: none; font-size: 0.78rem; margin-left: 1.25rem; }
     .footer-links a:hover { color: white; }
-
-    @media (max-width: 640px) {
-      .hero-seccion { height: 320px; }
-      .hero-seccion h1 { font-size: 2rem; }
-      .hero-seccion-content { padding: 1.5rem; }
-      .precio-card { flex-direction: column; }
-      .instagram-feed { grid-template-columns: repeat(3, 1fr); }
-      nav { padding: 0 1rem; }
-      .nav-links .nav-link { display: none; }
-    }
   </style>
 </head>
 <body>
@@ -162,7 +169,7 @@
   </a>
   <div class="nav-links" id="nav-links">
     <div class="nav-dropdown">
-      <button class="nav-link activo nav-dropdown-btn" onclick="toggleDropdown()">
+      <button class="nav-link nav-dropdown-btn activo" onclick="toggleDropdown()">
         Secciones
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
       </button>
@@ -189,121 +196,228 @@
 </nav>
 
 <!-- HERO -->
-<div class="hero-seccion">
-  <div class="hero-seccion-bg" id="hero-bg"></div>
-  <div class="hero-seccion-content">
-    <div class="hero-breadcrumb"><a href="index.html">Club Apolana</a> / <span id="hero-breadcrumb-texto">Escuela</span></div>
-    <h1 id="hero-titulo">Escuela de atletismo</h1>
-    <p class="hero-seccion-meta" id="hero-meta">Iniciación y desarrollo del atletismo para jóvenes de 3 a 18 años.</p>
-    <span class="hero-tag" id="hero-dirigido">De 3 a 18 años</span>
+<div class="hero">
+  <div class="hero-bg" id="hero-bg"></div>
+  <div class="hero-content">
+    <div class="hero-breadcrumb"><a href="index.html">Club Apolana</a> / Escuela de atletismo</div>
+    <h1>Escuela de<br>atletismo</h1>
+    <p class="hero-sub">Iniciación y desarrollo del atletismo para jóvenes de 3 a 18 años.</p>
+    <span class="hero-tag">De 3 a 18 años · Temporada 2025/26</span>
   </div>
 </div>
 
-<!-- CONTENIDO PRINCIPAL -->
-<div class="page-wrap">
-
-  <!-- INFO RÁPIDA -->
-  <div class="info-rapida">
+<!-- INFO RÁPIDA -->
+<div class="wrap">
+  <div class="info-strip">
     <div class="info-item">
-      <div class="info-item-label">Dirigido a</div>
-      <div class="info-item-val" id="info-dirigido">—</div>
+      <div class="info-label">Edad</div>
+      <div class="info-val">3 a 18 años</div>
     </div>
     <div class="info-item">
-      <div class="info-item-label">Horarios</div>
-      <div class="info-item-val" id="info-horarios">—</div>
+      <div class="info-label">Horario</div>
+      <div class="info-val">Lun/Mié o Mar/Jue<br>+ opciones viernes</div>
     </div>
     <div class="info-item">
-      <div class="info-item-label">Cuota</div>
-      <div class="info-item-val" id="info-precio">—</div>
+      <div class="info-label">Cuota temporada</div>
+      <div class="info-val">Desde 300 €<br><span style="font-size:0.78rem;font-weight:400;color:var(--texto-suave)">en 2 pagos</span></div>
     </div>
     <div class="info-item">
-      <div class="info-item-label">Contacto</div>
-      <div class="info-item-val" id="info-contacto">—</div>
+      <div class="info-label">Prueba gratuita</div>
+      <div class="info-val">4 entrenamientos<br><span style="font-size:0.78rem;font-weight:400;color:var(--texto-suave)">sin compromiso</span></div>
+    </div>
+    <div class="info-item" style="grid-column: 1 / -1;">
+      <div class="info-label">Contacto</div>
+      <div class="info-val">636 06 17 00</div>
     </div>
   </div>
-
-  <!-- DESCRIPCIÓN -->
-  <p class="seccion-desc" id="seccion-desc">Cargando información...</p>
-
-  <!-- DESTACADOS -->
-  <div class="destacados" id="destacados-grid"></div>
-
-  <!-- GRUPOS -->
-  <div class="grupos-section">
-    <h2 class="section-title">Grupos y categorías</h2>
-    <p class="section-sub">Organizamos los grupos por edad y nivel para que cada atleta entrene con sus iguales.</p>
-    <div class="grupos-texto" id="grupos-texto">—</div>
-  </div>
-
 </div>
 
-<!-- PRECIO Y CTA -->
-<div style="background:var(--gris);padding:3rem 2rem;">
-  <div class="page-wrap" style="padding:0;">
-    <div class="precio-card">
-      <div>
-        <div style="color:rgba(255,255,255,0.6);font-size:0.78rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.5rem;">Cuota e inscripción</div>
-        <div class="precio-texto" id="precio-texto">—</div>
+<!-- DESCRIPCIÓN -->
+<div class="wrap">
+  <div class="sec">
+    <h2 class="sec-title">Nuestra filosofía</h2>
+    <div class="descripcion">
+      <p>Desde la escuela de atletismo buscamos promover la práctica de este maravilloso deporte, queriendo romper la etiqueta de que el atletismo es aburrido, ya que normalmente se relaciona solo con carreras, pero que en realidad abarca una gran cantidad de diferentes e interesantes especialidades. Para ello, ya desde la primera etapa de enseñanza-aprendizaje, plantearemos una variada gama de ejercicios, con formas principalmente jugadas en las categorías inferiores.</p>
+      <p>Creemos que la práctica de este deporte, en el que a pesar de ser un deporte individual, se practica en un entorno abierto, al aire libre, donde la interacción con los compañeros es necesaria, fomenta las relaciones de amistad, creando un muy buen clima de trabajo, compañerismo y fomentando la solidaridad.</p>
+      <p>Todos estos aspectos, como la superación personal y el compañerismo, son básicos para la formación integral del niño, que es uno de los objetivos básicos que persigue nuestra escuela.</p>
+    </div>
+  </div>
+
+  <hr class="sec-divider">
+
+  <!-- FOTO DESPUÉS DE DESCRIPCIÓN -->
+  <div id="foto-desc-wrap" style="margin: -1rem 0 2rem; border-radius: 14px; overflow: hidden; height: 320px; background: var(--gris); display: none;">
+    <img id="foto-desc-img" src="" alt="Escuela de atletismo" style="width:100%;height:100%;object-fit:cover;display:block;">
+  </div>
+
+  <hr class="sec-divider">
+  <div class="sec">
+    <h2 class="sec-title">¿Qué incluye la matrícula?</h2>
+    <p class="sec-sub">Todo lo que necesita el atleta para comenzar la temporada.</p>
+    <div class="incluye-grid">
+      <div class="incluye-item">
+        <div class="incluye-check"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <span class="incluye-text">Camiseta técnica del club</span>
       </div>
-      <div class="precio-cta">
-        <a href="inscripcion.html">Inscribirse ahora</a>
-        <p>15 días de prueba gratuita</p>
+      <div class="incluye-item">
+        <div class="incluye-check"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <span class="incluye-text">Sudadera del club</span>
+      </div>
+      <div class="incluye-item">
+        <div class="incluye-check"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <span class="incluye-text">Licencia escolar federada</span>
+      </div>
+      <div class="incluye-item">
+        <div class="incluye-check"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <span class="incluye-text">Seguro deportivo</span>
+      </div>
+      <div class="incluye-item">
+        <div class="incluye-check"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <span class="incluye-text">Acompañamiento a carreras y competiciones</span>
+      </div>
+      <div class="incluye-item">
+        <div class="incluye-check"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <span class="incluye-text">Entrenadores titulados especializados</span>
       </div>
     </div>
   </div>
-</div>
 
-<!-- GALERÍA -->
-<div class="page-wrap">
-  <div class="galeria-section" id="galeria-section" style="margin-top:3rem;">
-    <h2 class="section-title">Galería</h2>
-    <p class="section-sub">Imágenes del club y los entrenamientos.</p>
-    <div class="galeria-grid" id="galeria-grid">
-      <div style="color:var(--texto-suave);font-size:0.85rem;grid-column:1/-1;">Las fotos aparecerán aquí cuando se suban desde el panel de administración.</div>
-    </div>
-  </div>
-</div>
+  <hr class="sec-divider">
 
-<!-- INSTAGRAM -->
-<div class="instagram-section">
-  <div class="instagram-inner">
-    <div class="instagram-header">
-      <a href="https://instagram.com/apolana.alicante" target="_blank">
-        <div class="ig-icon">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="white" stroke="none"/></svg>
+  <!-- HORARIOS -->
+  <div class="sec">
+    <h2 class="sec-title">Horarios de entrenamiento</h2>
+    <p class="sec-sub">Dos grupos según la edad. Cada grupo tiene dos opciones de horario — elige la que mejor te venga.</p>
+    <div class="horarios-grid">
+      <div class="horario-card">
+        <div class="horario-grupo">Categoría pequeños</div>
+        <div class="horario-edad">Nacidos entre 2023 y 2015</div>
+        <div style="margin-bottom:1rem;">
+          <div class="horario-tiempo">17:30 – 18:30 h</div>
         </div>
-        <span class="instagram-handle">@apolana.alicante</span>
-      </a>
-    </div>
-    <div class="ig-embed-wrap">
-      <p style="margin-bottom:0.75rem;">Síguenos en Instagram para estar al día de todas las novedades del club.</p>
-      <a href="https://instagram.com/apolana.alicante" target="_blank" style="display:inline-flex;align-items:center;gap:8px;background:var(--azul);color:white;padding:8px 20px;border-radius:8px;text-decoration:none;font-size:0.85rem;font-weight:500;">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="white" stroke="none"/></svg>
-        Ver @apolana.alicante
-      </a>
+        <div class="horario-opcion">Lunes y miércoles</div>
+        <div style="font-size:0.8rem;color:var(--texto-suave);margin:4px 0 8px 14px;">ó</div>
+        <div class="horario-opcion">Martes y jueves</div>
+      </div>
+      <div class="horario-card">
+        <div class="horario-grupo">Categoría avanzados</div>
+        <div class="horario-edad">Nacidos entre 2008 y 2014</div>
+        <div style="margin-bottom:1rem;">
+          <div class="horario-tiempo">18:30 – 20:00 h · Vie 17:30–19:00 h</div>
+        </div>
+        <div class="horario-opcion">Lunes, miércoles y viernes</div>
+        <div style="font-size:0.8rem;color:var(--texto-suave);margin:4px 0 8px 14px;">ó</div>
+        <div class="horario-opcion">Martes, jueves y viernes</div>
+      </div>
     </div>
   </div>
-</div>
 
-<!-- CONTACTO -->
-<div class="contacto-section">
-  <div class="contacto-inner">
-    <h2>¿Tienes alguna pregunta?</h2>
-    <p>Estamos aquí para ayudarte. Contacta con nosotros por el canal que prefieras.</p>
-    <div class="contacto-grid" id="contacto-grid">
-      <!-- Se rellena por JS según la sección -->
+  <hr class="sec-divider">
+
+  <!-- CUOTAS -->
+  <div class="sec">
+    <h2 class="sec-title">Cuotas de la temporada</h2>
+    <p class="sec-sub">Se realizan únicamente dos pagos. Con ambos queda cubierta toda la temporada hasta junio.</p>
+
+    <div style="margin-bottom:1.5rem;">
+      <div class="cuotas-header">
+        <h3>Cuotas por tramo de edad</h3>
+        <p>Cuota 1ª al formalizar la inscripción · Cuota 2ª en diciembre</p>
+      </div>
+      <div class="cuotas-grid">
+        <div class="cuota-col">
+          <div class="cuota-col-header">
+            <div class="cuota-num">Cuota 1ª</div>
+            <div class="cuota-when">Al inscribirse (septiembre)</div>
+          </div>
+          <div class="cuota-fila">
+            <span class="cuota-edad">Nacidos 2016–2023</span>
+            <span class="cuota-precio">170 €</span>
+          </div>
+          <div class="cuota-fila">
+            <span class="cuota-edad">Nacidos 2012–2015</span>
+            <span class="cuota-precio">195 €</span>
+          </div>
+          <div class="cuota-fila">
+            <span class="cuota-edad">Nacidos 2008–2011</span>
+            <span class="cuota-precio">200 €</span>
+          </div>
+        </div>
+        <div class="cuota-col">
+          <div class="cuota-col-header">
+            <div class="cuota-num">Cuota 2ª</div>
+            <div class="cuota-when">Diciembre</div>
+          </div>
+          <div class="cuota-fila">
+            <span class="cuota-edad">Nacidos 2016–2023</span>
+            <span class="cuota-precio">130 €</span>
+          </div>
+          <div class="cuota-fila">
+            <span class="cuota-edad">Nacidos 2012–2015</span>
+            <span class="cuota-precio">155 €</span>
+          </div>
+          <div class="cuota-fila">
+            <span class="cuota-edad">Nacidos 2008–2011</span>
+            <span class="cuota-precio">170 €</span>
+          </div>
+        </div>
+      </div>
+      <div class="cuota-nota">
+        <strong>Descuento para familias:</strong> El segundo hermano disfruta de un 20% de descuento y el tercero y siguientes de un 40%. Las cuotas son para toda la temporada y no se realizan devoluciones salvo causa médica justificada.
+      </div>
+    </div>
+  </div>
+
+  <!-- GALERÍA -->
+  <div class="sec">
+    <h2 class="sec-title">Galería</h2>
+    <p class="sec-sub">Imágenes de entrenamientos y competiciones de la escuela.</p>
+    <div class="galeria-grid" id="galeria-grid">
+      <div class="galeria-empty">Las fotos aparecerán aquí cuando se suban desde el panel de administración.</div>
     </div>
   </div>
 </div>
 
 <!-- CTA -->
-<div class="cta-section">
+<div class="cta">
   <h2>¿Te animas a probar?</h2>
-  <p>Periodo de prueba de 15 días sin compromiso. Empieza cuando quieras.</p>
-  <a href="inscripcion.html" class="cta-btn">Inscribirse ahora</a>
+  <p>4 entrenamientos de prueba sin compromiso. Empieza cuando quieras.</p>
+  <div class="cta-btns">
+    <a href="inscripcion.html" class="btn-w">Inscribirse ahora</a>
+    <a href="mailto:escuelaapolana@gmail.com" class="btn-o">Contactar con el club</a>
+  </div>
 </div>
 
-<!-- FOOTER -->
+<!-- CONTACTO -->
+<div class="contacto">
+  <div class="contacto-grid">
+    <a href="tel:+34636061700" class="contacto-item">
+      <div class="c-icon" style="background:rgba(255,255,255,0.1);">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.79 19.79 0 0 1 11.63 19 19.5 19.5 0 0 1 4.5 12 19.79 19.79 0 0 1 1.12 3.18 2 2 0 0 1 3.1 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+      </div>
+      <div><span>Teléfono escuela</span><strong>636 06 17 00</strong></div>
+    </a>
+    <a href="https://wa.me/34636061700" target="_blank" class="contacto-item">
+      <div class="c-icon" style="background:#25d366;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+      </div>
+      <div><span>WhatsApp</span><strong>636 06 17 00</strong></div>
+    </a>
+    <a href="mailto:escuelaapolana@gmail.com" class="contacto-item">
+      <div class="c-icon" style="background:rgba(255,255,255,0.1);">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      </div>
+      <div><span>Email</span><strong>escuelaapolana@gmail.com</strong></div>
+    </a>
+    <a href="https://instagram.com/apolana.alicante" target="_blank" class="contacto-item">
+      <div class="c-icon" style="background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="white" stroke="none"/></svg>
+      </div>
+      <div><span>Instagram</span><strong>@apolana.alicante</strong></div>
+    </a>
+  </div>
+</div>
+
 <footer>
   <div class="footer-inner">
     <div class="footer-logo">
@@ -320,166 +434,47 @@
 </footer>
 
 <script>
-// ============================================
-// CONFIGURACIÓN — CAMBIAR SOLO ESTA VARIABLE
-// ============================================
-const SECCION_ID = 'escuela'; // escuela | competicion | running | triatlon | natacion | instalaciones
-
-// Teléfonos por sección
-const TELEFONOS = {
-  escuela:     { tel: '636 06 17 00', wa: '636061700' },
-  competicion: { tel: '625 47 38 30', wa: '625473830' },
-  running:     { tel: '625 47 38 30', wa: '625473830' },
-  triatlon:    { tel: '625 47 38 30', wa: '625473830' },
-  natacion:    { tel: '625 47 38 30', wa: '625473830' },
-  instalaciones: { tel: '625 47 38 30', wa: '625473830' },
-};
-
-// Foto de sección
-const FOTO_SECCION = {
-  escuela: 'seccion-escuela.jpg',
-  competicion: 'seccion-atletismo.jpg',
-  running: 'seccion-running.jpg',
-  triatlon: 'seccion-triatlon.jpg',
-  natacion: 'seccion-natacion.jpg',
-  instalaciones: 'seccion-instalaciones.jpg',
-};
-
-// ============================================
 const SB_URL = 'https://icaxokjsvhlreuwpyxeb.supabase.co';
 const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImljYXhva2pzdmhscmV1d3B5eGViIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEwNzE2NTgsImV4cCI6MjA5NjY0NzY1OH0.xn1ZY-otHY0-l7g64uutSVjiU8DbkHxxZmTvu77IaHA';
 const db = supabase.createClient(SB_URL, SB_KEY);
-const IMG_BASE = SB_URL + '/storage/v1/object/public/imagenes-club/';
+const IMG = SB_URL + '/storage/v1/object/public/imagenes-club/';
 
-async function cargarContenido() {
-  const { data } = await db.from('contenido_secciones').select('*').eq('seccion', SECCION_ID).single();
-  if (!data) return;
+// Foto hero
+const heroImg = new Image();
+heroImg.onload = () => { document.getElementById('hero-bg').style.backgroundImage = `url(${IMG}seccion-escuela.jpg)`; };
+heroImg.src = IMG + 'seccion-escuela.jpg';
 
-  // Hero
-  document.title = (data.titulo || 'Sección') + ' · Club Apolana';
-  document.getElementById('hero-titulo').textContent = data.titulo || '';
-  document.getElementById('hero-breadcrumb-texto').textContent = data.titulo || '';
-  if (data.descripcion) document.getElementById('hero-meta').textContent = data.descripcion.split('\n')[0];
-  if (data.dirigido_a) {
-    document.getElementById('hero-dirigido').textContent = data.dirigido_a;
-    document.getElementById('info-dirigido').textContent = data.dirigido_a;
-  }
+// Foto después de descripción
+const fotoDesc = new Image();
+fotoDesc.onload = () => {
+  const wrap = document.getElementById('foto-desc-wrap');
+  document.getElementById('foto-desc-img').src = fotoDesc.src;
+  wrap.style.display = 'block';
+};
+fotoDesc.src = IMG + 'escuela-interior.jpg';
 
-  // Info rápida
-  if (data.horarios) document.getElementById('info-horarios').textContent = data.horarios;
-  if (data.precio_texto) document.getElementById('info-precio').textContent = data.precio_texto.split('\n')[0];
-  const tel = TELEFONOS[SECCION_ID];
-  if (tel) document.getElementById('info-contacto').textContent = tel.tel;
-
-  // Descripción
-  if (data.descripcion) document.getElementById('seccion-desc').textContent = data.descripcion;
-
-  // Destacados
-  if (data.destacados) {
-    const items = data.destacados.split('\n').filter(Boolean);
-    document.getElementById('destacados-grid').innerHTML = items.map(item => `
-      <div class="destacado-item">
-        <div class="destacado-check">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-        </div>
-        <span class="destacado-text">${item}</span>
-      </div>`).join('');
-  }
-
-  // Grupos
-  if (data.grupos) document.getElementById('grupos-texto').textContent = data.grupos;
-
-  // Precio
-  if (data.precio_texto) document.getElementById('precio-texto').textContent = data.precio_texto;
-}
-
-function cargarFotoHero() {
-  const foto = FOTO_SECCION[SECCION_ID];
-  if (!foto) return;
-  const img = new Image();
-  img.onload = () => { document.getElementById('hero-bg').style.backgroundImage = `url(${IMG_BASE}${foto})`; };
-  img.src = IMG_BASE + foto;
-}
-
+// Galería
 function cargarGaleria() {
-  // Intentar cargar fotos de galería: galeria-SECCION-1.jpg, galeria-SECCION-2.jpg, etc.
   const grid = document.getElementById('galeria-grid');
-  let cargadas = 0;
+  let cargadas = 0, intentos = 0;
   const fotos = [];
-  let intentos = 0;
   [1,2,3,4,5,6].forEach(n => {
-    const url = `${IMG_BASE}galeria-${SECCION_ID}-${n}.jpg`;
+    const url = `${IMG}galeria-escuela-${n}.jpg`;
     const img = new Image();
-    img.onload = () => {
-      fotos.push({ n, url });
-      cargadas++;
-      if (cargadas > 0) {
-        grid.innerHTML = fotos.sort((a,b)=>a.n-b.n).map(f => `
-          <div class="galeria-item"><img src="${f.url}" alt="Foto ${SECCION_ID}"></div>`).join('');
-      }
+    img.onload = () => { fotos.push({n, url}); cargadas++;
+      grid.innerHTML = fotos.sort((a,b)=>a.n-b.n).map(f=>`<div class="galeria-item"><img src="${f.url}" alt="Escuela ${f.n}"></div>`).join('');
     };
-    img.onerror = () => {
-      intentos++;
-      if (intentos === 6 && cargadas === 0) {
-        grid.innerHTML = '<div style="color:var(--texto-suave);font-size:0.85rem;grid-column:1/-1;">Las fotos de galería aparecerán aquí cuando se suban desde el panel de administración.</div>';
-      }
+    img.onerror = () => { intentos++;
+      if (intentos === 6 && cargadas === 0) grid.innerHTML = '<div class="galeria-empty">Las fotos aparecerán aquí cuando se suban desde el panel de administración.</div>';
     };
     img.src = url;
   });
 }
-
-function renderContacto() {
-  const tel = TELEFONOS[SECCION_ID];
-  if (!tel) return;
-  document.getElementById('contacto-grid').innerHTML = `
-    <a href="tel:+34${tel.wa}" class="contacto-item">
-      <div class="contacto-icon" style="background:rgba(255,255,255,0.1);">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.79 19.79 0 0 1 11.63 19 19.5 19.5 0 0 1 4.5 12 19.79 19.79 0 0 1 1.12 3.18 2 2 0 0 1 3.1 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-      </div>
-      <div class="contacto-item-text"><span>Teléfono</span><strong>${tel.tel}</strong></div>
-    </a>
-    <a href="https://wa.me/34${tel.wa}" target="_blank" class="contacto-item">
-      <div class="contacto-icon" style="background:#25d366;">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
-      </div>
-      <div class="contacto-item-text"><span>WhatsApp</span><strong>${tel.tel}</strong></div>
-    </a>
-    <a href="mailto:escuelaapolana@gmail.com" class="contacto-item">
-      <div class="contacto-icon" style="background:rgba(255,255,255,0.1);">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-      </div>
-      <div class="contacto-item-text"><span>Email</span><strong>escuelaapolana@gmail.com</strong></div>
-    </a>
-    <a href="https://instagram.com/apolana.alicante" target="_blank" class="contacto-item">
-      <div class="contacto-icon" style="background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="white" stroke="none"/></svg>
-      </div>
-      <div class="contacto-item-text"><span>Instagram</span><strong>@apolana.alicante</strong></div>
-    </a>`;
-}
-
-// Inicializar
-cargarContenido();
-cargarFotoHero();
 cargarGaleria();
-renderContacto();
 
-// NAV
-function toggleDropdown() {
-  const m = document.getElementById('nav-dropdown-menu');
-  if (m) m.classList.toggle('visible');
-}
-function toggleMenu() {
-  const l = document.getElementById('nav-links');
-  if (l) l.classList.toggle('open');
-}
-document.addEventListener('click', function(e) {
-  if (!e.target.closest('.nav-dropdown')) {
-    const m = document.getElementById('nav-dropdown-menu');
-    if (m) m.classList.remove('visible');
-  }
-});
-
+function toggleDropdown() { document.getElementById('nav-dropdown-menu').classList.toggle('visible'); }
+function toggleMenu() { document.getElementById('nav-links').classList.toggle('open'); }
+document.addEventListener('click', e => { if (!e.target.closest('.nav-dropdown')) { const m = document.getElementById('nav-dropdown-menu'); if(m) m.classList.remove('visible'); } });
 </script>
 </body>
 </html>
