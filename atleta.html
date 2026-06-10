@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Atleta · Club Apolana</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --azul: #1a5f8f; --azul-claro: #4a90c4; --azul-bg: #e8f2fa; --azul-oscuro: #123f60;
+      --gris: #f5f6f8; --gris-borde: #dde2e8; --texto: #1a1d23; --texto-suave: #6b7280;
+      --error: #dc2626; --exito: #16a34a; --warn: #d97706;
+      --morado: #7c3aed; --morado-bg: #f5f3ff;
+      --sidebar: 210px;
+    }
+    html, body { height: 100%; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--gris); color: var(--texto); }
+
+    #login-screen { display: flex; align-items: center; justify-content: center; min-height: 100vh; background: var(--gris); padding: 1rem; }
+    .login-box { background: white; border-radius: 16px; border: 1px solid var(--gris-borde); padding: 2.5rem; width: 100%; max-width: 380px; }
+    .login-logo { display: flex; align-items: center; gap: 12px; margin-bottom: 2rem; }
+    .login-logo img { width: 44px; height: 44px; border-radius: 50%; object-fit: contain; }
+    .login-logo-text span { font-weight: 600; font-size: 0.95rem; display: block; }
+    .login-logo-text small { color: var(--texto-suave); font-size: 0.75rem; }
+    .login-box h1 { font-size: 1.2rem; font-weight: 600; margin-bottom: 0.25rem; }
+    .login-box p { font-size: 0.83rem; color: var(--texto-suave); margin-bottom: 1.5rem; }
+    .lf { margin-bottom: 1rem; }
+    .lf label { display: block; font-size: 0.82rem; font-weight: 500; margin-bottom: 4px; }
+    .lf input { width: 100%; padding: 9px 11px; border: 1px solid var(--gris-borde); border-radius: 8px; font-size: 0.9rem; }
+    .lf input:focus { outline: none; border-color: var(--azul-claro); box-shadow: 0 0 0 3px rgba(74,144,196,0.12); }
+    .login-btn { width: 100%; background: var(--morado); color: white; border: none; padding: 10px; border-radius: 8px; font-size: 0.9rem; font-weight: 500; cursor: pointer; margin-top: 0.5rem; }
+    .login-btn:hover { background: #6d28d9; }
+    .login-err { font-size: 0.8rem; color: var(--error); margin-top: 0.5rem; display: none; }
+    .login-err.v { display: block; }
+
+    #app { display: none; min-height: 100vh; }
+    #app.visible { display: flex; }
+
+    .sidebar { width: var(--sidebar); background: #1e1b4b; min-height: 100vh; display: flex; flex-direction: column; flex-shrink: 0; position: sticky; top: 0; height: 100vh; overflow-y: auto; }
+    .sb-logo { padding: 1rem; border-bottom: 1px solid rgba(255,255,255,0.08); display: flex; align-items: center; gap: 10px; }
+    .sb-logo img { width: 34px; height: 34px; border-radius: 50%; object-fit: contain; background: white; padding: 2px; }
+    .sb-logo span { color: white; font-weight: 600; font-size: 0.85rem; }
+    .sb-logo small { color: rgba(255,255,255,0.4); font-size: 0.68rem; display: block; }
+    .sb-section { font-size: 0.63rem; color: rgba(255,255,255,0.3); padding: 0.875rem 1rem 0.2rem; letter-spacing: 0.1em; text-transform: uppercase; }
+    .sb-item { display: flex; align-items: center; gap: 9px; padding: 8px 1rem; font-size: 0.82rem; color: rgba(255,255,255,0.6); cursor: pointer; transition: all 0.12s; border: none; background: none; width: 100%; text-align: left; }
+    .sb-item:hover { background: rgba(255,255,255,0.07); color: white; }
+    .sb-item.activo { background: rgba(124,58,237,0.25); color: #a78bfa; }
+    .sb-item svg { flex-shrink: 0; }
+    .sb-footer { margin-top: auto; padding: 1rem; border-top: 1px solid rgba(255,255,255,0.08); }
+    .sb-user { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+    .sb-avatar { width: 30px; height: 30px; border-radius: 50%; background: var(--morado); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; color: white; flex-shrink: 0; }
+    .sb-user-info span { font-size: 0.8rem; color: white; display: block; }
+    .sb-user-info small { font-size: 0.68rem; color: rgba(255,255,255,0.4); }
+    .sb-logout { display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.4); font-size: 0.75rem; cursor: pointer; background: none; border: none; padding: 0; }
+    .sb-logout:hover { color: white; }
+
+    .main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+    .topbar { background: white; border-bottom: 1px solid var(--gris-borde); padding: 0.875rem 1.5rem; display: flex; align-items: center; justify-content: space-between; }
+    .topbar h1 { font-size: 1.05rem; font-weight: 600; }
+    .topbar-right { display: flex; gap: 0.75rem; align-items: center; }
+    .btn { padding: 7px 16px; border-radius: 8px; font-size: 0.83rem; font-weight: 500; cursor: pointer; border: none; transition: all 0.12s; display: inline-flex; align-items: center; gap: 6px; }
+    .btn-p { background: var(--morado); color: white; }
+    .btn-p:hover { background: #6d28d9; }
+    .btn-s { background: white; color: var(--texto); border: 1px solid var(--gris-borde); }
+    .btn-s:hover { background: var(--gris); }
+    .btn-azul { background: var(--azul); color: white; }
+    .btn-azul:hover { background: var(--azul-oscuro); }
+
+    .content { padding: 1.5rem; flex: 1; }
+    .panel { display: none; }
+    .panel.activo { display: block; }
+
+    /* PERFIL HEADER */
+    .perfil-header { background: linear-gradient(135deg, #1e1b4b 0%, #3730a3 100%); border-radius: 14px; padding: 1.75rem; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 1.5rem; }
+    .perfil-avatar { width: 68px; height: 68px; border-radius: 50%; background: rgba(255,255,255,0.15); display: flex; align-items: center; justify-content: center; font-size: 1.6rem; font-weight: 700; color: white; flex-shrink: 0; border: 3px solid rgba(255,255,255,0.3); }
+    .perfil-nombre { color: white; font-size: 1.3rem; font-weight: 700; }
+    .perfil-meta { color: rgba(255,255,255,0.65); font-size: 0.85rem; margin-top: 3px; }
+    .perfil-tags { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+    .perfil-tag { background: rgba(255,255,255,0.15); color: white; font-size: 0.72rem; padding: 3px 10px; border-radius: 20px; }
+
+    /* STATS */
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 0.875rem; margin-bottom: 1.25rem; }
+    .stat-card { background: white; border-radius: 10px; border: 1px solid var(--gris-borde); padding: 1rem; text-align: center; }
+    .stat-val { font-size: 1.75rem; font-weight: 700; color: var(--morado); line-height: 1; }
+    .stat-label { font-size: 0.72rem; color: var(--texto-suave); margin-top: 4px; }
+
+    .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+    .card { background: white; border-radius: 10px; border: 1px solid var(--gris-borde); padding: 1.25rem; }
+    .card-title { font-size: 0.88rem; font-weight: 600; margin-bottom: 0.875rem; display: flex; align-items: center; gap: 7px; }
+
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 0.72rem; font-weight: 600; }
+    .badge-activo { background: #dcfce7; color: #166534; }
+    .badge-prueba { background: #fef3c7; color: #92400e; }
+    .badge-apuntado { background: var(--azul-bg); color: var(--azul); }
+    .tag { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 0.72rem; font-weight: 500; background: var(--morado-bg); color: var(--morado); }
+
+    /* ENTRENOS */
+    .entreno-item { background: white; border: 1px solid var(--gris-borde); border-radius: 10px; margin-bottom: 0.875rem; overflow: hidden; transition: border-color 0.12s; }
+    .entreno-item:hover { border-color: var(--morado); }
+    .entreno-head { padding: 1rem 1.25rem; display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; }
+    .entreno-tipo { font-size: 0.7rem; font-weight: 600; padding: 2px 8px; border-radius: 20px; display: inline-block; margin-bottom: 4px; }
+    .tipo-tecnica { background: #e0f2fe; color: #0369a1; }
+    .tipo-fuerza { background: #fce7f3; color: #9d174d; }
+    .tipo-velocidad { background: #fef3c7; color: #92400e; }
+    .tipo-resistencia { background: #dcfce7; color: #166534; }
+    .tipo-competicion { background: #fee2e2; color: #991b1b; }
+    .tipo-otro { background: var(--gris); color: var(--texto-suave); }
+    .entreno-titulo { font-size: 0.95rem; font-weight: 600; }
+    .entreno-fecha { font-size: 0.78rem; color: var(--texto-suave); margin-top: 2px; }
+    .entreno-body { padding: 0 1.25rem 1rem; font-size: 0.85rem; color: var(--texto-suave); line-height: 1.6; white-space: pre-wrap; }
+    .entreno-adjunto { display: inline-flex; align-items: center; gap: 6px; font-size: 0.78rem; color: var(--azul); text-decoration: none; margin-top: 8px; padding: 4px 10px; background: var(--azul-bg); border-radius: 6px; }
+    .fb-btn { font-size: 0.78rem; padding: 5px 12px; border-radius: 7px; background: var(--morado); color: white; border: none; cursor: pointer; flex-shrink: 0; }
+    .fb-btn.ya { background: #dcfce7; color: #166534; cursor: default; }
+
+    /* COMPETICIONES */
+    .comp-item { background: white; border: 1px solid var(--gris-borde); border-radius: 10px; padding: 1rem 1.25rem; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 1rem; }
+    .comp-fecha-box { min-width: 48px; text-align: center; background: var(--morado-bg); border-radius: 8px; padding: 0.5rem 0.25rem; flex-shrink: 0; }
+    .comp-dia { font-size: 1.2rem; font-weight: 700; color: var(--morado); line-height: 1; }
+    .comp-mes { font-size: 0.68rem; color: #7c3aed; text-transform: uppercase; font-weight: 600; }
+    .comp-info { flex: 1; }
+    .comp-titulo { font-size: 0.9rem; font-weight: 600; }
+    .comp-meta { font-size: 0.75rem; color: var(--texto-suave); margin-top: 2px; }
+    .apuntarse-btn { font-size: 0.78rem; padding: 6px 14px; border-radius: 7px; background: var(--morado); color: white; border: none; cursor: pointer; flex-shrink: 0; transition: all 0.12s; }
+    .apuntarse-btn:hover { background: #6d28d9; }
+    .apuntarse-btn.apuntado { background: #dcfce7; color: #166534; cursor: default; }
+
+    /* STATS GRÁFICA SIMPLE */
+    .marcas-lista { display: flex; flex-direction: column; gap: 6px; }
+    .marca-item { display: flex; align-items: center; gap: 10px; font-size: 0.83rem; }
+    .marca-bar-wrap { flex: 1; background: var(--gris); border-radius: 4px; height: 8px; overflow: hidden; }
+    .marca-bar { height: 100%; background: var(--morado); border-radius: 4px; transition: width 0.5s; }
+    .marca-label { min-width: 80px; color: var(--texto-suave); font-size: 0.75rem; }
+    .marca-val { min-width: 60px; text-align: right; font-weight: 600; font-size: 0.8rem; }
+
+    /* MODAL FEEDBACK */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 200; align-items: center; justify-content: center; padding: 1rem; }
+    .modal-overlay.v { display: flex; }
+    .modal { background: white; border-radius: 14px; width: 100%; max-width: 460px; }
+    .modal-head { padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--gris-borde); display: flex; align-items: center; justify-content: space-between; }
+    .modal-head h2 { font-size: 1rem; font-weight: 600; }
+    .modal-close { background: none; border: none; cursor: pointer; color: var(--texto-suave); }
+    .modal-body { padding: 1.5rem; }
+    .modal-foot { padding: 1rem 1.5rem; border-top: 1px solid var(--gris-borde); display: flex; justify-content: flex-end; gap: 0.75rem; }
+    .mf { margin-bottom: 1rem; }
+    .mf label { display: block; font-size: 0.82rem; font-weight: 500; margin-bottom: 4px; }
+    .mf input, .mf textarea { width: 100%; padding: 8px 10px; border: 1px solid var(--gris-borde); border-radius: 7px; font-size: 0.87rem; }
+    .mf textarea { resize: vertical; min-height: 80px; }
+    .stars { display: flex; gap: 8px; margin-top: 4px; }
+    .star { width: 40px; height: 40px; border-radius: 8px; border: 1.5px solid var(--gris-borde); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1.2rem; transition: all 0.12s; }
+    .star:hover, .star.sel { border-color: var(--morado); background: var(--morado-bg); }
+    .star-label { font-size: 0.7rem; color: var(--texto-suave); margin-top: 3px; text-align: center; }
+
+    .spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.6s linear infinite; vertical-align: middle; margin-right: 4px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    @media (max-width: 700px) {
+      .sidebar { display: none; }
+      .g2 { grid-template-columns: 1fr; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">
+      <img src="https://icaxokjsvhlreuwpyxeb.supabase.co/storage/v1/object/public/imagenes-club/logo.png" alt="Club Apolana" onerror="this.style.display='none'">
+      <div class="login-logo-text">
+        <span>Club Apolana</span>
+        <small>Portal del atleta</small>
+      </div>
+    </div>
+    <h1>Acceso atletas</h1>
+    <p>Tu perfil, entrenamientos y competiciones</p>
+    <div class="lf"><label>Email</label><input type="email" id="l-email" placeholder="tu@email.com" autocomplete="email"></div>
+    <div class="lf"><label>Contraseña</label><input type="password" id="l-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"></div>
+    <div class="login-err" id="l-err">Email o contraseña incorrectos</div>
+    <button class="login-btn" id="l-btn" onclick="doLogin()">Entrar</button>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <aside class="sidebar">
+    <div class="sb-logo">
+      <img src="https://icaxokjsvhlreuwpyxeb.supabase.co/storage/v1/object/public/imagenes-club/logo.png" alt="Logo" onerror="this.style.display='none'">
+      <div><span>Apolana</span><small id="sb-grupo">Atleta</small></div>
+    </div>
+    <div class="sb-section">Mi panel</div>
+    <button class="sb-item activo" onclick="showPanel('perfil')">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      Mi perfil
+    </button>
+    <button class="sb-item" onclick="showPanel('entrenamientos')">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+      Entrenamientos
+    </button>
+    <button class="sb-item" onclick="showPanel('stats')">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      Mis estadísticas
+    </button>
+    <button class="sb-item" onclick="showPanel('competiciones')">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      Competiciones
+    </button>
+    <div class="sb-footer">
+      <div class="sb-user">
+        <div class="sb-avatar" id="sb-initials">A</div>
+        <div class="sb-user-info">
+          <span id="sb-nombre">Atleta</span>
+          <small>Atleta</small>
+        </div>
+      </div>
+      <button class="sb-logout" onclick="doLogout()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Cerrar sesión
+      </button>
+    </div>
+  </aside>
+
+  <div class="main">
+    <div class="topbar">
+      <h1 id="topbar-title">Mi perfil</h1>
+      <div class="topbar-right">
+        <a href="index.html" target="_blank" class="btn btn-s">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          Web del club
+        </a>
+      </div>
+    </div>
+    <div class="content">
+
+      <!-- PERFIL -->
+      <div class="panel activo" id="panel-perfil">
+        <div id="perfil-contenido"><div style="color:var(--texto-suave);">Cargando...</div></div>
+      </div>
+
+      <!-- ENTRENAMIENTOS -->
+      <div class="panel" id="panel-entrenamientos">
+        <div id="entrenos-contenido"><div style="color:var(--texto-suave);">Cargando...</div></div>
+      </div>
+
+      <!-- ESTADÍSTICAS -->
+      <div class="panel" id="panel-stats">
+        <div id="stats-contenido"><div style="color:var(--texto-suave);">Cargando estadísticas...</div></div>
+      </div>
+
+      <!-- COMPETICIONES -->
+      <div class="panel" id="panel-competiciones">
+        <div id="comp-contenido"><div style="color:var(--texto-suave);">Cargando...</div></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- MODAL FEEDBACK -->
+<div class="modal-overlay" id="modal-feedback">
+  <div class="modal">
+    <div class="modal-head">
+      <h2>Feedback del entrenamiento</h2>
+      <button class="modal-close" onclick="cerrarModal('modal-feedback')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="fb-entreno-id">
+      <div style="font-size:0.88rem;font-weight:600;margin-bottom:1rem;" id="fb-titulo"></div>
+      <div class="mf">
+        <label>¿Cómo fue la sesión?</label>
+        <div class="stars">
+          <div style="text-align:center;"><div class="star" onclick="selStar(1)" id="star-1">😞</div><div class="star-label">Mal</div></div>
+          <div style="text-align:center;"><div class="star" onclick="selStar(2)" id="star-2">😐</div><div class="star-label">Regular</div></div>
+          <div style="text-align:center;"><div class="star" onclick="selStar(3)" id="star-3">🙂</div><div class="star-label">Bien</div></div>
+          <div style="text-align:center;"><div class="star" onclick="selStar(4)" id="star-4">😄</div><div class="star-label">Muy bien</div></div>
+          <div style="text-align:center;"><div class="star" onclick="selStar(5)" id="star-5">🔥</div><div class="star-label">Excelente</div></div>
+        </div>
+      </div>
+      <div class="mf">
+        <label>Marca o tiempo <span style="color:var(--texto-suave);font-weight:400;font-size:0.78rem;">(opcional)</span></label>
+        <input type="text" id="fb-marca" placeholder="Ej: 12.5s, 4:30 min/km, 8.45m...">
+      </div>
+      <div class="mf">
+        <label>Notas <span style="color:var(--texto-suave);font-weight:400;font-size:0.78rem;">(opcional)</span></label>
+        <textarea id="fb-notas" placeholder="¿Cómo te encontraste? ¿Alguna dificultad o logro?"></textarea>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-s" onclick="cerrarModal('modal-feedback')">Cancelar</button>
+      <button class="btn btn-p" id="btn-fb" onclick="enviarFeedback()">Enviar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const SB_URL = 'https://icaxokjsvhlreuwpyxeb.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImljYXhva2pzdmhscmV1d3B5eGViIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEwNzE2NTgsImV4cCI6MjA5NjY0NzY1OH0.xn1ZY-otHY0-l7g64uutSVjiU8DbkHxxZmTvu77IaHA';
+const db = supabase.createClient(SB_URL, SB_KEY);
+
+let perfilActual = null, atletaData = null, grupoData = null, starSel = 0;
+
+// AUTH
+async function doLogin() {
+  const email = document.getElementById('l-email').value.trim();
+  const pass = document.getElementById('l-pass').value;
+  const err = document.getElementById('l-err');
+  const btn = document.getElementById('l-btn');
+  err.classList.remove('v');
+  btn.innerHTML = '<span class="spinner"></span>Entrando...'; btn.disabled = true;
+  try {
+    const { data, error } = await db.auth.signInWithPassword({ email, password: pass });
+    if (error) throw error;
+    const { data: perfil } = await db.from('perfiles').select('*').eq('id', data.user.id).single();
+    if (!perfil || !['atleta','admin'].includes(perfil.rol)) throw new Error('No atleta');
+    iniciarApp(perfil);
+  } catch(e) {
+    err.classList.add('v'); btn.innerHTML = 'Entrar'; btn.disabled = false;
+  }
+}
+
+async function checkSession() {
+  const { data } = await db.auth.getSession();
+  if (data.session) {
+    const { data: p } = await db.from('perfiles').select('*').eq('id', data.session.user.id).single();
+    if (p && ['atleta','admin'].includes(p.rol)) { iniciarApp(p); return; }
+  }
+  document.getElementById('login-screen').style.display = 'flex';
+}
+
+async function iniciarApp(perfil) {
+  perfilActual = perfil;
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('app').classList.add('visible');
+  const n = perfil.nombre || 'Atleta';
+  document.getElementById('sb-nombre').textContent = n;
+  document.getElementById('sb-initials').textContent = n.charAt(0).toUpperCase();
+  // Buscar atleta vinculado al perfil
+  const { data: atleta } = await db.from('atletas').select('*').eq('perfil_padre_id', perfil.id).single();
+  if (atleta) {
+    atletaData = atleta;
+    if (atleta.grupo_id) {
+      const { data: grupo } = await db.from('grupos').select('*').eq('id', atleta.grupo_id).single();
+      grupoData = grupo;
+      if (grupo) document.getElementById('sb-grupo').textContent = grupo.nombre;
+    }
+    renderPerfil();
+  } else {
+    // El atleta usa su propio perfil como referencia
+    document.getElementById('perfil-contenido').innerHTML = '<div style="color:var(--texto-suave);font-size:0.88rem;padding:1rem;">Tu perfil de atleta aún no está vinculado. Contacta con el club.</div>';
+  }
+}
+
+async function doLogout() { await db.auth.signOut(); location.reload(); }
+
+// PERFIL
+function renderPerfil() {
+  const a = atletaData;
+  document.getElementById('perfil-contenido').innerHTML = `
+    <div class="perfil-header">
+      <div class="perfil-avatar">${a.nombre.charAt(0)}${a.apellidos.charAt(0)}</div>
+      <div>
+        <div class="perfil-nombre">${a.nombre} ${a.apellidos}</div>
+        <div class="perfil-meta">${calcEdad(a.fecha_nacimiento)} años · ${a.seccion}</div>
+        <div class="perfil-tags">
+          <span class="perfil-tag">${grupoData?.nombre||'Sin grupo'}</span>
+          <span class="perfil-tag">${a.estado}</span>
+          ${a.licencia_rfea ? `<span class="perfil-tag">RFEA: ${a.licencia_rfea}</span>` : ''}
+        </div>
+      </div>
+    </div>
+    <div class="g2">
+      <div class="card">
+        <div class="card-title">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+          Mis datos
+        </div>
+        <div style="font-size:0.85rem;display:flex;flex-direction:column;gap:8px;">
+          <div style="display:flex;justify-content:space-between;padding-bottom:7px;border-bottom:1px solid var(--gris-borde);"><span style="color:var(--texto-suave);">Fecha nacimiento</span><span style="font-weight:500;">${a.fecha_nacimiento||'—'}</span></div>
+          <div style="display:flex;justify-content:space-between;padding-bottom:7px;border-bottom:1px solid var(--gris-borde);"><span style="color:var(--texto-suave);">Sección</span><span class="tag">${a.seccion}</span></div>
+          <div style="display:flex;justify-content:space-between;padding-bottom:7px;border-bottom:1px solid var(--gris-borde);"><span style="color:var(--texto-suave);">Grupo</span><span style="font-weight:500;">${grupoData?.nombre||'—'}</span></div>
+          <div style="display:flex;justify-content:space-between;"><span style="color:var(--texto-suave);">Horario</span><span style="font-weight:500;">${grupoData?.horario||'—'}</span></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+          Estado
+        </div>
+        <div style="font-size:0.85rem;display:flex;flex-direction:column;gap:8px;">
+          <div style="display:flex;justify-content:space-between;padding-bottom:7px;border-bottom:1px solid var(--gris-borde);"><span style="color:var(--texto-suave);">Estado</span><span class="badge badge-${a.estado}">${a.estado}</span></div>
+          <div style="display:flex;justify-content:space-between;padding-bottom:7px;border-bottom:1px solid var(--gris-borde);"><span style="color:var(--texto-suave);">Pago</span><span class="badge badge-${a.estado_pago||'pendiente'}">${(a.estado_pago||'pendiente').replace('_',' ')}</span></div>
+          <div style="display:flex;justify-content:space-between;padding-bottom:7px;border-bottom:1px solid var(--gris-borde);"><span style="color:var(--texto-suave);">Camiseta</span><span style="font-weight:500;">${a.talla_camiseta||'—'}</span></div>
+          <div style="display:flex;justify-content:space-between;"><span style="color:var(--texto-suave);">Ropa</span><span class="badge ${a.ropa_entregada?'badge-activo':'badge-prueba'}">${a.ropa_entregada?'Entregada':'Pendiente'}</span></div>
+        </div>
+      </div>
+    </div>`;
+}
+
+function calcEdad(f) {
+  if (!f) return '—';
+  const h = new Date(), n = new Date(f);
+  let e = h.getFullYear() - n.getFullYear();
+  if (h < new Date(h.getFullYear(), n.getMonth(), n.getDate())) e--;
+  return e;
+}
+
+// ENTRENAMIENTOS
+async function cargarEntrenamientos() {
+  if (!atletaData?.grupo_id) {
+    document.getElementById('entrenos-contenido').innerHTML = '<div style="color:var(--texto-suave);font-size:0.88rem;">Aún no tienes grupo asignado. Los entrenamientos aparecerán aquí cuando tu entrenador los publique.</div>';
+    return;
+  }
+  const { data: entrenos } = await db.from('entrenamientos').select('*').eq('grupo_id', atletaData.grupo_id).order('fecha', { ascending: false }).limit(25);
+  if (!entrenos?.length) { document.getElementById('entrenos-contenido').innerHTML = '<div style="color:var(--texto-suave);">Tu entrenador aún no ha publicado entrenamientos.</div>'; return; }
+  const { data: fbDados } = await db.from('feedback_entrenamientos').select('entrenamiento_id').eq('atleta_id', atletaData.id);
+  const fbIds = new Set((fbDados||[]).map(f => f.entrenamiento_id));
+  const TIPOS_CLS = { tecnica:'tipo-tecnica', fuerza:'tipo-fuerza', velocidad:'tipo-velocidad', resistencia:'tipo-resistencia', competicion:'tipo-competicion', otro:'tipo-otro' };
+  document.getElementById('entrenos-contenido').innerHTML = entrenos.map(e => `
+    <div class="entreno-item">
+      <div class="entreno-head">
+        <div style="flex:1">
+          <span class="entreno-tipo ${TIPOS_CLS[e.tipo]||'tipo-otro'}">${e.tipo}</span>
+          <div class="entreno-titulo">${e.titulo}</div>
+          <div class="entreno-fecha">${new Date(e.fecha).toLocaleDateString('es-ES',{weekday:'long',year:'numeric',month:'long',day:'numeric'})}</div>
+        </div>
+        ${fbIds.has(e.id)
+          ? '<button class="fb-btn ya">✓ Enviado</button>'
+          : `<button class="fb-btn" onclick="abrirFeedback('${e.id}','${e.titulo.replace(/'/g,"\\'")}')">Feedback</button>`}
+      </div>
+      <div class="entreno-body">${e.descripcion||''}</div>
+      ${e.archivo_url?`<div style="padding:0 1.25rem 0.875rem;"><a href="${e.archivo_url}" target="_blank" class="entreno-adjunto"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Ver plan</a></div>`:''}
+    </div>`).join('');
+}
+
+// ESTADÍSTICAS
+async function cargarStats() {
+  if (!atletaData) return;
+  const { data: fb } = await db.from('feedback_entrenamientos').select('*,entrenamientos(titulo,fecha,tipo)').eq('atleta_id', atletaData.id).order('created_at', { ascending: false });
+  const total = fb?.length || 0;
+  const conMarca = fb?.filter(f => f.tiempo_marca)?.length || 0;
+  const sensMedia = total > 0 ? (fb.reduce((s,f) => s + (f.sensaciones||0), 0) / total).toFixed(1) : '—';
+  const SENS_LABEL = { '1':'Mal', '2':'Regular', '3':'Bien', '4':'Muy bien', '5':'Excelente' };
+  document.getElementById('stats-contenido').innerHTML = `
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-val">${total}</div><div class="stat-label">Entrenamientos con feedback</div></div>
+      <div class="stat-card"><div class="stat-val">${sensMedia}</div><div class="stat-label">Sensación media (1-5)</div></div>
+      <div class="stat-card"><div class="stat-val">${conMarca}</div><div class="stat-label">Sesiones con marca</div></div>
+      <div class="stat-card"><div class="stat-val">${atletaData.es_socio ? 'Sí' : 'No'}</div><div class="stat-label">Socio del club</div></div>
+    </div>
+    ${conMarca > 0 ? `
+    <div class="card" style="margin-bottom:1rem;">
+      <div class="card-title">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Últimas marcas registradas
+      </div>
+      <div class="marcas-lista">
+        ${fb.filter(f=>f.tiempo_marca).slice(0,8).map(f=>`
+          <div class="marca-item">
+            <span class="marca-label">${f.entrenamientos?.fecha||'—'}</span>
+            <div class="marca-bar-wrap"><div class="marca-bar" style="width:70%"></div></div>
+            <span class="marca-val">${f.tiempo_marca}</span>
+          </div>`).join('')}
+      </div>
+    </div>` : ''}
+    <div class="card">
+      <div class="card-title">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Historial de feedbacks
+      </div>
+      ${fb?.length ? `<div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;font-size:0.82rem;">
+        <thead><tr>
+          <th style="padding:7px 10px;text-align:left;font-size:0.7rem;color:var(--texto-suave);background:var(--gris);border-bottom:1px solid var(--gris-borde);">Entrenamiento</th>
+          <th style="padding:7px 10px;text-align:left;font-size:0.7rem;color:var(--texto-suave);background:var(--gris);border-bottom:1px solid var(--gris-borde);">Fecha</th>
+          <th style="padding:7px 10px;text-align:left;font-size:0.7rem;color:var(--texto-suave);background:var(--gris);border-bottom:1px solid var(--gris-borde);">Sensación</th>
+          <th style="padding:7px 10px;text-align:left;font-size:0.7rem;color:var(--texto-suave);background:var(--gris);border-bottom:1px solid var(--gris-borde);">Marca</th>
+        </tr></thead>
+        <tbody>${fb.slice(0,15).map(f=>`<tr>
+          <td style="padding:8px 10px;border-bottom:1px solid var(--gris-borde);">${f.entrenamientos?.titulo||'—'}</td>
+          <td style="padding:8px 10px;border-bottom:1px solid var(--gris-borde);color:var(--texto-suave);">${f.entrenamientos?.fecha||'—'}</td>
+          <td style="padding:8px 10px;border-bottom:1px solid var(--gris-borde);">${['','😞','😐','🙂','😄','🔥'][f.sensaciones]||'—'}</td>
+          <td style="padding:8px 10px;border-bottom:1px solid var(--gris-borde);font-weight:500;">${f.tiempo_marca||'—'}</td>
+        </tr>`).join('')}</tbody>
+      </table></div>`
+      : '<div style="color:var(--texto-suave);font-size:0.85rem;">Aún no tienes feedbacks registrados</div>'}
+    </div>`;
+}
+
+// COMPETICIONES
+async function cargarCompeticiones() {
+  const { data: eventos } = await db.from('eventos').select('*').in('tipo',['competicion','control']).gte('fecha_inicio', new Date().toISOString()).order('fecha_inicio').limit(20);
+  if (!eventos?.length) { document.getElementById('comp-contenido').innerHTML = '<div style="color:var(--texto-suave);">No hay competiciones próximas publicadas.</div>'; return; }
+  // Ver a cuáles ya está apuntado
+  const { data: inscritos } = await db.from('inscripciones_eventos').select('evento_id').eq('atleta_id', atletaData.id);
+  const inscIds = new Set((inscritos||[]).map(i => i.evento_id));
+  const TIPOS = { competicion:'Competición', control:'Control interno' };
+  document.getElementById('comp-contenido').innerHTML = eventos.map(e => {
+    const f = new Date(e.fecha_inicio);
+    const apuntado = inscIds.has(e.id);
+    return `<div class="comp-item">
+      <div class="comp-fecha-box"><div class="comp-dia">${f.getDate()}</div><div class="comp-mes">${f.toLocaleDateString('es-ES',{month:'short'}).replace('.','')}</div></div>
+      <div class="comp-info">
+        <div class="comp-titulo">${e.titulo}</div>
+        <div class="comp-meta">${f.toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'})}${e.lugar?' · '+e.lugar:''}</div>
+        ${e.descripcion?`<div style="font-size:0.78rem;color:var(--texto-suave);margin-top:3px;">${e.descripcion}</div>`:''}
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;">
+        <span class="badge badge-${e.tipo==='competicion'?'impagado':'activo'}" style="${e.tipo==='competicion'?'':'background:#e0f2fe;color:#0369a1;'}">${TIPOS[e.tipo]||e.tipo}</span>
+        ${e.inscripcion_abierta
+          ? apuntado
+            ? '<button class="apuntarse-btn apuntado">✓ Apuntado</button>'
+            : `<button class="apuntarse-btn" onclick="apuntarse('${e.id}',this)">Apuntarme</button>`
+          : '<span style="font-size:0.75rem;color:var(--texto-suave);">Inscripción cerrada</span>'}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+async function apuntarse(eventoId, btn) {
+  if (!atletaData) return;
+  btn.disabled = true; btn.textContent = '...';
+  const { error } = await db.from('inscripciones_eventos').insert([{ evento_id: eventoId, atleta_id: atletaData.id, estado: 'apuntado' }]);
+  if (!error) { btn.className = 'apuntarse-btn apuntado'; btn.textContent = '✓ Apuntado'; }
+  else { btn.disabled = false; btn.textContent = 'Apuntarme'; }
+}
+
+// FEEDBACK
+function abrirFeedback(id, titulo) {
+  document.getElementById('fb-entreno-id').value = id;
+  document.getElementById('fb-titulo').textContent = titulo;
+  document.getElementById('fb-marca').value = '';
+  document.getElementById('fb-notas').value = '';
+  starSel = 0;
+  document.querySelectorAll('.star').forEach(s => s.classList.remove('sel'));
+  document.getElementById('modal-feedback').classList.add('v');
+}
+
+function selStar(n) {
+  starSel = n;
+  document.querySelectorAll('.star').forEach((s,i) => s.classList.toggle('sel', i+1 === n));
+}
+
+async function enviarFeedback() {
+  if (!starSel) { alert('Indica cómo fue la sesión'); return; }
+  const btn = document.getElementById('btn-fb');
+  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Enviando...';
+  const { error } = await db.from('feedback_entrenamientos').insert([{
+    entrenamiento_id: document.getElementById('fb-entreno-id').value,
+    atleta_id: atletaData.id,
+    sensaciones: starSel,
+    tiempo_marca: document.getElementById('fb-marca').value.trim() || null,
+    notas: document.getElementById('fb-notas').value.trim() || null,
+  }]);
+  if (error) { alert('Error al enviar'); btn.disabled = false; btn.innerHTML = 'Enviar'; return; }
+  cerrarModal('modal-feedback');
+  btn.disabled = false; btn.innerHTML = 'Enviar';
+  cargarEntrenamientos();
+}
+
+// NAVEGACIÓN
+const TITLES = { perfil:'Mi perfil', entrenamientos:'Entrenamientos', stats:'Mis estadísticas', competiciones:'Competiciones' };
+function showPanel(id) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('activo'));
+  document.querySelectorAll('.sb-item').forEach(b => b.classList.remove('activo'));
+  document.getElementById('panel-' + id).classList.add('activo');
+  document.querySelectorAll('.sb-item').forEach(b => { if (b.getAttribute('onclick')?.includes("'"+id+"'")) b.classList.add('activo'); });
+  document.getElementById('topbar-title').textContent = TITLES[id] || id;
+  if (id === 'entrenamientos') cargarEntrenamientos();
+  if (id === 'stats') cargarStats();
+  if (id === 'competiciones') cargarCompeticiones();
+}
+
+function cerrarModal(id) { document.getElementById(id).classList.remove('v'); }
+document.querySelectorAll('.modal-overlay').forEach(el => {
+  el.addEventListener('click', function(e) { if (e.target === this) this.classList.remove('v'); });
+});
+
+checkSession();
+</script>
+</body>
+</html>
