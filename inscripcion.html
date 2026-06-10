@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inscripción · Club Apolana</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --azul: #1a5f8f;
+      --azul-claro: #4a90c4;
+      --azul-bg: #e8f2fa;
+      --gris: #f5f6f8;
+      --gris-borde: #dde2e8;
+      --texto: #1a1d23;
+      --texto-suave: #6b7280;
+      --error: #dc2626;
+      --exito: #16a34a;
+      --radio: 10px;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--gris);
+      color: var(--texto);
+      min-height: 100vh;
+      padding: 0 0 4rem;
+    }
+
+    /* CABECERA */
+    header {
+      background: var(--azul);
+      padding: 1.5rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .logo-circle {
+      width: 52px; height: 52px;
+      border-radius: 50%;
+      background: white;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .logo-circle svg { width: 36px; height: 36px; }
+    header h1 { color: white; font-size: 1.25rem; font-weight: 600; }
+    header p { color: rgba(255,255,255,0.7); font-size: 0.85rem; margin-top: 2px; }
+
+    /* PROGRESO */
+    .progreso-wrap {
+      background: white;
+      border-bottom: 1px solid var(--gris-borde);
+      padding: 1rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .progreso {
+      max-width: 640px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 0;
+    }
+    .paso {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex: 1;
+      font-size: 0.78rem;
+      color: var(--texto-suave);
+    }
+    .paso.activo { color: var(--azul); font-weight: 600; }
+    .paso.hecho { color: var(--exito); }
+    .paso-num {
+      width: 24px; height: 24px;
+      border-radius: 50%;
+      border: 2px solid var(--gris-borde);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem; font-weight: 600;
+      flex-shrink: 0;
+    }
+    .paso.activo .paso-num { background: var(--azul); border-color: var(--azul); color: white; }
+    .paso.hecho .paso-num { background: var(--exito); border-color: var(--exito); color: white; }
+    .paso-linea { flex: 1; height: 2px; background: var(--gris-borde); margin: 0 4px; }
+    .paso-linea.hecha { background: var(--exito); }
+
+    /* CONTENIDO */
+    .contenido {
+      max-width: 640px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+
+    .seccion-titulo {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--azul);
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--azul-bg);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card {
+      background: white;
+      border-radius: var(--radio);
+      border: 1px solid var(--gris-borde);
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .campo { margin-bottom: 1.1rem; }
+    .campo:last-child { margin-bottom: 0; }
+
+    label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--texto);
+      margin-bottom: 5px;
+    }
+    label span.req { color: var(--error); margin-left: 2px; }
+    label span.opt { color: var(--texto-suave); font-weight: 400; font-size: 0.8rem; }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--gris-borde);
+      border-radius: 8px;
+      font-size: 0.9rem;
+      color: var(--texto);
+      background: white;
+      transition: border-color 0.15s;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--azul-claro);
+      box-shadow: 0 0 0 3px rgba(74,144,196,0.12);
+    }
+    input.error, select.error { border-color: var(--error); }
+
+    .error-msg {
+      font-size: 0.78rem;
+      color: var(--error);
+      margin-top: 4px;
+      display: none;
+    }
+    .error-msg.visible { display: block; }
+
+    .fila2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+    .fila3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.75rem; }
+
+    textarea { resize: vertical; min-height: 80px; }
+
+    .checkbox-grupo { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border: 1px solid var(--gris-borde);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .checkbox-item:hover { border-color: var(--azul-claro); background: var(--azul-bg); }
+    .checkbox-item input[type="checkbox"] {
+      width: 18px; height: 18px;
+      cursor: pointer;
+      accent-color: var(--azul);
+      flex-shrink: 0;
+    }
+    .checkbox-item span { font-size: 0.88rem; }
+
+    .radio-grupo { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
+    .radio-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      border: 1.5px solid var(--gris-borde);
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: all 0.15s;
+    }
+    .radio-pill input { display: none; }
+    .radio-pill:has(input:checked) {
+      border-color: var(--azul);
+      background: var(--azul-bg);
+      color: var(--azul);
+      font-weight: 500;
+    }
+
+    .info-box {
+      background: var(--azul-bg);
+      border: 1px solid #b8d9f0;
+      border-radius: 8px;
+      padding: 0.875rem 1rem;
+      font-size: 0.85rem;
+      color: var(--azul);
+      margin-bottom: 1rem;
+      display: flex;
+      gap: 8px;
+    }
+
+    /* PASOS */
+    .paso-contenido { display: none; }
+    .paso-contenido.activo { display: block; }
+
+    /* BOTONES */
+    .botones {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 1.5rem;
+      gap: 1rem;
+    }
+    .btn {
+      padding: 11px 24px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      transition: all 0.15s;
+    }
+    .btn-primario {
+      background: var(--azul);
+      color: white;
+      flex: 1;
+    }
+    .btn-primario:hover { background: #15507a; }
+    .btn-primario:disabled { background: var(--gris-borde); cursor: not-allowed; color: var(--texto-suave); }
+    .btn-secundario {
+      background: white;
+      color: var(--texto);
+      border: 1px solid var(--gris-borde);
+    }
+    .btn-secundario:hover { background: var(--gris); }
+
+    /* ÉXITO */
+    .exito-pantalla {
+      text-align: center;
+      padding: 3rem 1rem;
+    }
+    .exito-icono {
+      width: 72px; height: 72px;
+      background: #dcfce7;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 1.5rem;
+      font-size: 2rem;
+    }
+    .exito-pantalla h2 { font-size: 1.4rem; margin-bottom: 0.5rem; }
+    .exito-pantalla p { color: var(--texto-suave); margin-bottom: 0.5rem; }
+    .ref-numero {
+      background: var(--azul-bg);
+      border: 1px solid #b8d9f0;
+      border-radius: 8px;
+      padding: 0.75rem 1.5rem;
+      font-weight: 600;
+      color: var(--azul);
+      display: inline-block;
+      margin: 1rem 0;
+      font-size: 1.1rem;
+      letter-spacing: 0.05em;
+    }
+
+    /* SPINNER */
+    .spinner {
+      display: inline-block;
+      width: 16px; height: 16px;
+      border: 2px solid rgba(255,255,255,0.4);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+      margin-right: 6px;
+      vertical-align: middle;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    @media (max-width: 500px) {
+      .fila2, .fila3 { grid-template-columns: 1fr; }
+      header { padding: 1rem; }
+      .card { padding: 1.1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo-circle">
+    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="50" cy="50" r="46" stroke="#1a5f8f" stroke-width="4" fill="none"/>
+      <circle cx="50" cy="50" r="40" stroke="#1a5f8f" stroke-width="2" fill="none"/>
+      <rect x="38" y="30" width="24" height="38" rx="4" stroke="#1a5f8f" stroke-width="3" fill="none"/>
+      <rect x="44" y="30" width="2" height="38" fill="#1a5f8f"/>
+      <ellipse cx="50" cy="30" rx="12" ry="8" fill="#1a5f8f"/>
+      <text x="50" y="55" text-anchor="middle" font-size="11" font-weight="bold" fill="#1a5f8f" font-family="Arial">21</text>
+    </svg>
+  </div>
+  <div>
+    <h1>Club Apolana · Inscripción</h1>
+    <p>Escuela de atletismo · Temporada 2025/26</p>
+  </div>
+</header>
+
+<div class="progreso-wrap">
+  <div class="progreso">
+    <div class="paso activo" id="prog-1">
+      <div class="paso-num">1</div>
+      <span>Atleta</span>
+    </div>
+    <div class="paso-linea" id="linea-1"></div>
+    <div class="paso" id="prog-2">
+      <div class="paso-num">2</div>
+      <span>Familia</span>
+    </div>
+    <div class="paso-linea" id="linea-2"></div>
+    <div class="paso" id="prog-3">
+      <div class="paso-num">3</div>
+      <span>Sección</span>
+    </div>
+    <div class="paso-linea" id="linea-3"></div>
+    <div class="paso" id="prog-4">
+      <div class="paso-num">4</div>
+      <span>Extras</span>
+    </div>
+    <div class="paso-linea" id="linea-4"></div>
+    <div class="paso" id="prog-5">
+      <div class="paso-num">5</div>
+      <span>Confirmar</span>
+    </div>
+  </div>
+</div>
+
+<div class="contenido">
+
+  <!-- PASO 1: DATOS DEL ATLETA -->
+  <div class="paso-contenido activo" id="paso-1">
+    <div class="seccion-titulo">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      Datos del atleta
+    </div>
+    <div class="card">
+      <div class="fila2">
+        <div class="campo">
+          <label>Nombre <span class="req">*</span></label>
+          <input type="text" id="nombre" placeholder="Nombre" autocomplete="given-name">
+          <div class="error-msg" id="err-nombre">Introduce el nombre</div>
+        </div>
+        <div class="campo">
+          <label>Apellidos <span class="req">*</span></label>
+          <input type="text" id="apellidos" placeholder="Apellidos" autocomplete="family-name">
+          <div class="error-msg" id="err-apellidos">Introduce los apellidos</div>
+        </div>
+      </div>
+      <div class="fila2">
+        <div class="campo">
+          <label>Fecha de nacimiento <span class="req">*</span></label>
+          <input type="date" id="fecha_nacimiento">
+          <div class="error-msg" id="err-fecha">Introduce la fecha de nacimiento</div>
+        </div>
+        <div class="campo">
+          <label>DNI / NIE <span class="opt">(opcional)</span></label>
+          <input type="text" id="dni_nie" placeholder="12345678A">
+        </div>
+      </div>
+    </div>
+    <div class="botones">
+      <div></div>
+      <button class="btn btn-primario" onclick="irPaso(2)">Siguiente →</button>
+    </div>
+  </div>
+
+  <!-- PASO 2: DATOS DE LA FAMILIA -->
+  <div class="paso-contenido" id="paso-2">
+    <div class="seccion-titulo">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Datos de la familia
+    </div>
+    <div class="card">
+      <div class="fila2">
+        <div class="campo">
+          <label>Nombre del padre <span class="opt">(opcional)</span></label>
+          <input type="text" id="nombre_padre" placeholder="Nombre completo">
+        </div>
+        <div class="campo">
+          <label>Nombre de la madre <span class="opt">(opcional)</span></label>
+          <input type="text" id="nombre_madre" placeholder="Nombre completo">
+        </div>
+      </div>
+      <div class="fila2">
+        <div class="campo">
+          <label>Teléfono de contacto <span class="req">*</span></label>
+          <input type="tel" id="telefono" placeholder="600 000 000" autocomplete="tel">
+          <div class="error-msg" id="err-telefono">Introduce un teléfono válido</div>
+        </div>
+        <div class="campo">
+          <label>Email de contacto <span class="req">*</span></label>
+          <input type="email" id="email" placeholder="correo@ejemplo.com" autocomplete="email">
+          <div class="error-msg" id="err-email">Introduce un email válido</div>
+        </div>
+      </div>
+    </div>
+    <div class="botones">
+      <button class="btn btn-secundario" onclick="irPaso(1)">← Atrás</button>
+      <button class="btn btn-primario" onclick="irPaso(3)">Siguiente →</button>
+    </div>
+  </div>
+
+  <!-- PASO 3: SECCIÓN Y ROPA -->
+  <div class="paso-contenido" id="paso-3">
+    <div class="seccion-titulo">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+      Sección y equipación
+    </div>
+    <div class="info-box">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      Los nuevos inscritos entran con un periodo de prueba de 15 días. El grupo definitivo lo asignará el coordinador.
+    </div>
+    <div class="card">
+      <div class="campo">
+        <label>Sección <span class="req">*</span></label>
+        <div class="radio-grupo" id="radio-seccion">
+          <label class="radio-pill"><input type="radio" name="seccion" value="escuela"> 🏃 Escuela (3–18 años)</label>
+          <label class="radio-pill"><input type="radio" name="seccion" value="running"> 🏅 Running adultos</label>
+          <label class="radio-pill"><input type="radio" name="seccion" value="triatlon"> 🚴 Triatlón</label>
+          <label class="radio-pill"><input type="radio" name="seccion" value="natacion"> 🏊 Natación</label>
+          <label class="radio-pill"><input type="radio" name="seccion" value="adultos"> 💪 Atletismo adultos</label>
+        </div>
+        <div class="error-msg" id="err-seccion">Selecciona una sección</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="fila2">
+        <div class="campo">
+          <label>Talla camiseta <span class="opt">(opcional)</span></label>
+          <select id="talla_camiseta">
+            <option value="">Seleccionar...</option>
+            <optgroup label="Tallas infantiles">
+              <option>2</option><option>4</option><option>6</option>
+              <option>8</option><option>10</option><option>12</option>
+            </optgroup>
+            <optgroup label="Tallas adulto">
+              <option>XS</option><option>S</option><option>M</option>
+              <option>L</option><option>XL</option><option>XXL</option>
+            </optgroup>
+          </select>
+        </div>
+        <div class="campo">
+          <label>Talla pantalón <span class="opt">(opcional)</span></label>
+          <select id="talla_pantalon">
+            <option value="">Seleccionar...</option>
+            <optgroup label="Tallas infantiles">
+              <option>2</option><option>4</option><option>6</option>
+              <option>8</option><option>10</option><option>12</option>
+            </optgroup>
+            <optgroup label="Tallas adulto">
+              <option>XS</option><option>S</option><option>M</option>
+              <option>L</option><option>XL</option><option>XXL</option>
+            </optgroup>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="botones">
+      <button class="btn btn-secundario" onclick="irPaso(2)">← Atrás</button>
+      <button class="btn btn-primario" onclick="irPaso(4)">Siguiente →</button>
+    </div>
+  </div>
+
+  <!-- PASO 4: EXTRAS -->
+  <div class="paso-contenido" id="paso-4">
+    <div class="seccion-titulo">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      Información adicional
+    </div>
+    <div class="card">
+      <div class="campo">
+        <label>¿Tienes amigos o familiares en el club? <span class="opt">(opcional)</span></label>
+        <input type="text" id="amigos_club" placeholder="Nombre de la persona...">
+      </div>
+      <div class="campo" style="margin-top: 1rem;">
+        <label>¿Te interesan actividades para padres y madres?</label>
+        <div class="checkbox-grupo">
+          <label class="checkbox-item">
+            <input type="checkbox" id="interes_padres">
+            <span>Sí, me interesa recibir información sobre actividades para familias</span>
+          </label>
+        </div>
+        <div id="tipo-actividad-wrap" style="display:none; margin-top: 0.75rem;">
+          <label>¿Qué tipo de actividad te interesa? <span class="opt">(opcional)</span></label>
+          <input type="text" id="tipo_actividad" placeholder="Running, yoga, nutrición...">
+        </div>
+      </div>
+      <div class="campo" style="margin-top: 1rem;">
+        <label>Observaciones <span class="opt">(opcional)</span></label>
+        <textarea id="observaciones" placeholder="Alergias, lesiones, cualquier información que debamos saber..."></textarea>
+      </div>
+    </div>
+    <div class="botones">
+      <button class="btn btn-secundario" onclick="irPaso(3)">← Atrás</button>
+      <button class="btn btn-primario" onclick="irPaso(5)">Siguiente →</button>
+    </div>
+  </div>
+
+  <!-- PASO 5: CONFIRMAR -->
+  <div class="paso-contenido" id="paso-5">
+    <div class="seccion-titulo">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+      Confirmar inscripción
+    </div>
+    <div class="card" id="resumen-card">
+      <!-- Resumen generado por JS -->
+    </div>
+    <div class="card" style="margin-top: 0.75rem;">
+      <div class="checkbox-grupo">
+        <label class="checkbox-item">
+          <input type="checkbox" id="acepta-lopd">
+          <span>Acepto el tratamiento de datos personales según la <strong>LOPD</strong> y el <strong>RGPD</strong>. Los datos serán utilizados exclusivamente para la gestión del club.</span>
+        </label>
+        <label class="checkbox-item">
+          <input type="checkbox" id="acepta-imagen">
+          <span>Autorizo al Club Apolana a utilizar imágenes del atleta en redes sociales y comunicaciones del club.</span>
+        </label>
+      </div>
+    </div>
+    <div class="botones">
+      <button class="btn btn-secundario" onclick="irPaso(4)">← Atrás</button>
+      <button class="btn btn-primario" id="btn-enviar" onclick="enviarInscripcion()">Enviar inscripción</button>
+    </div>
+  </div>
+
+  <!-- PASO 6: ÉXITO -->
+  <div class="paso-contenido" id="paso-6">
+    <div class="exito-pantalla">
+      <div class="exito-icono">✓</div>
+      <h2>¡Inscripción recibida!</h2>
+      <p>Hemos registrado la inscripción de <strong id="nombre-confirmado"></strong>.</p>
+      <div class="ref-numero" id="ref-numero"></div>
+      <p style="margin-bottom: 1.5rem;">El equipo del Club Apolana revisará los datos y os contactará en breve para confirmar el grupo y los próximos pasos.</p>
+      <div class="info-box" style="text-align: left; max-width: 420px; margin: 0 auto;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        Periodo de prueba: <strong>15 días</strong> desde el primer entrenamiento. Guarda tu número de referencia.
+      </div>
+      <button class="btn btn-secundario" style="margin-top: 2rem;" onclick="nuevaInscripcion()">Inscribir otro atleta</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // ============================================
+  // CONFIGURACIÓN SUPABASE
+  // ============================================
+  const SUPABASE_URL = 'https://icaxokjsvhlreuwpyxeb.supabase.co';
+  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImljYXhva2pzdmhscmV1d3B5eGViIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEwNzE2NTgsImV4cCI6MjA5NjY0NzY1OH0.xn1ZY-otHY0-l7g64uutSVjiU8DbkHxxZmTvu77IaHA';
+  const { createClient } = supabase;
+  const db = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  let pasoActual = 1;
+
+  // Mostrar/ocultar tipo de actividad padres
+  document.getElementById('interes_padres').addEventListener('change', function() {
+    document.getElementById('tipo-actividad-wrap').style.display = this.checked ? 'block' : 'none';
+  });
+
+  // ============================================
+  // NAVEGACIÓN ENTRE PASOS
+  // ============================================
+  function irPaso(n) {
+    if (n > pasoActual && !validarPaso(pasoActual)) return;
+
+    document.getElementById('paso-' + pasoActual).classList.remove('activo');
+    document.getElementById('paso-' + n).classList.add('activo');
+
+    // Actualizar progreso
+    for (let i = 1; i <= 5; i++) {
+      const el = document.getElementById('prog-' + i);
+      el.classList.remove('activo', 'hecho');
+      if (i < n) el.classList.add('hecho');
+      else if (i === n) el.classList.add('activo');
+    }
+    for (let i = 1; i <= 4; i++) {
+      const linea = document.getElementById('linea-' + i);
+      linea.classList.toggle('hecha', i < n);
+    }
+
+    if (n === 5) generarResumen();
+    pasoActual = n;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // ============================================
+  // VALIDACIÓN
+  // ============================================
+  function validarPaso(paso) {
+    let ok = true;
+
+    if (paso === 1) {
+      ok = validarCampo('nombre', 'err-nombre', v => v.trim().length > 1) && ok;
+      ok = validarCampo('apellidos', 'err-apellidos', v => v.trim().length > 1) && ok;
+      ok = validarCampo('fecha_nacimiento', 'err-fecha', v => v !== '') && ok;
+    }
+
+    if (paso === 2) {
+      ok = validarCampo('telefono', 'err-telefono', v => /^[6789]\d{8}$/.test(v.replace(/\s/g,''))) && ok;
+      ok = validarCampo('email', 'err-email', v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) && ok;
+    }
+
+    if (paso === 3) {
+      const seccion = document.querySelector('input[name="seccion"]:checked');
+      const errEl = document.getElementById('err-seccion');
+      if (!seccion) { errEl.classList.add('visible'); ok = false; }
+      else errEl.classList.remove('visible');
+    }
+
+    return ok;
+  }
+
+  function validarCampo(id, errId, fn) {
+    const input = document.getElementById(id);
+    const err = document.getElementById(errId);
+    const valido = fn(input.value);
+    input.classList.toggle('error', !valido);
+    err.classList.toggle('visible', !valido);
+    return valido;
+  }
+
+  // ============================================
+  // RESUMEN
+  // ============================================
+  const SECCIONES = {
+    escuela: 'Escuela (3–18 años)',
+    running: 'Running adultos',
+    triatlon: 'Triatlón',
+    natacion: 'Natación',
+    adultos: 'Atletismo adultos'
+  };
+
+  function generarResumen() {
+    const seccionVal = document.querySelector('input[name="seccion"]:checked')?.value;
+    const filas = [
+      ['Atleta', `${val('nombre')} ${val('apellidos')}`],
+      ['Fecha de nacimiento', val('fecha_nacimiento')],
+      ['Teléfono', val('telefono')],
+      ['Email', val('email')],
+      ['Sección', SECCIONES[seccionVal] || '—'],
+      ['Talla camiseta', val('talla_camiseta') || '—'],
+      ['Talla pantalón', val('talla_pantalon') || '—'],
+    ];
+    if (val('amigos_club')) filas.push(['Amigos en el club', val('amigos_club')]);
+
+    const html = `
+      <table style="width:100%; border-collapse:collapse; font-size:0.88rem;">
+        ${filas.map(([k,v]) => `
+          <tr>
+            <td style="padding:7px 0; color:#6b7280; width:45%; border-bottom:1px solid #f0f0f0;">${k}</td>
+            <td style="padding:7px 0; font-weight:500; border-bottom:1px solid #f0f0f0;">${v}</td>
+          </tr>`).join('')}
+      </table>`;
+    document.getElementById('resumen-card').innerHTML = html;
+  }
+
+  function val(id) { return document.getElementById(id)?.value || ''; }
+
+  // ============================================
+  // ENVÍO A SUPABASE
+  // ============================================
+  async function enviarInscripcion() {
+    if (!document.getElementById('acepta-lopd').checked) {
+      alert('Debes aceptar la política de protección de datos para continuar.');
+      return;
+    }
+
+    const btn = document.getElementById('btn-enviar');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span>Enviando...';
+
+    const seccionVal = document.querySelector('input[name="seccion"]:checked')?.value;
+    const hoy = new Date();
+    const finPrueba = new Date(hoy);
+    finPrueba.setDate(finPrueba.getDate() + 15);
+
+    const datos = {
+      nombre: val('nombre').trim(),
+      apellidos: val('apellidos').trim(),
+      fecha_nacimiento: val('fecha_nacimiento'),
+      dni_nie: val('dni_nie').trim() || null,
+      nombre_padre: val('nombre_padre').trim() || null,
+      nombre_madre: val('nombre_madre').trim() || null,
+      telefono_contacto: val('telefono').trim(),
+      email_contacto: val('email').trim().toLowerCase(),
+      seccion: seccionVal,
+      estado: 'prueba',
+      fecha_prueba_fin: finPrueba.toISOString().split('T')[0],
+      talla_camiseta: val('talla_camiseta') || null,
+      talla_pantalon: val('talla_pantalon') || null,
+      amigos_en_club: val('amigos_club').trim() || null,
+      interes_actividades_padres: document.getElementById('interes_padres').checked,
+      tipo_actividad_padres: val('tipo_actividad').trim() || null,
+      observaciones: val('observaciones').trim() || null,
+      estado_pago: 'pendiente',
+    };
+
+    try {
+      const { data, error } = await db.from('atletas').insert([datos]).select();
+      if (error) throw error;
+
+      // Éxito
+      const ref = 'APO-' + data[0].id.slice(0,8).toUpperCase();
+      document.getElementById('nombre-confirmado').textContent = datos.nombre + ' ' + datos.apellidos;
+      document.getElementById('ref-numero').textContent = ref;
+
+      document.getElementById('paso-5').classList.remove('activo');
+      document.getElementById('paso-6').classList.add('activo');
+      // Ocultar barra de progreso en éxito
+      document.querySelector('.progreso-wrap').style.display = 'none';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    } catch (err) {
+      console.error(err);
+      alert('Ha ocurrido un error al enviar la inscripción. Por favor, inténtalo de nuevo o contacta con el club.');
+      btn.disabled = false;
+      btn.innerHTML = 'Enviar inscripción';
+    }
+  }
+
+  function nuevaInscripcion() {
+    location.reload();
+  }
+</script>
+</body>
+</html>
