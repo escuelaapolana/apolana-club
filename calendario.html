@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calendario · Club Apolana</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --azul: #1a5f8f; --azul-oscuro: #123f60; --azul-claro: #4a90c4; --azul-bg: #e8f2fa;
+      --gris: #f5f6f8; --gris-borde: #dde2e8; --texto: #1a1d23; --texto-suave: #6b7280;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--gris); color: var(--texto); }
+
+    nav { position: sticky; top: 0; z-index: 100; background: var(--azul); display: flex; align-items: center; justify-content: space-between; padding: 0 2rem; height: 58px; }
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .nav-logo img { width: 34px; height: 34px; border-radius: 50%; object-fit: contain; background: white; padding: 2px; }
+    .nav-logo span { color: white; font-weight: 600; font-size: 0.95rem; }
+    .nav-links { display: flex; align-items: center; gap: 2px; }
+    .nav-link { color: rgba(255,255,255,0.8); text-decoration: none; padding: 6px 12px; border-radius: 6px; font-size: 0.85rem; transition: all 0.12s; }
+    .nav-link:hover { background: rgba(255,255,255,0.1); color: white; }
+    .nav-link.activo { color: white; background: rgba(255,255,255,0.15); }
+    .nav-btn { background: white; color: var(--azul); padding: 6px 16px; border-radius: 6px; font-size: 0.85rem; font-weight: 600; text-decoration: none; margin-left: 6px; }
+
+    .page-header { background: var(--azul); padding: 3rem 2rem 2.5rem; }
+    .page-header-inner { max-width: 1040px; margin: 0 auto; }
+    .page-header h1 { color: white; font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .page-header p { color: rgba(255,255,255,0.7); font-size: 0.92rem; }
+
+    .page-wrap { max-width: 1040px; margin: 0 auto; padding: 2rem; }
+
+    /* FILTROS */
+    .filtros { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+    .filtro-btn { padding: 6px 16px; border-radius: 20px; border: 1.5px solid var(--gris-borde); background: white; font-size: 0.82rem; font-weight: 500; cursor: pointer; transition: all 0.12s; color: var(--texto-suave); }
+    .filtro-btn:hover { border-color: var(--azul-claro); color: var(--azul); }
+    .filtro-btn.activo { border-color: var(--azul); background: var(--azul-bg); color: var(--azul); }
+
+    /* MES HEADER */
+    .mes-header { font-size: 0.78rem; font-weight: 600; color: var(--texto-suave); text-transform: uppercase; letter-spacing: 0.1em; padding: 0.5rem 0; margin-top: 1.5rem; margin-bottom: 0.75rem; border-bottom: 1px solid var(--gris-borde); }
+    .mes-header:first-child { margin-top: 0; }
+
+    /* EVENTO CARD */
+    .evento-card { background: white; border: 1px solid var(--gris-borde); border-radius: 12px; padding: 1.1rem 1.25rem; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 1.1rem; transition: all 0.12s; }
+    .evento-card:hover { border-color: var(--azul-claro); transform: translateX(3px); }
+    .evento-fecha-box { min-width: 54px; text-align: center; border-radius: 10px; padding: 0.6rem 0.25rem; flex-shrink: 0; }
+    .evento-dia { font-size: 1.4rem; font-weight: 700; line-height: 1; }
+    .evento-mes { font-size: 0.68rem; text-transform: uppercase; font-weight: 600; margin-top: 2px; }
+    .evento-info { flex: 1; }
+    .evento-titulo { font-size: 0.92rem; font-weight: 600; margin-bottom: 3px; }
+    .evento-meta { font-size: 0.78rem; color: var(--texto-suave); display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .evento-meta-item { display: flex; align-items: center; gap: 4px; }
+    .evento-tipo-badge { font-size: 0.7rem; font-weight: 600; padding: 3px 10px; border-radius: 20px; flex-shrink: 0; }
+
+    .tipo-competicion { background: #fef3c7; color: #92400e; }
+    .tipo-control { background: #dbeafe; color: #1e40af; }
+    .tipo-evento_club { background: #dcfce7; color: #166534; }
+    .tipo-actividad_padres { background: #fce7f3; color: #9d174d; }
+    .tipo-entrenamiento_especial { background: #f3e8ff; color: #6b21a8; }
+    .tipo-otro { background: var(--gris); color: var(--texto-suave); }
+
+    .empty-state { text-align: center; padding: 3rem 1rem; color: var(--texto-suave); }
+    .empty-state svg { margin-bottom: 1rem; color: var(--gris-borde); }
+    .empty-state p { font-size: 0.9rem; }
+
+    footer { background: var(--azul-oscuro); padding: 2rem; margin-top: 3rem; }
+    .footer-inner { max-width: 1040px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+    .footer-logo { display: flex; align-items: center; gap: 8px; }
+    .footer-logo img { width: 26px; height: 26px; border-radius: 50%; background: white; padding: 2px; object-fit: contain; }
+    .footer-logo span { color: white; font-weight: 600; font-size: 0.85rem; }
+    .footer-links a { color: rgba(255,255,255,0.45); text-decoration: none; font-size: 0.78rem; margin-left: 1.25rem; }
+    .footer-links a:hover { color: white; }
+
+    @media (max-width: 600px) {
+      nav { padding: 0 1rem; }
+      .nav-links .nav-link { display: none; }
+      .page-wrap { padding: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">
+    <img src="https://icaxokjsvhlreuwpyxeb.supabase.co/storage/v1/object/public/imagenes-club/logo.png" alt="Club Apolana" onerror="this.style.display='none'">
+    <span>Club Apolana</span>
+  </a>
+  <div class="nav-links">
+    <a href="index.html#secciones" class="nav-link">Secciones</a>
+    <a href="calendario.html" class="nav-link activo">Calendario</a>
+    <a href="noticias.html" class="nav-link">Noticias</a>
+    <a href="index.html#acceso" class="nav-link">Mi perfil</a>
+    <a href="inscripcion.html" class="nav-btn">Inscribirse</a>
+  </div>
+</nav>
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <h1>Calendario de eventos</h1>
+    <p>Competiciones, controles, actividades y eventos del Club Apolana</p>
+  </div>
+</div>
+
+<div class="page-wrap">
+  <div class="filtros">
+    <button class="filtro-btn activo" onclick="filtrar('', this)">Todos</button>
+    <button class="filtro-btn" onclick="filtrar('competicion', this)">Competiciones</button>
+    <button class="filtro-btn" onclick="filtrar('control', this)">Controles</button>
+    <button class="filtro-btn" onclick="filtrar('actividad_padres', this)">Familias</button>
+    <button class="filtro-btn" onclick="filtrar('evento_club', this)">Club</button>
+  </div>
+  <div id="eventos-contenido">
+    <div class="empty-state"><p>Cargando eventos...</p></div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">
+      <img src="https://icaxokjsvhlreuwpyxeb.supabase.co/storage/v1/object/public/imagenes-club/logo.png" alt="Logo" onerror="this.style.display='none'">
+      <span>Club Apolana · Alicante</span>
+    </div>
+    <div class="footer-links">
+      <a href="index.html">Inicio</a>
+      <a href="inscripcion.html">Inscripción</a>
+      <a href="noticias.html">Noticias</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+const SB_URL = 'https://icaxokjsvhlreuwpyxeb.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImljYXhva2pzdmhscmV1d3B5eGViIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEwNzE2NTgsImV4cCI6MjA5NjY0NzY1OH0.xn1ZY-otHY0-l7g64uutSVjiU8DbkHxxZmTvu77IaHA';
+const db = supabase.createClient(SB_URL, SB_KEY);
+
+const TIPOS = {
+  competicion: { label: 'Competición', cls: 'tipo-competicion', color: '#92400e', bg: '#fef3c7' },
+  control: { label: 'Control', cls: 'tipo-control', color: '#1e40af', bg: '#dbeafe' },
+  evento_club: { label: 'Evento club', cls: 'tipo-evento_club', color: '#166534', bg: '#dcfce7' },
+  actividad_padres: { label: 'Act. familias', cls: 'tipo-actividad_padres', color: '#9d174d', bg: '#fce7f3' },
+  entrenamiento_especial: { label: 'Entreno especial', cls: 'tipo-entrenamiento_especial', color: '#6b21a8', bg: '#f3e8ff' },
+  otro: { label: 'Evento', cls: 'tipo-otro', color: '#6b7280', bg: '#f3f4f6' },
+};
+
+let todosEventos = [];
+let filtroActual = '';
+
+async function cargarEventos() {
+  const { data } = await db.from('eventos').select('*').order('fecha_inicio', { ascending: true });
+  todosEventos = data || [];
+  renderEventos(todosEventos);
+}
+
+function filtrar(tipo, btn) {
+  filtroActual = tipo;
+  document.querySelectorAll('.filtro-btn').forEach(b => b.classList.remove('activo'));
+  btn.classList.add('activo');
+  const lista = tipo ? todosEventos.filter(e => e.tipo === tipo) : todosEventos;
+  renderEventos(lista);
+}
+
+function renderEventos(lista) {
+  const contenedor = document.getElementById('eventos-contenido');
+  if (!lista.length) {
+    contenedor.innerHTML = `<div class="empty-state">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      <p>No hay eventos${filtroActual ? ' de este tipo' : ''} publicados</p>
+    </div>`;
+    return;
+  }
+
+  // Agrupar por mes
+  const porMes = {};
+  lista.forEach(ev => {
+    const f = new Date(ev.fecha_inicio);
+    const key = f.getFullYear() + '-' + String(f.getMonth()+1).padStart(2,'0');
+    const label = f.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' });
+    if (!porMes[key]) porMes[key] = { label, eventos: [] };
+    porMes[key].eventos.push(ev);
+  });
+
+  let html = '';
+  Object.entries(porMes).sort().forEach(([key, grupo]) => {
+    const esPasado = key < new Date().toISOString().slice(0,7);
+    html += `<div class="mes-header" style="${esPasado ? 'opacity:0.5' : ''}">${grupo.label.charAt(0).toUpperCase() + grupo.label.slice(1)}</div>`;
+    grupo.eventos.forEach(ev => {
+      const f = new Date(ev.fecha_inicio);
+      const tipo = TIPOS[ev.tipo] || TIPOS.otro;
+      const pasado = new Date(ev.fecha_inicio) < new Date();
+      html += `
+        <div class="evento-card" style="${pasado ? 'opacity:0.6' : ''}">
+          <div class="evento-fecha-box" style="background:${tipo.bg};">
+            <div class="evento-dia" style="color:${tipo.color}">${f.getDate()}</div>
+            <div class="evento-mes" style="color:${tipo.color}">${f.toLocaleDateString('es-ES',{month:'short'}).replace('.','')}</div>
+          </div>
+          <div class="evento-info">
+            <div class="evento-titulo">${ev.titulo}</div>
+            <div class="evento-meta">
+              <span class="evento-meta-item">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                ${f.toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'})}
+              </span>
+              ${ev.lugar ? `<span class="evento-meta-item">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                ${ev.lugar}
+              </span>` : ''}
+              ${ev.descripcion ? `<span>${ev.descripcion}</span>` : ''}
+            </div>
+          </div>
+          <span class="evento-tipo-badge ${tipo.cls}">${tipo.label}</span>
+        </div>`;
+    });
+  });
+
+  contenedor.innerHTML = html;
+}
+
+cargarEventos();
+</script>
+</body>
+</html>
