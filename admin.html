@@ -252,6 +252,10 @@
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
       Fotos del club
     </button>
+    <button class="sb-item" onclick="showPanel('contenido')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+      Contenido web
+    </button>
     <button class="sb-item" onclick="showPanel('eventos')">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
       Eventos
@@ -514,33 +518,81 @@
         </div>
         <div style="font-size:0.9rem;font-weight:600;margin-bottom:0.75rem;">Fotos por sección</div>
         <div class="g3" style="margin-bottom:1.5rem;">
-          ${['escuela','running','triatlon','natacion','atletismo','instalaciones'].map(s => `
           <div>
-            <div style="font-size:0.78rem;color:var(--texto-suave);margin-bottom:6px;text-transform:capitalize;">${s}</div>
-            <label class="img-slot" id="slot-${s}">
-              <input type="file" accept="image/*" onchange="subirFoto(this,'imagenes-club','seccion-${s}.jpg','slot-${s}')">
-              <div class="img-slot-placeholder">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-                <span>Subir foto</span>
-              </div>
+            <div style="font-size:0.78rem;color:var(--texto-suave);margin-bottom:6px;">Escuela</div>
+            <label class="img-slot" id="slot-escuela">
+              <input type="file" accept="image/*" onchange="subirFoto(this,'imagenes-club','seccion-escuela.jpg','slot-escuela')">
+              <div class="img-slot-placeholder"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span>Subir foto</span></div>
               <span class="img-slot-label">Cambiar</span>
             </label>
-          </div>`).join('')}
+          </div>
+          <div>
+            <div style="font-size:0.78rem;color:var(--texto-suave);margin-bottom:6px;">Running</div>
+            <label class="img-slot" id="slot-running">
+              <input type="file" accept="image/*" onchange="subirFoto(this,'imagenes-club','seccion-running.jpg','slot-running')">
+              <div class="img-slot-placeholder"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span>Subir foto</span></div>
+              <span class="img-slot-label">Cambiar</span>
+            </label>
+          </div>
+          <div>
+            <div style="font-size:0.78rem;color:var(--texto-suave);margin-bottom:6px;">Triatlón</div>
+            <label class="img-slot" id="slot-triatlon">
+              <input type="file" accept="image/*" onchange="subirFoto(this,'imagenes-club','seccion-triatlon.jpg','slot-triatlon')">
+              <div class="img-slot-placeholder"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span>Subir foto</span></div>
+              <span class="img-slot-label">Cambiar</span>
+            </label>
+          </div>
+          <div>
+            <div style="font-size:0.78rem;color:var(--texto-suave);margin-bottom:6px;">Natación</div>
+            <label class="img-slot" id="slot-natacion">
+              <input type="file" accept="image/*" onchange="subirFoto(this,'imagenes-club','seccion-natacion.jpg','slot-natacion')">
+              <div class="img-slot-placeholder"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span>Subir foto</span></div>
+              <span class="img-slot-label">Cambiar</span>
+            </label>
+          </div>
+          <div>
+            <div style="font-size:0.78rem;color:var(--texto-suave);margin-bottom:6px;">Atletismo pista</div>
+            <label class="img-slot" id="slot-atletismo">
+              <input type="file" accept="image/*" onchange="subirFoto(this,'imagenes-club','seccion-atletismo.jpg','slot-atletismo')">
+              <div class="img-slot-placeholder"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span>Subir foto</span></div>
+              <span class="img-slot-label">Cambiar</span>
+            </label>
+          </div>
+          <div>
+            <div style="font-size:0.78rem;color:var(--texto-suave);margin-bottom:6px;">Instalaciones</div>
+            <label class="img-slot" id="slot-instalaciones">
+              <input type="file" accept="image/*" onchange="subirFoto(this,'imagenes-club','seccion-instalaciones.jpg','slot-instalaciones')">
+              <div class="img-slot-placeholder"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span>Subir foto</span></div>
+              <span class="img-slot-label">Cambiar</span>
+            </label>
+          </div>
         </div>
         <div style="font-size:0.9rem;font-weight:600;margin-bottom:0.75rem;">Fotos de noticias</div>
         <div class="g3">
-          ${[1,2,3].map(n => `
           <div>
-            <div style="font-size:0.78rem;color:var(--texto-suave);margin-bottom:6px;">Noticia ${n}</div>
-            <label class="img-slot" id="slot-noticia-${n}">
-              <input type="file" accept="image/*" onchange="subirFoto(this,'imagenes-club','noticia-${n}.jpg','slot-noticia-${n}')">
-              <div class="img-slot-placeholder">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-                <span>Subir foto</span>
-              </div>
+            <div style="font-size:0.78rem;color:var(--texto-suave);margin-bottom:6px;">Noticia 1</div>
+            <label class="img-slot" id="slot-noticia-1">
+              <input type="file" accept="image/*" onchange="subirFoto(this,'imagenes-club','noticia-1.jpg','slot-noticia-1')">
+              <div class="img-slot-placeholder"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span>Subir foto</span></div>
               <span class="img-slot-label">Cambiar</span>
             </label>
-          </div>`).join('')}
+          </div>
+          <div>
+            <div style="font-size:0.78rem;color:var(--texto-suave);margin-bottom:6px;">Noticia 2</div>
+            <label class="img-slot" id="slot-noticia-2">
+              <input type="file" accept="image/*" onchange="subirFoto(this,'imagenes-club','noticia-2.jpg','slot-noticia-2')">
+              <div class="img-slot-placeholder"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span>Subir foto</span></div>
+              <span class="img-slot-label">Cambiar</span>
+            </label>
+          </div>
+          <div>
+            <div style="font-size:0.78rem;color:var(--texto-suave);margin-bottom:6px;">Noticia 3</div>
+            <label class="img-slot" id="slot-noticia-3">
+              <input type="file" accept="image/*" onchange="subirFoto(this,'imagenes-club','noticia-3.jpg','slot-noticia-3')">
+              <div class="img-slot-placeholder"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span>Subir foto</span></div>
+              <span class="img-slot-label">Cambiar</span>
+            </label>
+          </div>
         </div>
       </div>
 
@@ -588,6 +640,22 @@
               <tbody id="tbody-pedidos"><tr><td colspan="6" class="table-empty">Cargando...</td></tr></tbody>
             </table>
           </div>
+        </div>
+      </div>
+
+      <!-- PANEL CONTENIDO WEB -->
+      <div class="panel" id="panel-contenido">
+        <div style="font-size:0.85rem;color:var(--texto-suave);margin-bottom:1.25rem;">Edita el contenido de cada sección que aparece en la web pública. Los cambios se guardan al pulsar el botón.</div>
+        <div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:1.5rem;" id="contenido-tabs">
+          <button class="btn btn-p" onclick="selSeccionContenido('escuela',this)">Escuela</button>
+          <button class="btn btn-s" onclick="selSeccionContenido('competicion',this)">Atletismo pista</button>
+          <button class="btn btn-s" onclick="selSeccionContenido('running',this)">Running</button>
+          <button class="btn btn-s" onclick="selSeccionContenido('triatlon',this)">Triatlón</button>
+          <button class="btn btn-s" onclick="selSeccionContenido('natacion',this)">Natación</button>
+          <button class="btn btn-s" onclick="selSeccionContenido('instalaciones',this)">Instalaciones</button>
+        </div>
+        <div class="card" id="contenido-editor">
+          <div style="color:var(--texto-suave);font-size:0.85rem;">Selecciona una sección para editarla</div>
         </div>
       </div>
 
@@ -893,7 +961,7 @@ async function doLogout() {
 // =====================
 // NAVEGACIÓN
 // =====================
-const PANEL_TITLES = { inicio:'Inicio', atletas:'Inscritos', grupos:'Grupos', prueba:'En prueba', ropa:'Control de ropa', pagos:'Pagos', fotos:'Fotos del club', eventos:'Eventos y calendario', tienda:'Tienda', usuarios:'Usuarios del sistema' };
+const PANEL_TITLES = { inicio:'Inicio', atletas:'Inscritos', grupos:'Grupos', prueba:'En prueba', ropa:'Control de ropa', pagos:'Pagos', fotos:'Fotos del club', eventos:'Eventos y calendario', tienda:'Tienda', usuarios:'Usuarios del sistema', contenido:'Contenido web' };
 
 function showPanel(id) {
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('activo'));
@@ -1438,6 +1506,59 @@ async function guardarUsuario() {
     await db.from('perfiles').insert([{ id: data.user.id, nombre, apellidos, email, rol, seccion }]);
   }
   cerrarModal('modal-usuario'); cargarUsuarios();
+}
+
+// =====================
+// CONTENIDO WEB
+// =====================
+let seccionContenidoActual = null;
+
+async function selSeccionContenido(seccion, btn) {
+  seccionContenidoActual = seccion;
+  document.querySelectorAll('#contenido-tabs .btn').forEach(b => { b.className = 'btn btn-s'; });
+  btn.className = 'btn btn-p';
+  const editor = document.getElementById('contenido-editor');
+  editor.innerHTML = '<div style="color:var(--texto-suave);font-size:0.85rem;">Cargando...</div>';
+  const { data } = await db.from('contenido_secciones').select('*').eq('seccion', seccion).single();
+  const d = data || {};
+  editor.innerHTML = `
+    <div style="font-size:0.95rem;font-weight:600;margin-bottom:1.25rem;color:var(--azul);">Editando: ${btn.textContent}</div>
+    <div class="mf2">
+      <div class="mf"><label>Título de la sección</label><input type="text" id="cs-titulo" value="${d.titulo||''}" placeholder="Ej: Escuela de atletismo"></div>
+      <div class="mf"><label>Dirigido a</label><input type="text" id="cs-dirigido" value="${d.dirigido_a||''}" placeholder="Ej: De 3 a 18 años"></div>
+    </div>
+    <div class="mf"><label>Descripción</label><textarea id="cs-desc" style="width:100%;padding:8px 10px;border:1px solid var(--gris-borde);border-radius:7px;font-size:0.87px;min-height:90px;resize:vertical;">${d.descripcion||''}</textarea></div>
+    <div class="mf2">
+      <div class="mf"><label>Horarios</label><textarea id="cs-horarios" style="width:100%;padding:8px 10px;border:1px solid var(--gris-borde);border-radius:7px;font-size:0.87rem;min-height:70px;resize:vertical;" placeholder="Lun/Mié/Vie 17:00-19:00">${d.horarios||''}</textarea></div>
+      <div class="mf"><label>Precio / cuota</label><textarea id="cs-precio" style="width:100%;padding:8px 10px;border:1px solid var(--gris-borde);border-radius:7px;font-size:0.87rem;min-height:70px;resize:vertical;" placeholder="Ej: 35€/mes · Matrícula 30€">${d.precio_texto||''}</textarea></div>
+    </div>
+    <div class="mf"><label>Grupos disponibles</label><textarea id="cs-grupos" style="width:100%;padding:8px 10px;border:1px solid var(--gris-borde);border-radius:7px;font-size:0.87rem;min-height:70px;resize:vertical;" placeholder="Prebenjamín, Benjamín, Alevín...">${d.grupos||''}</textarea></div>
+    <div class="mf"><label>Puntos destacados <span style="color:var(--texto-suave);font-weight:400;font-size:0.78rem;">(uno por línea)</span></label><textarea id="cs-destacados" style="width:100%;padding:8px 10px;border:1px solid var(--gris-borde);border-radius:7px;font-size:0.87rem;min-height:80px;resize:vertical;" placeholder="Entrenadores titulados&#10;Grupos reducidos&#10;Material incluido">${d.destacados||''}</textarea></div>
+    <div style="display:flex;justify-content:flex-end;margin-top:1rem;">
+      <button class="btn btn-p" onclick="guardarContenido()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        Guardar cambios
+      </button>
+    </div>`;
+}
+
+async function guardarContenido() {
+  if (!seccionContenidoActual) return;
+  const datos = {
+    titulo: document.getElementById('cs-titulo').value.trim(),
+    dirigido_a: document.getElementById('cs-dirigido').value.trim(),
+    descripcion: document.getElementById('cs-desc').value.trim(),
+    horarios: document.getElementById('cs-horarios').value.trim(),
+    precio_texto: document.getElementById('cs-precio').value.trim(),
+    grupos: document.getElementById('cs-grupos').value.trim(),
+    destacados: document.getElementById('cs-destacados').value.trim(),
+    updated_at: new Date().toISOString(),
+  };
+  const { error } = await db.from('contenido_secciones').upsert({ seccion: seccionContenidoActual, ...datos }, { onConflict: 'seccion' });
+  if (!error) {
+    const btn = document.querySelector('#panel-contenido .btn-p[onclick="guardarContenido()"]');
+    if (btn) { btn.textContent = '✓ Guardado'; setTimeout(() => { btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Guardar cambios'; }, 2000); }
+  } else { alert('Error al guardar. Inténtalo de nuevo.'); }
 }
 
 // =====================
