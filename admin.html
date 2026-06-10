@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin · Club Apolana</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cropperjs@1.6.2/dist/cropper.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/cropperjs@1.6.2/dist/cropper.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -146,6 +148,19 @@
     .foto-upload:hover { border-color: var(--azul-claro); background: var(--azul-bg); }
     .foto-upload input { display: none; }
     .foto-upload p { font-size: 0.83rem; color: var(--texto-suave); margin-top: 6px; }
+
+    /* MODAL RECORTE */
+    .crop-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 999; align-items: center; justify-content: center; flex-direction: column; gap: 1rem; padding: 1rem; }
+    .crop-overlay.v { display: flex; }
+    .crop-container { background: #1a1a1a; border-radius: 12px; overflow: hidden; max-width: 700px; width: 100%; max-height: 70vh; }
+    .crop-container img { max-width: 100%; display: block; }
+    .crop-actions { display: flex; gap: 0.75rem; align-items: center; }
+    .crop-btn { padding: 10px 22px; border-radius: 8px; font-size: 0.88rem; font-weight: 500; cursor: pointer; border: none; }
+    .crop-btn-p { background: var(--azul); color: white; }
+    .crop-btn-p:hover { background: var(--azul-oscuro); }
+    .crop-btn-s { background: rgba(255,255,255,0.15); color: white; }
+    .crop-btn-s:hover { background: rgba(255,255,255,0.25); }
+    .crop-hint { color: rgba(255,255,255,0.6); font-size: 0.8rem; }
     .foto-preview { width: 80px; height: 80px; border-radius: 8px; object-fit: cover; margin: 0.5rem auto; display: none; }
 
     /* IMAGEN PORTADA */
@@ -679,6 +694,21 @@
       </div>
 
     </div>
+  </div>
+</div>
+
+<!-- MODAL RECORTE -->
+<div class="crop-overlay" id="crop-overlay">
+  <div class="crop-hint">Arrastra para ajustar · Pellizca para hacer zoom</div>
+  <div class="crop-container">
+    <img id="crop-img" src="" alt="Recortar">
+  </div>
+  <div class="crop-actions">
+    <button class="crop-btn crop-btn-s" onclick="cancelarRecorte()">Cancelar</button>
+    <button class="crop-btn crop-btn-p" id="crop-btn-confirmar" onclick="confirmarRecorte()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:4px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+      Subir foto recortada
+    </button>
   </div>
 </div>
 
@@ -1274,24 +1304,86 @@ async function marcarPagado(id) {
 // =====================
 // FOTOS
 // =====================
-async function subirFoto(input, bucket, filename, slotId) {
+// =====================
+// FOTOS CON RECORTE
+// =====================
+let cropperInstance = null;
+let cropPendiente = { bucket: null, filename: null, slotId: null };
+
+function subirFoto(input, bucket, filename, slotId) {
   if (!input.files[0]) return;
   const file = input.files[0];
-  const slot = document.getElementById(slotId);
-  slot.style.borderColor = 'var(--azul-claro)';
-  const { data, error } = await db.storage.from(bucket).upload(filename, file, { upsert: true });
-  if (!error) {
-    const { data: url } = db.storage.from(bucket).getPublicUrl(filename);
-    const placeholder = slot.querySelector('.img-slot-placeholder');
-    let img = slot.querySelector('img:not(.foto-preview)');
-    if (!img) { img = document.createElement('img'); img.style.cssText = 'width:100%;height:180px;object-fit:cover;display:block;'; slot.insertBefore(img, placeholder); }
-    img.src = url.publicUrl + '?t=' + Date.now();
-    placeholder.style.display = 'none';
-    slot.style.borderColor = 'var(--exito)';
-  } else {
-    alert('Error al subir la foto. Asegúrate de estar logueado como admin.');
-    slot.style.borderColor = 'var(--error)';
+  // Validar formato
+  if (!file.type.startsWith('image/') || file.type === 'image/heic') {
+    alert('Por favor, usa formato JPEG o PNG. Los archivos HEIC del iPhone deben convertirse primero.');
+    return;
   }
+  cropPendiente = { bucket, filename, slotId };
+  const reader = new FileReader();
+  reader.onload = e => {
+    const cropImg = document.getElementById('crop-img');
+    cropImg.src = e.target.result;
+    document.getElementById('crop-overlay').classList.add('v');
+    // Destruir instancia anterior si existe
+    if (cropperInstance) { cropperInstance.destroy(); cropperInstance = null; }
+    cropImg.onload = () => {
+      cropperInstance = new Cropper(cropImg, {
+        viewMode: 1,
+        autoCropArea: 1,
+        movable: true,
+        zoomable: true,
+        rotatable: false,
+        scalable: false,
+        responsive: true,
+        background: false,
+        guides: true,
+        center: true,
+      });
+    };
+  };
+  reader.readAsDataURL(file);
+}
+
+function cancelarRecorte() {
+  document.getElementById('crop-overlay').classList.remove('v');
+  if (cropperInstance) { cropperInstance.destroy(); cropperInstance = null; }
+}
+
+async function confirmarRecorte() {
+  if (!cropperInstance) return;
+  const btn = document.getElementById('crop-btn-confirmar');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>Subiendo...';
+
+  const canvas = cropperInstance.getCroppedCanvas({ maxWidth: 1920, maxHeight: 1080, fillColor: '#fff' });
+  const { bucket, filename, slotId } = cropPendiente;
+  const isJpg = filename.endsWith('.jpg') || filename.endsWith('.jpeg');
+  const mimeType = isJpg ? 'image/jpeg' : 'image/png';
+
+  canvas.toBlob(async (blob) => {
+    const { error } = await db.storage.from(bucket).upload(filename, blob, { upsert: true, contentType: mimeType });
+    if (!error) {
+      const { data: urlData } = db.storage.from(bucket).getPublicUrl(filename);
+      const slot = document.getElementById(slotId);
+      if (slot) {
+        const placeholder = slot.querySelector('.img-slot-placeholder');
+        let img = slot.querySelector('img:not(.foto-preview)');
+        if (!img) {
+          img = document.createElement('img');
+          img.style.cssText = 'width:100%;height:180px;object-fit:cover;display:block;';
+          slot.insertBefore(img, placeholder);
+        }
+        img.src = urlData.publicUrl + '?t=' + Date.now();
+        if (placeholder) placeholder.style.display = 'none';
+        slot.style.borderColor = 'var(--exito)';
+      }
+      cancelarRecorte();
+    } else {
+      alert('Error al subir la foto: ' + error.message);
+    }
+    btn.disabled = false;
+    btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:4px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Subir foto recortada';
+  }, mimeType, 0.92);
 }
 
 function previewFoto(input, previewId, labelId) {
