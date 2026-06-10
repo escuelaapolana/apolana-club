@@ -15,18 +15,37 @@
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: white; color: var(--texto); }
 
     /* NAV */
-    nav { position: sticky; top: 0; z-index: 100; background: var(--azul); display: flex; align-items: center; justify-content: space-between; padding: 0 2rem; height: 58px; }
+    nav { position: sticky; top: 0; z-index: 100; background: var(--azul); display: flex; align-items: center; justify-content: space-between; padding: 0 2rem; height: 60px; }
     .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-    .nav-logo img { width: 36px; height: 36px; border-radius: 50%; object-fit: contain; background: white; padding: 2px; }
+    .nav-logo img { width: 34px; height: 34px; border-radius: 50%; object-fit: contain; background: white; padding: 2px; }
     .nav-logo span { color: white; font-weight: 600; font-size: 0.95rem; }
     .nav-links { display: flex; align-items: center; gap: 2px; }
-    .nav-link { color: rgba(255,255,255,0.8); text-decoration: none; padding: 6px 12px; border-radius: 6px; font-size: 0.85rem; transition: all 0.12s; }
-    .nav-link:hover { background: rgba(255,255,255,0.1); color: white; }
-    .nav-btn { background: white; color: var(--azul); padding: 6px 16px; border-radius: 6px; font-size: 0.85rem; font-weight: 600; text-decoration: none; margin-left: 6px; transition: all 0.12s; }
-    .nav-btn:hover { background: var(--azul-bg); }
-    .nav-btn-login { background: transparent; color: white; border: 1.5px solid rgba(255,255,255,0.45); padding: 5px 14px; border-radius: 6px; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.12s; cursor: pointer; }
-    .nav-btn-login:hover { border-color: white; background: rgba(255,255,255,0.1); }
-
+    .nav-link { color: rgba(255,255,255,0.8); text-decoration: none; padding: 6px 11px; border-radius: 6px; font-size: 0.85rem; transition: all 0.12s; background: none; border: none; cursor: pointer; display: flex; align-items: center; gap: 5px; font-family: inherit; }
+    .nav-link:hover, .nav-link.activo { background: rgba(255,255,255,0.12); color: white; }
+    .nav-ig { padding: 6px 8px; }
+    .nav-btn { background: white; color: var(--azul); padding: 6px 16px; border-radius: 6px; font-size: 0.85rem; font-weight: 600; text-decoration: none; margin-left: 4px; transition: all 0.12s; }
+    .nav-btn:hover { background: #e8f2fa; }
+    .nav-dropdown { position: relative; }
+    .nav-dropdown-menu { display: none; position: absolute; top: calc(100% + 8px); left: 0; background: white; border-radius: 12px; border: 1px solid #dde2e8; box-shadow: 0 8px 24px rgba(0,0,0,0.12); min-width: 220px; overflow: hidden; z-index: 200; }
+    .nav-dropdown-menu.visible { display: block; }
+    .nav-dropdown-item { display: flex; align-items: center; gap: 10px; padding: 10px 16px; color: #1a1d23; text-decoration: none; font-size: 0.85rem; transition: background 0.1s; }
+    .nav-dropdown-item:hover { background: #e8f2fa; color: #1a5f8f; }
+    .nav-dropdown-item svg { flex-shrink: 0; color: #4a90c4; }
+    .nav-hamburger { display: none; background: none; border: none; color: white; cursor: pointer; padding: 4px; }
+    @media (max-width: 768px) {
+      nav { padding: 0 1rem; }
+      .nav-hamburger { display: flex; }
+      .nav-links { display: none; position: absolute; top: 60px; left: 0; right: 0; background: #123f60; flex-direction: column; align-items: stretch; padding: 0.5rem 0; gap: 0; z-index: 99; }
+      .nav-links.open { display: flex; }
+      .nav-link { border-radius: 0; padding: 10px 1.5rem; }
+      .nav-btn { margin: 0.5rem 1rem; text-align: center; padding: 10px; }
+      .nav-dropdown { width: 100%; }
+      .nav-dropdown-menu { position: static; box-shadow: none; border: none; border-radius: 0; background: rgba(0,0,0,0.2); display: none; }
+      .nav-dropdown-menu.visible { display: block; }
+      .nav-dropdown-item { color: rgba(255,255,255,0.8); padding: 9px 2.5rem; }
+      .nav-dropdown-item:hover { background: rgba(255,255,255,0.08); color: white; }
+      .nav-ig { display: none; }
+    }
     /* HERO */
     .hero { background: var(--azul); padding: 5rem 2rem 4rem; text-align: center; position: relative; overflow: hidden; }
     .hero::before { content:''; position:absolute; inset:0; background: repeating-linear-gradient(-45deg, transparent, transparent 40px, rgba(255,255,255,0.02) 40px, rgba(255,255,255,0.02) 80px); }
@@ -150,18 +169,36 @@
 <body>
 
 <nav>
-  <a href="#" class="nav-logo">
+  <a href="index.html" class="nav-logo">
     <img src="https://icaxokjsvhlreuwpyxeb.supabase.co/storage/v1/object/public/imagenes-club/logo.png" alt="Club Apolana" onerror="this.style.display='none'">
     <span>Club Apolana</span>
   </a>
-  <div class="nav-links">
-    <a href="#secciones" class="nav-link">Secciones</a>
-    <a href="#calendario" class="nav-link">Calendario</a>
-    <a href="#noticias" class="nav-link">Noticias</a>
-    <a href="#acceso" class="nav-link">Mi perfil</a>
+  <div class="nav-links" id="nav-links">
+    <div class="nav-dropdown">
+      <button class="nav-link nav-dropdown-btn" onclick="toggleDropdown()">
+        Secciones
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="nav-dropdown-menu" id="nav-dropdown-menu">
+        <a href="escuela.html" class="nav-dropdown-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="2"/><path d="M12 7v6l-3 3"/><path d="M12 13l3 3"/></svg>Escuela (3–18 años)</a>
+        <a href="competicion.html" class="nav-dropdown-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>Atletismo pista</a>
+        <a href="running.html" class="nav-dropdown-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18"/><path d="M3 6l9 6 9-6"/></svg>Running</a>
+        <a href="triatlon.html" class="nav-dropdown-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="5" cy="17" r="3"/><circle cx="19" cy="17" r="3"/><path d="M12 3v8l4 3"/></svg>Triatlón</a>
+        <a href="natacion.html" class="nav-dropdown-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12c1-1 2-2 4-2s3 2 4 2 3-2 4-2 3 2 4 2"/></svg>Natación</a>
+        <a href="instalaciones.html" class="nav-dropdown-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>Instalaciones</a>
+      </div>
+    </div>
+    <a href="calendario.html" class="nav-link">Calendario</a>
+    <a href="noticias.html" class="nav-link">Noticias</a>
+    <a href="index.html#acceso" class="nav-link">Mi perfil</a>
+    <a href="https://instagram.com/apolana.alicante" target="_blank" class="nav-link nav-ig">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+    </a>
     <a href="inscripcion.html" class="nav-btn">Inscribirse</a>
-    <button class="nav-btn-login" onclick="abrirLogin()" id="nav-acceder">Acceder</button>
   </div>
+  <button class="nav-hamburger" onclick="toggleMenu()" aria-label="Menú">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
 </nav>
 
 <section class="hero">

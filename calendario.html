@@ -86,13 +86,32 @@
     <img src="https://icaxokjsvhlreuwpyxeb.supabase.co/storage/v1/object/public/imagenes-club/logo.png" alt="Club Apolana" onerror="this.style.display='none'">
     <span>Club Apolana</span>
   </a>
-  <div class="nav-links">
-    <a href="index.html#secciones" class="nav-link">Secciones</a>
+  <div class="nav-links" id="nav-links">
+    <div class="nav-dropdown">
+      <button class="nav-link nav-dropdown-btn" onclick="toggleDropdown()">
+        Secciones
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="nav-dropdown-menu" id="nav-dropdown-menu">
+        <a href="escuela.html" class="nav-dropdown-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="2"/><path d="M12 7v6l-3 3"/><path d="M12 13l3 3"/></svg>Escuela (3–18 años)</a>
+        <a href="competicion.html" class="nav-dropdown-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>Atletismo pista</a>
+        <a href="running.html" class="nav-dropdown-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18"/><path d="M3 6l9 6 9-6"/></svg>Running</a>
+        <a href="triatlon.html" class="nav-dropdown-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="5" cy="17" r="3"/><circle cx="19" cy="17" r="3"/><path d="M12 3v8l4 3"/></svg>Triatlón</a>
+        <a href="natacion.html" class="nav-dropdown-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12c1-1 2-2 4-2s3 2 4 2 3-2 4-2 3 2 4 2"/></svg>Natación</a>
+        <a href="instalaciones.html" class="nav-dropdown-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>Instalaciones</a>
+      </div>
+    </div>
     <a href="calendario.html" class="nav-link activo">Calendario</a>
     <a href="noticias.html" class="nav-link">Noticias</a>
     <a href="index.html#acceso" class="nav-link">Mi perfil</a>
+    <a href="https://instagram.com/apolana.alicante" target="_blank" class="nav-link nav-ig">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+    </a>
     <a href="inscripcion.html" class="nav-btn">Inscribirse</a>
   </div>
+  <button class="nav-hamburger" onclick="toggleMenu()" aria-label="Menú">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
 </nav>
 
 <div class="page-header">

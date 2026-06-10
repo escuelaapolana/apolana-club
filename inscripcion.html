@@ -4,7 +4,20 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Inscripción · Club Apolana</title>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
+function toggleDropdown() {
+  document.getElementById('nav-dropdown-menu').classList.toggle('visible');
+}
+function toggleMenu() {
+  document.getElementById('nav-links').classList.toggle('open');
+}
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.nav-dropdown')) {
+    const m = document.getElementById('nav-dropdown-menu');
+    if (m) m.classList.remove('visible');
+  }
+});
+</script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
