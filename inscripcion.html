@@ -17,105 +17,128 @@
       --texto-suave: #6b7280;
       --error: #dc2626;
       --exito: #16a34a;
-      --radio: 10px;
     }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--gris); color: var(--texto); min-height: 100vh; padding: 0 0 4rem; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--gris); color: var(--texto); min-height: 100vh; padding-bottom: 4rem; }
 
-    header { background: var(--azul); padding: 1.5rem 2rem; display: flex; align-items: center; gap: 1rem; }
-    .logo-circle { width: 52px; height: 52px; border-radius: 50%; background: white; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    header h1 { color: white; font-size: 1.25rem; font-weight: 600; }
-    header p { color: rgba(255,255,255,0.7); font-size: 0.85rem; margin-top: 2px; }
+    header { background: var(--azul); padding: 1.25rem 2rem; display: flex; align-items: center; gap: 1rem; }
+    .logo-circle { width: 48px; height: 48px; border-radius: 50%; background: white; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    header h1 { color: white; font-size: 1.2rem; font-weight: 600; }
+    header p { color: rgba(255,255,255,0.65); font-size: 0.82rem; margin-top: 2px; }
 
-    .progreso-wrap { background: white; border-bottom: 1px solid var(--gris-borde); padding: 1rem 2rem; position: sticky; top: 0; z-index: 10; }
-    .progreso { max-width: 640px; margin: 0 auto; display: flex; align-items: center; }
-    .paso-prog { display: flex; align-items: center; gap: 6px; flex: 1; font-size: 0.78rem; color: var(--texto-suave); }
-    .paso-prog.activo { color: var(--azul); font-weight: 600; }
-    .paso-prog.hecho { color: var(--exito); }
-    .paso-num { width: 24px; height: 24px; border-radius: 50%; border: 2px solid var(--gris-borde); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; flex-shrink: 0; }
-    .paso-prog.activo .paso-num { background: var(--azul); border-color: var(--azul); color: white; }
-    .paso-prog.hecho .paso-num { background: var(--exito); border-color: var(--exito); color: white; }
-    .paso-linea { flex: 1; height: 2px; background: var(--gris-borde); margin: 0 4px; }
-    .paso-linea.hecha { background: var(--exito); }
+    .progreso-wrap { background: white; border-bottom: 1px solid var(--gris-borde); padding: 0.875rem 2rem; position: sticky; top: 0; z-index: 10; }
+    .progreso { max-width: 660px; margin: 0 auto; display: flex; align-items: center; }
+    .pp { display: flex; align-items: center; gap: 5px; flex: 1; font-size: 0.75rem; color: var(--texto-suave); white-space: nowrap; }
+    .pp.activo { color: var(--azul); font-weight: 600; }
+    .pp.hecho { color: var(--exito); }
+    .pn { width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--gris-borde); display: flex; align-items: center; justify-content: center; font-size: 0.72rem; font-weight: 600; flex-shrink: 0; }
+    .pp.activo .pn { background: var(--azul); border-color: var(--azul); color: white; }
+    .pp.hecho .pn { background: var(--exito); border-color: var(--exito); color: white; }
+    .pl { flex: 1; height: 2px; background: var(--gris-borde); margin: 0 3px; min-width: 8px; }
+    .pl.hecha { background: var(--exito); }
 
-    .contenido { max-width: 640px; margin: 2rem auto; padding: 0 1rem; }
-    .seccion-titulo { font-size: 1.1rem; font-weight: 600; color: var(--azul); margin-bottom: 1.25rem; padding-bottom: 0.5rem; border-bottom: 2px solid var(--azul-bg); display: flex; align-items: center; gap: 8px; }
-    .card { background: white; border-radius: var(--radio); border: 1px solid var(--gris-borde); padding: 1.5rem; margin-bottom: 1rem; }
-    .campo { margin-bottom: 1.1rem; }
+    .contenido { max-width: 660px; margin: 2rem auto; padding: 0 1rem; }
+
+    .stitle { font-size: 1.05rem; font-weight: 600; color: var(--azul); margin-bottom: 1.1rem; padding-bottom: 0.5rem; border-bottom: 2px solid var(--azul-bg); display: flex; align-items: center; gap: 8px; }
+    .stitle svg { flex-shrink: 0; }
+
+    .card { background: white; border-radius: 10px; border: 1px solid var(--gris-borde); padding: 1.4rem; margin-bottom: 0.875rem; }
+
+    .campo { margin-bottom: 1rem; }
     .campo:last-child { margin-bottom: 0; }
-    label { display: block; font-size: 0.85rem; font-weight: 500; color: var(--texto); margin-bottom: 5px; }
-    label span.req { color: var(--error); margin-left: 2px; }
-    label span.opt { color: var(--texto-suave); font-weight: 400; font-size: 0.8rem; }
-    input[type="text"], input[type="date"], input[type="tel"], input[type="email"], select, textarea {
-      width: 100%; padding: 10px 12px; border: 1px solid var(--gris-borde); border-radius: 8px; font-size: 0.9rem; color: var(--texto); background: white; transition: border-color 0.15s; appearance: none; -webkit-appearance: none;
+    label.lbl { display: block; font-size: 0.83rem; font-weight: 500; margin-bottom: 4px; }
+    .req { color: var(--error); margin-left: 2px; }
+    .opt { color: var(--texto-suave); font-weight: 400; font-size: 0.78rem; }
+
+    input[type=text], input[type=date], input[type=tel], input[type=email], select, textarea {
+      width: 100%; padding: 9px 11px; border: 1px solid var(--gris-borde); border-radius: 8px;
+      font-size: 0.88rem; color: var(--texto); background: white; transition: border-color 0.15s;
+      -webkit-appearance: none; appearance: none;
     }
     input:focus, select:focus, textarea:focus { outline: none; border-color: var(--azul-claro); box-shadow: 0 0 0 3px rgba(74,144,196,0.12); }
-    input.error, select.error { border-color: var(--error); }
-    .error-msg { font-size: 0.78rem; color: var(--error); margin-top: 4px; display: none; }
-    .error-msg.visible { display: block; }
-    .fila2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
-    textarea { resize: vertical; min-height: 80px; }
+    input.err-input, select.err-input { border-color: var(--error); }
+    .emsg { font-size: 0.76rem; color: var(--error); margin-top: 3px; display: none; }
+    .emsg.v { display: block; }
 
-    /* SELECTOR DE RAMA PRINCIPAL */
-    .rama-selector { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
+    .f2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+    .f3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.75rem; }
+    textarea { resize: vertical; min-height: 76px; }
+
+    /* RAMA SELECTOR */
+    .rama-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem; }
     .rama-card {
       background: white; border: 2px solid var(--gris-borde); border-radius: 12px;
       padding: 1.5rem 1rem; text-align: center; cursor: pointer; transition: all 0.15s;
     }
     .rama-card:hover { border-color: var(--azul-claro); background: var(--azul-bg); }
-    .rama-card.seleccionada { border-color: var(--azul); background: var(--azul-bg); }
-    .rama-card .rama-icono { font-size: 2.5rem; margin-bottom: 0.5rem; }
-    .rama-card h3 { font-size: 1rem; font-weight: 600; color: var(--texto); }
-    .rama-card p { font-size: 0.8rem; color: var(--texto-suave); margin-top: 4px; }
-    .rama-card input { display: none; }
+    .rama-card.sel { border-color: var(--azul); background: var(--azul-bg); }
+    .rama-card svg { color: var(--azul); margin-bottom: 0.6rem; }
+    .rama-card h3 { font-size: 1rem; font-weight: 600; }
+    .rama-card p { font-size: 0.78rem; color: var(--texto-suave); margin-top: 3px; }
 
-    /* SECCIÓN PILLS */
-    .seccion-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-top: 4px; }
-    .seccion-pill {
-      display: flex; align-items: center; gap: 8px; padding: 10px 12px;
+    /* PILLS DE SECCIÓN */
+    .pill-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-top: 4px; }
+    .pill {
+      display: flex; align-items: center; gap: 8px; padding: 9px 12px;
       border: 1.5px solid var(--gris-borde); border-radius: 8px; cursor: pointer;
-      font-size: 0.88rem; transition: all 0.15s;
+      font-size: 0.85rem; transition: all 0.15s; background: white;
     }
-    .seccion-pill:hover { border-color: var(--azul-claro); background: var(--azul-bg); }
-    .seccion-pill input { display: none; }
-    .seccion-pill.seleccionada { border-color: var(--azul); background: var(--azul-bg); color: var(--azul); font-weight: 500; }
-    .seccion-pill .pill-icono { font-size: 1.2rem; }
+    .pill:hover { border-color: var(--azul-claro); background: var(--azul-bg); }
+    .pill.sel { border-color: var(--azul); background: var(--azul-bg); color: var(--azul); font-weight: 500; }
+    .pill svg { flex-shrink: 0; color: inherit; }
+
+    /* SOCIO */
+    .socio-card {
+      border: 2px solid var(--gris-borde); border-radius: 10px; padding: 1.1rem;
+      cursor: pointer; transition: all 0.15s; margin-bottom: 0.75rem; background: white;
+    }
+    .socio-card:hover { border-color: var(--azul-claro); }
+    .socio-card.sel { border-color: var(--azul); background: var(--azul-bg); }
+    .socio-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem; }
+    .socio-titulo { font-weight: 600; font-size: 0.95rem; }
+    .socio-badge { background: var(--azul); color: white; font-size: 0.72rem; padding: 2px 8px; border-radius: 20px; font-weight: 500; }
+    .socio-benefits { list-style: none; display: flex; flex-direction: column; gap: 4px; }
+    .socio-benefits li { font-size: 0.82rem; color: var(--texto-suave); display: flex; align-items: center; gap: 6px; }
+    .socio-benefits li::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: var(--azul-claro); flex-shrink: 0; }
 
     /* CHECKBOXES */
-    .check-lista { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
+    .check-lista { display: flex; flex-direction: column; gap: 8px; }
     .check-item {
       display: flex; align-items: flex-start; gap: 10px; padding: 10px 12px;
       border: 1px solid var(--gris-borde); border-radius: 8px; cursor: pointer; transition: all 0.15s;
     }
     .check-item:hover { border-color: var(--azul-claro); background: var(--azul-bg); }
-    .check-item input[type="checkbox"] { width: 18px; height: 18px; margin-top: 1px; cursor: pointer; accent-color: var(--azul); flex-shrink: 0; }
-    .check-item span { font-size: 0.87rem; line-height: 1.4; }
+    .check-item input[type=checkbox] { width: 17px; height: 17px; margin-top: 1px; cursor: pointer; accent-color: var(--azul); flex-shrink: 0; }
+    .check-item span { font-size: 0.85rem; line-height: 1.45; }
 
-    .info-box { background: var(--azul-bg); border: 1px solid #b8d9f0; border-radius: 8px; padding: 0.875rem 1rem; font-size: 0.85rem; color: #1a5f8f; margin-bottom: 1rem; display: flex; gap: 8px; align-items: flex-start; }
+    .info-box { background: var(--azul-bg); border: 1px solid #b8d9f0; border-radius: 8px; padding: 0.8rem 1rem; font-size: 0.83rem; color: var(--azul); margin-bottom: 0.875rem; display: flex; gap: 8px; align-items: flex-start; }
+    .info-box svg { flex-shrink: 0; margin-top: 1px; }
 
-    .paso-contenido { display: none; }
-    .paso-contenido.activo { display: block; }
+    .warn-box { background: #fffbeb; border: 1px solid #fcd34d; border-radius: 8px; padding: 0.8rem 1rem; font-size: 0.83rem; color: #92400e; margin-bottom: 0.875rem; display: flex; gap: 8px; align-items: flex-start; }
 
-    .botones { display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; gap: 1rem; }
-    .btn { padding: 11px 24px; border-radius: 8px; font-size: 0.9rem; font-weight: 500; cursor: pointer; border: none; transition: all 0.15s; }
-    .btn-primario { background: var(--azul); color: white; flex: 1; }
-    .btn-primario:hover { background: #15507a; }
-    .btn-primario:disabled { background: var(--gris-borde); cursor: not-allowed; color: var(--texto-suave); }
-    .btn-secundario { background: white; color: var(--texto); border: 1px solid var(--gris-borde); }
-    .btn-secundario:hover { background: var(--gris); }
+    .paso-c { display: none; }
+    .paso-c.activo { display: block; }
 
-    .exito-pantalla { text-align: center; padding: 3rem 1rem; }
-    .exito-icono { width: 72px; height: 72px; background: #dcfce7; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; font-size: 2rem; }
-    .exito-pantalla h2 { font-size: 1.4rem; margin-bottom: 0.5rem; }
-    .exito-pantalla p { color: var(--texto-suave); margin-bottom: 0.5rem; }
-    .ref-numero { background: var(--azul-bg); border: 1px solid #b8d9f0; border-radius: 8px; padding: 0.75rem 1.5rem; font-weight: 600; color: var(--azul); display: inline-block; margin: 1rem 0; font-size: 1.1rem; letter-spacing: 0.05em; }
+    .bots { display: flex; gap: 0.75rem; margin-top: 1.4rem; }
+    .btn { padding: 10px 22px; border-radius: 8px; font-size: 0.88rem; font-weight: 500; cursor: pointer; border: none; transition: all 0.15s; }
+    .btn-p { background: var(--azul); color: white; flex: 1; }
+    .btn-p:hover { background: #15507a; }
+    .btn-p:disabled { background: var(--gris-borde); cursor: not-allowed; color: var(--texto-suave); }
+    .btn-s { background: white; color: var(--texto); border: 1px solid var(--gris-borde); }
+    .btn-s:hover { background: var(--gris); }
 
-    .spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.4); border-top-color: white; border-radius: 50%; animation: spin 0.6s linear infinite; margin-right: 6px; vertical-align: middle; }
+    .exito { text-align: center; padding: 3rem 1rem; }
+    .exito-ico { width: 68px; height: 68px; background: #dcfce7; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem; }
+    .exito h2 { font-size: 1.35rem; margin-bottom: 0.5rem; }
+    .exito p { color: var(--texto-suave); font-size: 0.9rem; margin-bottom: 0.4rem; }
+    .ref { background: var(--azul-bg); border: 1px solid #b8d9f0; border-radius: 8px; padding: 0.7rem 1.5rem; font-weight: 600; color: var(--azul); display: inline-block; margin: 0.875rem 0; font-size: 1.05rem; letter-spacing: 0.06em; }
+
+    .spinner { display: inline-block; width: 15px; height: 15px; border: 2px solid rgba(255,255,255,0.35); border-top-color: white; border-radius: 50%; animation: spin 0.6s linear infinite; margin-right: 6px; vertical-align: middle; }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    @media (max-width: 500px) {
-      .fila2, .seccion-grid, .rama-selector { grid-template-columns: 1fr; }
+    @media (max-width: 520px) {
+      .f2, .f3, .pill-grid, .rama-grid { grid-template-columns: 1fr; }
       header { padding: 1rem; }
-      .card { padding: 1.1rem; }
+      .pp span { display: none; }
     }
   </style>
 </head>
@@ -123,13 +146,13 @@
 
 <header>
   <div class="logo-circle">
-    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="50" cy="50" r="46" stroke="#1a5f8f" stroke-width="4" fill="none"/>
-      <circle cx="50" cy="50" r="40" stroke="#1a5f8f" stroke-width="2" fill="none"/>
-      <rect x="38" y="28" width="24" height="40" rx="4" stroke="#1a5f8f" stroke-width="3" fill="none"/>
-      <rect x="44" y="28" width="2" height="40" fill="#1a5f8f"/>
-      <ellipse cx="50" cy="28" rx="12" ry="8" fill="#1a5f8f"/>
-      <text x="50" y="55" text-anchor="middle" font-size="11" font-weight="bold" fill="#1a5f8f" font-family="Arial">21</text>
+    <svg viewBox="0 0 100 100" fill="none" width="36" height="36">
+      <circle cx="50" cy="50" r="46" stroke="#1a5f8f" stroke-width="4"/>
+      <circle cx="50" cy="50" r="40" stroke="#1a5f8f" stroke-width="2"/>
+      <rect x="38" y="27" width="24" height="42" rx="4" stroke="#1a5f8f" stroke-width="3"/>
+      <rect x="44" y="27" width="2" height="42" fill="#1a5f8f"/>
+      <ellipse cx="50" cy="27" rx="12" ry="8" fill="#1a5f8f"/>
+      <text x="50" y="56" text-anchor="middle" font-size="11" font-weight="bold" fill="#1a5f8f" font-family="Arial">21</text>
     </svg>
   </div>
   <div>
@@ -140,260 +163,347 @@
 
 <div class="progreso-wrap">
   <div class="progreso">
-    <div class="paso-prog activo" id="prog-1"><div class="paso-num">1</div><span>Sección</span></div>
-    <div class="paso-linea" id="linea-1"></div>
-    <div class="paso-prog" id="prog-2"><div class="paso-num">2</div><span>Atleta</span></div>
-    <div class="paso-linea" id="linea-2"></div>
-    <div class="paso-prog" id="prog-3"><div class="paso-num">3</div><span>Familia</span></div>
-    <div class="paso-linea" id="linea-3"></div>
-    <div class="paso-prog" id="prog-4"><div class="paso-num">4</div><span>Equipación</span></div>
-    <div class="paso-linea" id="linea-4"></div>
-    <div class="paso-prog" id="prog-5"><div class="paso-num">5</div><span>Extras</span></div>
-    <div class="paso-linea" id="linea-5"></div>
-    <div class="paso-prog" id="prog-6"><div class="paso-num">6</div><span>Confirmar</span></div>
+    <div class="pp activo" id="prog-1"><div class="pn">1</div><span>Sección</span></div>
+    <div class="pl" id="l1"></div>
+    <div class="pp" id="prog-2"><div class="pn">2</div><span>Atleta</span></div>
+    <div class="pl" id="l2"></div>
+    <div class="pp" id="prog-3"><div class="pn">3</div><span>Contacto</span></div>
+    <div class="pl" id="l3"></div>
+    <div class="pp" id="prog-4"><div class="pn">4</div><span>Pago</span></div>
+    <div class="pl" id="l4"></div>
+    <div class="pp" id="prog-5"><div class="pn">5</div><span>Equipación</span></div>
+    <div class="pl" id="l5"></div>
+    <div class="pp" id="prog-6"><div class="pn">6</div><span>Extras</span></div>
+    <div class="pl" id="l6"></div>
+    <div class="pp" id="prog-7"><div class="pn">7</div><span>Confirmar</span></div>
   </div>
 </div>
 
 <div class="contenido">
 
-  <!-- PASO 1: RAMA + SECCIÓN -->
-  <div class="paso-contenido activo" id="paso-1">
-    <div class="seccion-titulo">¿A qué área quieres inscribirte?</div>
+  <!-- PASO 1: SECCIÓN -->
+  <div class="paso-c activo" id="paso-1">
+    <div class="stitle">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      ¿A qué área quieres inscribirte?
+    </div>
 
-    <div class="rama-selector">
-      <label class="rama-card" id="rama-escuela-card" onclick="seleccionarRama('escuela')">
-        <input type="radio" name="rama" value="escuela">
-        <div class="rama-icono">🏃</div>
+    <div class="rama-grid">
+      <div class="rama-card" id="rc-escuela" onclick="selRama('escuela')">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin:0 auto 0.6rem;display:block;color:var(--azul)"><circle cx="12" cy="5" r="2"/><path d="M12 7v6l-3 3"/><path d="M12 13l3 3"/><path d="M9 17H6a2 2 0 0 0-2 2v1"/><path d="M15 17h3a2 2 0 0 1 2 2v1"/></svg>
         <h3>Escuela</h3>
         <p>3 a 18 años</p>
-      </label>
-      <label class="rama-card" id="rama-adultos-card" onclick="seleccionarRama('adultos')">
-        <input type="radio" name="rama" value="adultos">
-        <div class="rama-icono">💪</div>
+      </div>
+      <div class="rama-card" id="rc-adultos" onclick="selRama('adultos')">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin:0 auto 0.6rem;display:block;color:var(--azul)"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
         <h3>Adultos</h3>
-        <p>Atletismo, running, triatlón, natación</p>
-      </label>
+        <p>Atletismo · Running · Triatlón · Natación</p>
+      </div>
     </div>
 
-    <!-- Secciones escuela (oculto por defecto) -->
-    <div id="secciones-escuela" style="display:none;">
+    <div id="wrap-escuela" style="display:none">
       <div class="card">
         <div class="campo">
-          <label>Grupo de edad <span class="req">*</span></label>
-          <div class="seccion-grid" id="grid-escuela">
-            <label class="seccion-pill" onclick="seleccionarSeccion(this, 'escuela')"><input type="radio" name="seccion" value="escuela"><span class="pill-icono">🐣</span> Prebenjamín (3–5)</label>
-            <label class="seccion-pill" onclick="seleccionarSeccion(this, 'escuela')"><input type="radio" name="seccion" value="escuela"><span class="pill-icono">⭐</span> Benjamín (6–7)</label>
-            <label class="seccion-pill" onclick="seleccionarSeccion(this, 'escuela')"><input type="radio" name="seccion" value="escuela"><span class="pill-icono">🌟</span> Alevín (8–9)</label>
-            <label class="seccion-pill" onclick="seleccionarSeccion(this, 'escuela')"><input type="radio" name="seccion" value="escuela"><span class="pill-icono">🏅</span> Infantil (10–11)</label>
-            <label class="seccion-pill" onclick="seleccionarSeccion(this, 'escuela')"><input type="radio" name="seccion" value="escuela"><span class="pill-icono">🥇</span> Cadete (12–13)</label>
-            <label class="seccion-pill" onclick="seleccionarSeccion(this, 'escuela')"><input type="radio" name="seccion" value="escuela"><span class="pill-icono">🔥</span> Junior (14–17)</label>
+          <label class="lbl">Categoría por edad <span class="req">*</span></label>
+          <div class="pill-grid" id="pills-escuela">
+            <div class="pill" onclick="selSeccion(this,'escuela','escuela','Prebenjamín (3–5 años)')">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>Prebenjamín (3–5)
+            </div>
+            <div class="pill" onclick="selSeccion(this,'escuela','escuela','Benjamín (6–7 años)')">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>Benjamín (6–7)
+            </div>
+            <div class="pill" onclick="selSeccion(this,'escuela','escuela','Alevín (8–9 años)')">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>Alevín (8–9)
+            </div>
+            <div class="pill" onclick="selSeccion(this,'escuela','escuela','Infantil (10–11 años)')">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>Infantil (10–11)
+            </div>
+            <div class="pill" onclick="selSeccion(this,'escuela','escuela','Cadete (12–13 años)')">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>Cadete (12–13)
+            </div>
+            <div class="pill" onclick="selSeccion(this,'escuela','escuela','Junior (14–17 años)')">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>Junior (14–17)
+            </div>
           </div>
-          <div class="error-msg" id="err-seccion-escuela">Selecciona un grupo</div>
+          <div class="emsg" id="err-cat">Selecciona una categoría</div>
         </div>
       </div>
     </div>
 
-    <!-- Secciones adultos (oculto por defecto) -->
-    <div id="secciones-adultos" style="display:none;">
+    <div id="wrap-adultos" style="display:none">
       <div class="card">
         <div class="campo">
-          <label>Modalidad <span class="req">*</span></label>
-          <div class="seccion-grid">
-            <label class="seccion-pill" onclick="seleccionarSeccion(this, 'adultos_modal')"><input type="radio" name="seccion" value="competicion"><span class="pill-icono">🏟️</span> Atletismo pista</label>
-            <label class="seccion-pill" onclick="seleccionarSeccion(this, 'adultos_modal')"><input type="radio" name="seccion" value="running"><span class="pill-icono">🏃</span> Running</label>
-            <label class="seccion-pill" onclick="seleccionarSeccion(this, 'adultos_modal')"><input type="radio" name="seccion" value="triatlon"><span class="pill-icono">🚴</span> Triatlón</label>
-            <label class="seccion-pill" onclick="seleccionarSeccion(this, 'adultos_modal')"><input type="radio" name="seccion" value="natacion"><span class="pill-icono">🏊</span> Natación</label>
+          <label class="lbl">Modalidad <span class="req">*</span></label>
+          <div class="pill-grid">
+            <div class="pill" onclick="selSeccion(this,'adultos','competicion','Atletismo pista')">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>Atletismo pista
+            </div>
+            <div class="pill" onclick="selSeccion(this,'adultos','running','Running')">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="2"/><path d="M12 7v5l3 4"/><path d="M9 12l-3 4"/></svg>Running
+            </div>
+            <div class="pill" onclick="selSeccion(this,'adultos','triatlon','Triatlón')">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="5" cy="17" r="3"/><circle cx="19" cy="17" r="3"/><path d="M12 3v8l4 3"/></svg>Triatlón
+            </div>
+            <div class="pill" onclick="selSeccion(this,'adultos','natacion','Natación')">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12c1-1 2-2 4-2s3 2 4 2 3-2 4-2 3 2 4 2"/><path d="M2 17c1-1 2-2 4-2s3 2 4 2 3-2 4-2 3 2 4 2"/></svg>Natación
+            </div>
           </div>
-          <div class="error-msg" id="err-seccion-adultos">Selecciona una modalidad</div>
+          <div class="emsg" id="err-mod">Selecciona una modalidad</div>
         </div>
       </div>
     </div>
 
-    <div class="error-msg visible" id="err-rama" style="display:none; margin-bottom:1rem;">Selecciona un área para continuar</div>
-    <div class="botones">
-      <div></div>
-      <button class="btn btn-primario" onclick="irPaso(2)">Siguiente →</button>
-    </div>
+    <div class="emsg v" id="err-rama" style="display:none;margin-bottom:0.75rem;font-size:0.85rem;">Selecciona un área para continuar</div>
+    <div class="bots"><div></div><button class="btn btn-p" onclick="irPaso(2)">Siguiente →</button></div>
   </div>
 
   <!-- PASO 2: DATOS DEL ATLETA -->
-  <div class="paso-contenido" id="paso-2">
-    <div class="seccion-titulo">
+  <div class="paso-c" id="paso-2">
+    <div class="stitle">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
       Datos del atleta
     </div>
     <div class="card">
-      <div class="fila2">
+      <div class="f2">
         <div class="campo">
-          <label>Nombre <span class="req">*</span></label>
+          <label class="lbl">Nombre <span class="req">*</span></label>
           <input type="text" id="nombre" placeholder="Nombre" autocomplete="given-name">
-          <div class="error-msg" id="err-nombre">Introduce el nombre</div>
+          <div class="emsg" id="err-nombre">Introduce el nombre</div>
         </div>
         <div class="campo">
-          <label>Apellidos <span class="req">*</span></label>
+          <label class="lbl">Apellidos <span class="req">*</span></label>
           <input type="text" id="apellidos" placeholder="Apellidos" autocomplete="family-name">
-          <div class="error-msg" id="err-apellidos">Introduce los apellidos</div>
+          <div class="emsg" id="err-apellidos">Introduce los apellidos</div>
         </div>
       </div>
-      <div class="fila2">
+      <div class="f2">
         <div class="campo">
-          <label>Fecha de nacimiento <span class="req">*</span></label>
+          <label class="lbl">Fecha de nacimiento <span class="req">*</span></label>
           <input type="date" id="fecha_nacimiento">
-          <div class="error-msg" id="err-fecha">Introduce la fecha de nacimiento</div>
+          <div class="emsg" id="err-fecha">Introduce la fecha</div>
         </div>
         <div class="campo">
-          <label>DNI / NIE <span class="opt">(opcional)</span></label>
+          <label class="lbl">DNI / NIE <span class="opt">(opcional)</span></label>
           <input type="text" id="dni_nie" placeholder="12345678A">
         </div>
       </div>
     </div>
-    <div class="botones">
-      <button class="btn btn-secundario" onclick="irPaso(1)">← Atrás</button>
-      <button class="btn btn-primario" onclick="irPaso(3)">Siguiente →</button>
+    <div class="bots">
+      <button class="btn btn-s" onclick="irPaso(1)">← Atrás</button>
+      <button class="btn btn-p" onclick="irPaso(3)">Siguiente →</button>
     </div>
   </div>
 
-  <!-- PASO 3: DATOS FAMILIA -->
-  <div class="paso-contenido" id="paso-3">
-    <div class="seccion-titulo">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+  <!-- PASO 3: CONTACTO -->
+  <div class="paso-c" id="paso-3">
+    <div class="stitle">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
       Datos de contacto
     </div>
     <div class="card">
-      <div class="fila2">
+      <div class="f2">
         <div class="campo">
-          <label id="label-padre">Nombre del padre <span class="opt">(opcional)</span></label>
+          <label class="lbl">Nombre del padre <span class="opt">(opcional)</span></label>
           <input type="text" id="nombre_padre" placeholder="Nombre completo">
         </div>
         <div class="campo">
-          <label id="label-madre">Nombre de la madre <span class="opt">(opcional)</span></label>
+          <label class="lbl">Nombre de la madre <span class="opt">(opcional)</span></label>
           <input type="text" id="nombre_madre" placeholder="Nombre completo">
         </div>
       </div>
-      <div class="fila2">
+      <div class="f2">
         <div class="campo">
-          <label>Teléfono de contacto <span class="req">*</span></label>
+          <label class="lbl">Teléfono <span class="req">*</span></label>
           <input type="tel" id="telefono" placeholder="600 000 000" autocomplete="tel">
-          <div class="error-msg" id="err-telefono">Introduce un teléfono válido</div>
+          <div class="emsg" id="err-tel">Teléfono no válido</div>
         </div>
         <div class="campo">
-          <label>Email de contacto <span class="req">*</span></label>
+          <label class="lbl">Email <span class="req">*</span></label>
           <input type="email" id="email" placeholder="correo@ejemplo.com" autocomplete="email">
-          <div class="error-msg" id="err-email">Introduce un email válido</div>
+          <div class="emsg" id="err-email">Email no válido</div>
         </div>
       </div>
     </div>
-    <div class="botones">
-      <button class="btn btn-secundario" onclick="irPaso(2)">← Atrás</button>
-      <button class="btn btn-primario" onclick="irPaso(4)">Siguiente →</button>
+    <div class="bots">
+      <button class="btn btn-s" onclick="irPaso(2)">← Atrás</button>
+      <button class="btn btn-p" onclick="irPaso(4)">Siguiente →</button>
     </div>
   </div>
 
-  <!-- PASO 4: EQUIPACIÓN (dinámica según sección) -->
-  <div class="paso-contenido" id="paso-4">
-    <div class="seccion-titulo">
+  <!-- PASO 4: PAGO Y SOCIO -->
+  <div class="paso-c" id="paso-4">
+    <div class="stitle">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+      Datos de pago y cuota
+    </div>
+
+    <div class="warn-box">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      El IBAN se utilizará exclusivamente para domiciliar el cobro de cuotas. Los datos bancarios se transmiten de forma segura.
+    </div>
+
+    <div class="card">
+      <div class="campo">
+        <label class="lbl">Número de cuenta (IBAN) <span class="req">*</span></label>
+        <input type="text" id="iban" placeholder="ES00 0000 0000 0000 0000 0000" autocomplete="off"
+          oninput="formatIBAN(this)">
+        <div class="emsg" id="err-iban">Introduce un IBAN español válido (24 dígitos)</div>
+      </div>
+      <div class="f2" style="margin-top:0.5rem;">
+        <div class="campo">
+          <label class="lbl">Titular de la cuenta <span class="req">*</span></label>
+          <input type="text" id="titular_cuenta" placeholder="Nombre completo del titular">
+          <div class="emsg" id="err-titular">Introduce el nombre del titular</div>
+        </div>
+        <div class="campo">
+          <label class="lbl">DNI del titular <span class="req">*</span></label>
+          <input type="text" id="dni_titular" placeholder="12345678A">
+          <div class="emsg" id="err-dni-titular">Introduce el DNI del titular</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stitle" style="margin-top:1.25rem;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      ¿Quieres hacerte socio del club?
+    </div>
+
+    <div class="socio-card sel" id="sc-si" onclick="selSocio(true)">
+      <div class="socio-header">
+        <span class="socio-titulo">Sí, quiero ser socio</span>
+        <span class="socio-badge">Recomendado</span>
+      </div>
+      <ul class="socio-benefits">
+        <li>Equipación del club incluida (camiseta + ropa de entrenamiento)</li>
+        <li>Acceso a la pista de atletismo del club</li>
+        <li>Descuento en instalaciones deportivas asociadas</li>
+        <li>Descuento en actividades, campus y eventos del club</li>
+      </ul>
+    </div>
+    <div class="socio-card" id="sc-no" onclick="selSocio(false)">
+      <div class="socio-titulo">No, solo inscripción básica</div>
+      <p style="font-size:0.8rem;color:var(--texto-suave);margin-top:3px;">Sin equipación ni acceso a instalaciones del socio</p>
+    </div>
+
+    <div class="bots">
+      <button class="btn btn-s" onclick="irPaso(3)">← Atrás</button>
+      <button class="btn btn-p" onclick="irPaso(5)">Siguiente →</button>
+    </div>
+  </div>
+
+  <!-- PASO 5: EQUIPACIÓN -->
+  <div class="paso-c" id="paso-5">
+    <div class="stitle">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
       Equipación
     </div>
     <div class="info-box">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-      Las tallas son orientativas. El club os contactará para confirmar antes de hacer el pedido.
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      Las tallas son orientativas. Os contactaremos para confirmar antes de realizar el pedido.
     </div>
 
-    <!-- Equipación escuela -->
-    <div id="equip-escuela" class="card" style="display:none;">
-      <div class="campo">
-        <label>Talla camiseta <span class="opt">(opcional)</span></label>
-        <select id="talla_camiseta_escuela">
-          <option value="">Seleccionar...</option>
-          <optgroup label="Tallas infantiles"><option>2</option><option>4</option><option>6</option><option>8</option><option>10</option><option>12</option></optgroup>
-          <optgroup label="Tallas adulto"><option>XS</option><option>S</option><option>M</option><option>L</option><option>XL</option><option>XXL</option></optgroup>
-        </select>
-      </div>
-    </div>
-
-    <!-- Equipación adultos -->
-    <div id="equip-adultos" class="card" style="display:none;">
-      <div class="fila2">
+    <!-- Escuela: solo camiseta -->
+    <div id="equip-escuela" style="display:none;">
+      <div class="card">
         <div class="campo">
-          <label>Talla camiseta <span class="opt">(opcional)</span></label>
-          <select id="talla_camiseta_adultos">
+          <label class="lbl">Talla camiseta <span class="opt">(opcional)</span></label>
+          <select id="talla_camiseta_e">
             <option value="">Seleccionar...</option>
-            <option>XS</option><option>S</option><option>M</option><option>L</option><option>XL</option><option>XXL</option>
-          </select>
-        </div>
-        <div class="campo">
-          <label>Talla mallas / pantalón <span class="opt">(opcional)</span></label>
-          <select id="talla_pantalon_adultos">
-            <option value="">Seleccionar...</option>
-            <option>XS</option><option>S</option><option>M</option><option>L</option><option>XL</option><option>XXL</option>
+            <optgroup label="Tallas infantiles"><option>2</option><option>4</option><option>6</option><option>8</option><option>10</option><option>12</option></optgroup>
+            <optgroup label="Tallas adulto"><option>XS</option><option>S</option><option>M</option><option>L</option><option>XL</option><option>XXL</option></optgroup>
           </select>
         </div>
       </div>
-      <div class="campo" style="margin-top:0.5rem;">
-        <label>Equipación de competición <span class="opt">(opcional)</span></label>
-        <select id="equip_competicion">
-          <option value="">No necesito por ahora</option>
-          <option value="dorsal">Solo dorsal</option>
-          <option value="completo">Equipación completa (camiseta + pantalón competición)</option>
-          <option value="consultar">Quiero consultarlo con el club</option>
-        </select>
+    </div>
+
+    <!-- Adultos: camiseta + mallas + competición -->
+    <div id="equip-adultos" style="display:none;">
+      <div class="card">
+        <div class="f2">
+          <div class="campo">
+            <label class="lbl">Talla camiseta <span class="opt">(opcional)</span></label>
+            <select id="talla_camiseta_a">
+              <option value="">Seleccionar...</option>
+              <option>XS</option><option>S</option><option>M</option><option>L</option><option>XL</option><option>XXL</option>
+            </select>
+          </div>
+          <div class="campo">
+            <label class="lbl">Talla mallas / pantalón <span class="opt">(opcional)</span></label>
+            <select id="talla_pantalon_a">
+              <option value="">Seleccionar...</option>
+              <option>XS</option><option>S</option><option>M</option><option>L</option><option>XL</option><option>XXL</option>
+            </select>
+          </div>
+        </div>
+        <div class="campo" style="margin-top:0.25rem;">
+          <label class="lbl">Equipación de competición <span class="opt">(opcional)</span></label>
+          <select id="equip_comp">
+            <option value="">No necesito por ahora</option>
+            <option value="dorsal">Solo dorsal</option>
+            <option value="completo">Equipación completa (camiseta + pantalón competición)</option>
+            <option value="consultar">Quiero consultarlo con el club</option>
+          </select>
+        </div>
       </div>
     </div>
 
-    <div class="botones">
-      <button class="btn btn-secundario" onclick="irPaso(3)">← Atrás</button>
-      <button class="btn btn-primario" onclick="irPaso(5)">Siguiente →</button>
+    <div class="bots">
+      <button class="btn btn-s" onclick="irPaso(4)">← Atrás</button>
+      <button class="btn btn-p" onclick="irPaso(6)">Siguiente →</button>
     </div>
   </div>
 
-  <!-- PASO 5: EXTRAS -->
-  <div class="paso-contenido" id="paso-5">
-    <div class="seccion-titulo">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+  <!-- PASO 6: EXTRAS -->
+  <div class="paso-c" id="paso-6">
+    <div class="stitle">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
       Información adicional
     </div>
     <div class="card">
       <div class="campo">
-        <label>¿Tienes amigos o familiares en el club? <span class="opt">(opcional)</span></label>
+        <label class="lbl">¿Tienes amigos o familiares en el club? <span class="opt">(opcional)</span></label>
         <input type="text" id="amigos_club" placeholder="Nombre de la persona...">
       </div>
-      <div class="campo" style="margin-top: 1rem;">
-        <label>¿Te interesan actividades para padres y madres?</label>
+      <div class="campo" style="margin-top:0.875rem;">
+        <label class="lbl">¿Te interesan actividades para padres y madres?</label>
         <div class="check-lista">
           <label class="check-item" for="interes_padres">
-            <input type="checkbox" id="interes_padres" onchange="toggleActividadPadres()">
+            <input type="checkbox" id="interes_padres" onchange="document.getElementById('wrap-act').style.display=this.checked?'block':'none'">
             <span>Sí, quiero recibir información sobre actividades para familias</span>
           </label>
         </div>
-        <div id="tipo-actividad-wrap" style="display:none; margin-top: 0.75rem;">
-          <label>¿Qué tipo de actividad te interesa? <span class="opt">(opcional)</span></label>
+        <div id="wrap-act" style="display:none;margin-top:0.75rem;">
+          <label class="lbl">¿Qué tipo de actividad? <span class="opt">(opcional)</span></label>
           <input type="text" id="tipo_actividad" placeholder="Running, yoga, nutrición...">
         </div>
       </div>
-      <div class="campo" style="margin-top: 1rem;">
-        <label>Observaciones <span class="opt">(opcional)</span></label>
+      <div class="campo" style="margin-top:0.875rem;">
+        <label class="lbl">Observaciones <span class="opt">(opcional)</span></label>
         <textarea id="observaciones" placeholder="Alergias, lesiones, cualquier información relevante..."></textarea>
       </div>
     </div>
-    <div class="botones">
-      <button class="btn btn-secundario" onclick="irPaso(4)">← Atrás</button>
-      <button class="btn btn-primario" onclick="irPaso(6)">Siguiente →</button>
+    <div class="bots">
+      <button class="btn btn-s" onclick="irPaso(5)">← Atrás</button>
+      <button class="btn btn-p" onclick="irPaso(7)">Siguiente →</button>
     </div>
   </div>
 
-  <!-- PASO 6: CONFIRMAR -->
-  <div class="paso-contenido" id="paso-6">
-    <div class="seccion-titulo">
+  <!-- PASO 7: CONFIRMAR -->
+  <div class="paso-c" id="paso-7">
+    <div class="stitle">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
       Confirmar inscripción
     </div>
     <div class="card" id="resumen-card"></div>
-    <div class="card" style="margin-top: 0.75rem;">
+    <div class="card" style="margin-top:0.75rem;">
       <div class="check-lista">
         <label class="check-item" for="acepta-lopd">
           <input type="checkbox" id="acepta-lopd">
-          <span>Acepto el tratamiento de datos personales según la <strong>LOPD</strong> y el <strong>RGPD</strong>. Los datos se usarán exclusivamente para la gestión del club.</span>
+          <span>Acepto el tratamiento de datos personales según la <strong>LOPD</strong> y el <strong>RGPD</strong>. Los datos se usarán exclusivamente para la gestión del club. <span class="req">*</span></span>
+        </label>
+        <label class="check-item" for="acepta-domiciliacion">
+          <input type="checkbox" id="acepta-domiciliacion">
+          <span>Autorizo al Club Apolana a domiciliar las cuotas en la cuenta bancaria indicada. <span class="req">*</span></span>
         </label>
         <label class="check-item" for="acepta-imagen">
           <input type="checkbox" id="acepta-imagen">
@@ -401,213 +511,205 @@
         </label>
       </div>
     </div>
-    <div class="botones">
-      <button class="btn btn-secundario" onclick="irPaso(5)">← Atrás</button>
-      <button class="btn btn-primario" id="btn-enviar" onclick="enviarInscripcion()">Enviar inscripción</button>
+    <div class="bots">
+      <button class="btn btn-s" onclick="irPaso(6)">← Atrás</button>
+      <button class="btn btn-p" id="btn-enviar" onclick="enviar()">Enviar inscripción</button>
     </div>
   </div>
 
   <!-- ÉXITO -->
-  <div class="paso-contenido" id="paso-exito">
-    <div class="exito-pantalla">
-      <div class="exito-icono">✓</div>
+  <div class="paso-c" id="paso-exito">
+    <div class="exito">
+      <div class="exito-ico">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
       <h2>¡Inscripción recibida!</h2>
-      <p>Hemos registrado la inscripción de <strong id="nombre-confirmado"></strong>.</p>
-      <div class="ref-numero" id="ref-numero"></div>
-      <p style="margin-bottom: 1.5rem;">El equipo del Club Apolana os contactará en breve para confirmar el grupo y los próximos pasos.</p>
-      <div class="info-box" style="text-align: left; max-width: 420px; margin: 0 auto;">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <p>Hemos registrado la inscripción de <strong id="nombre-ok"></strong>.</p>
+      <div class="ref" id="ref-ok"></div>
+      <p style="margin-bottom:1.25rem;">El equipo del Club Apolana os contactará en breve para confirmar el grupo y los próximos pasos.</p>
+      <div class="info-box" style="max-width:420px;margin:0 auto;text-align:left;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
         Periodo de prueba: <strong>15 días</strong> desde el primer entrenamiento. Guarda tu número de referencia.
       </div>
-      <button class="btn btn-secundario" style="margin-top: 2rem;" onclick="location.reload()">Inscribir otro atleta</button>
+      <button class="btn btn-s" style="margin-top:2rem;" onclick="location.reload()">Inscribir otro atleta</button>
     </div>
   </div>
 
 </div>
 
 <script>
-  const SUPABASE_URL = 'https://icaxokjsvhlreuwpyxeb.supabase.co';
-  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImljYXhva2pzdmhscmV1d3B5eGViIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEwNzE2NTgsImV4cCI6MjA5NjY0NzY1OH0.xn1ZY-otHY0-l7g64uutSVjiU8DbkHxxZmTvu77IaHA';
-  const { createClient } = supabase;
-  const db = createClient(SUPABASE_URL, SUPABASE_KEY);
+  const SB_URL = 'https://icaxokjsvhlreuwpyxeb.supabase.co';
+  const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImljYXhva2pzdmhscmV1d3B5eGViIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEwNzE2NTgsImV4cCI6MjA5NjY0NzY1OH0.xn1ZY-otHY0-l7g64uutSVjiU8DbkHxxZmTvu77IaHA';
+  const db = supabase.createClient(SB_URL, SB_KEY);
 
-  let pasoActual = 1;
-  let ramaSeleccionada = null;
-  let seccionSeleccionada = null;
-  let categoriaEscuela = null;
+  let paso = 1;
+  const TOTAL = 7;
+  let rama = null, seccion = null, categoria = null, esSocio = true;
 
-  const TOTAL_PASOS = 6;
-
-  function seleccionarRama(rama) {
-    ramaSeleccionada = rama;
-    document.getElementById('rama-escuela-card').classList.toggle('seleccionada', rama === 'escuela');
-    document.getElementById('rama-adultos-card').classList.toggle('seleccionada', rama === 'adultos');
-    document.getElementById('secciones-escuela').style.display = rama === 'escuela' ? 'block' : 'none';
-    document.getElementById('secciones-adultos').style.display = rama === 'adultos' ? 'block' : 'none';
+  function selRama(r) {
+    rama = r;
+    document.getElementById('rc-escuela').classList.toggle('sel', r === 'escuela');
+    document.getElementById('rc-adultos').classList.toggle('sel', r === 'adultos');
+    document.getElementById('wrap-escuela').style.display = r === 'escuela' ? 'block' : 'none';
+    document.getElementById('wrap-adultos').style.display = r === 'adultos' ? 'block' : 'none';
     document.getElementById('err-rama').style.display = 'none';
-    // Resetear sección
-    seccionSeleccionada = null;
-    categoriaEscuela = null;
-    document.querySelectorAll('.seccion-pill').forEach(p => p.classList.remove('seleccionada'));
+    seccion = null; categoria = null;
+    document.querySelectorAll('.pill').forEach(p => p.classList.remove('sel'));
   }
 
-  function seleccionarSeccion(el, tipo) {
-    document.querySelectorAll('.seccion-pill').forEach(p => p.classList.remove('seleccionada'));
-    el.classList.add('seleccionada');
-    seccionSeleccionada = el.querySelector('input').value;
-    if (tipo === 'escuela') {
-      categoriaEscuela = el.querySelector('span:last-child').textContent.trim();
-    }
+  function selSeccion(el, tipo, val, cat) {
+    document.querySelectorAll('#wrap-' + (tipo === 'escuela' ? 'escuela' : 'adultos') + ' .pill').forEach(p => p.classList.remove('sel'));
+    el.classList.add('sel');
+    seccion = val; categoria = cat;
   }
 
-  function toggleActividadPadres() {
-    const checked = document.getElementById('interes_padres').checked;
-    document.getElementById('tipo-actividad-wrap').style.display = checked ? 'block' : 'none';
+  function selSocio(s) {
+    esSocio = s;
+    document.getElementById('sc-si').classList.toggle('sel', s);
+    document.getElementById('sc-no').classList.toggle('sel', !s);
+  }
+
+  function formatIBAN(input) {
+    let v = input.value.replace(/[^A-Z0-9]/gi, '').toUpperCase();
+    let formatted = v.match(/.{1,4}/g)?.join(' ') || v;
+    input.value = formatted;
   }
 
   function irPaso(n) {
-    if (n > pasoActual && !validarPaso(pasoActual)) return;
-    document.getElementById('paso-' + pasoActual).classList.remove('activo');
-    const destino = n <= TOTAL_PASOS ? 'paso-' + n : 'paso-exito';
-    document.getElementById(n <= TOTAL_PASOS ? 'paso-' + n : 'paso-exito').classList.add('activo');
-
-    for (let i = 1; i <= TOTAL_PASOS; i++) {
+    if (n > paso && !validar(paso)) return;
+    document.getElementById('paso-' + (paso <= TOTAL ? paso : 'exito')).classList.remove('activo');
+    const dest = n <= TOTAL ? 'paso-' + n : 'paso-exito';
+    document.getElementById(dest).classList.add('activo');
+    for (let i = 1; i <= TOTAL; i++) {
       const el = document.getElementById('prog-' + i);
       el.classList.remove('activo', 'hecho');
       if (i < n) el.classList.add('hecho');
       else if (i === n) el.classList.add('activo');
     }
-    for (let i = 1; i <= TOTAL_PASOS - 1; i++) {
-      document.getElementById('linea-' + i).classList.toggle('hecha', i < n);
+    for (let i = 1; i < TOTAL; i++) document.getElementById('l' + i).classList.toggle('hecha', i < n);
+    if (n === 5) {
+      document.getElementById('equip-escuela').style.display = rama === 'escuela' ? 'block' : 'none';
+      document.getElementById('equip-adultos').style.display = rama === 'adultos' ? 'block' : 'none';
     }
-
-    // Mostrar equipación correcta en paso 4
-    if (n === 4) {
-      document.getElementById('equip-escuela').style.display = ramaSeleccionada === 'escuela' ? 'block' : 'none';
-      document.getElementById('equip-adultos').style.display = ramaSeleccionada === 'adultos' ? 'block' : 'none';
-    }
-
-    if (n === 6) generarResumen();
-    pasoActual = n;
+    if (n === 7) generarResumen();
+    paso = n;
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  function validarPaso(paso) {
-    let ok = true;
-    if (paso === 1) {
-      if (!ramaSeleccionada) {
-        document.getElementById('err-rama').style.display = 'block';
-        return false;
-      }
-      if (!seccionSeleccionada) {
-        const errId = ramaSeleccionada === 'escuela' ? 'err-seccion-escuela' : 'err-seccion-adultos';
-        document.getElementById(errId).classList.add('visible');
+  function validar(p) {
+    if (p === 1) {
+      if (!rama) { document.getElementById('err-rama').style.display = 'block'; return false; }
+      if (!seccion) {
+        document.getElementById(rama === 'escuela' ? 'err-cat' : 'err-mod').classList.add('v');
         return false;
       }
     }
-    if (paso === 2) {
-      ok = validarCampo('nombre', 'err-nombre', v => v.trim().length > 1) && ok;
-      ok = validarCampo('apellidos', 'err-apellidos', v => v.trim().length > 1) && ok;
-      ok = validarCampo('fecha_nacimiento', 'err-fecha', v => v !== '') && ok;
+    if (p === 2) {
+      let ok = vc('nombre','err-nombre', v => v.trim().length > 1);
+      ok = vc('apellidos','err-apellidos', v => v.trim().length > 1) && ok;
+      ok = vc('fecha_nacimiento','err-fecha', v => v !== '') && ok;
+      return ok;
     }
-    if (paso === 3) {
-      ok = validarCampo('telefono', 'err-telefono', v => /^[6789]\d{8}$/.test(v.replace(/\s/g,''))) && ok;
-      ok = validarCampo('email', 'err-email', v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) && ok;
+    if (p === 3) {
+      let ok = vc('telefono','err-tel', v => /^[6789]\d{8}$/.test(v.replace(/\s/g,'')));
+      ok = vc('email','err-email', v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) && ok;
+      return ok;
     }
+    if (p === 4) {
+      const iban = document.getElementById('iban').value.replace(/\s/g,'');
+      let ok = vc2('iban','err-iban', iban.length === 24 && /^ES\d{22}$/i.test(iban));
+      ok = vc('titular_cuenta','err-titular', v => v.trim().length > 2) && ok;
+      ok = vc('dni_titular','err-dni-titular', v => v.trim().length > 5) && ok;
+      return ok;
+    }
+    return true;
+  }
+
+  function vc(id, errId, fn) {
+    const el = document.getElementById(id);
+    const err = document.getElementById(errId);
+    const ok = fn(el.value);
+    el.classList.toggle('err-input', !ok);
+    err.classList.toggle('v', !ok);
+    return ok;
+  }
+  function vc2(id, errId, ok) {
+    const el = document.getElementById(id);
+    const err = document.getElementById(errId);
+    el.classList.toggle('err-input', !ok);
+    err.classList.toggle('v', !ok);
     return ok;
   }
 
-  function validarCampo(id, errId, fn) {
-    const input = document.getElementById(id);
-    const err = document.getElementById(errId);
-    const valido = fn(input.value);
-    input.classList.toggle('error', !valido);
-    err.classList.toggle('visible', !valido);
-    return valido;
-  }
-
-  const SECCIONES_LABEL = {
-    escuela: 'Escuela', competicion: 'Atletismo pista', running: 'Running', triatlon: 'Triatlón', natacion: 'Natación'
-  };
+  const SEC_LABEL = { escuela:'Escuela', competicion:'Atletismo pista', running:'Running', triatlon:'Triatlón', natacion:'Natación' };
 
   function generarResumen() {
-    const tallaCamiseta = ramaSeleccionada === 'escuela'
-      ? val('talla_camiseta_escuela') : val('talla_camiseta_adultos');
-    const tallaPantalon = ramaSeleccionada === 'adultos' ? val('talla_pantalon_adultos') : null;
-
+    const tc = rama === 'escuela' ? g('talla_camiseta_e') : g('talla_camiseta_a');
+    const tp = rama === 'adultos' ? g('talla_pantalon_a') : null;
     const filas = [
-      ['Sección', SECCIONES_LABEL[seccionSeleccionada] || seccionSeleccionada],
-      ramaSeleccionada === 'escuela' ? ['Categoría', categoriaEscuela || '—'] : null,
-      ['Atleta', `${val('nombre')} ${val('apellidos')}`],
-      ['Fecha de nacimiento', val('fecha_nacimiento')],
-      ['Teléfono', val('telefono')],
-      ['Email', val('email')],
-      ['Talla camiseta', tallaCamiseta || '—'],
-      tallaPantalon ? ['Talla mallas/pantalón', tallaPantalon] : null,
+      ['Sección', SEC_LABEL[seccion] || seccion],
+      ['Categoría', categoria || '—'],
+      ['Atleta', g('nombre') + ' ' + g('apellidos')],
+      ['Fecha nacimiento', g('fecha_nacimiento')],
+      ['Teléfono', g('telefono')],
+      ['Email', g('email')],
+      ['IBAN', g('iban')],
+      ['Titular cuenta', g('titular_cuenta')],
+      ['Socio', esSocio ? 'Sí' : 'No'],
+      ['Talla camiseta', tc || '—'],
+      tp ? ['Talla mallas/pantalón', tp || '—'] : null,
     ].filter(Boolean);
-
-    document.getElementById('resumen-card').innerHTML = `
-      <table style="width:100%; border-collapse:collapse; font-size:0.88rem;">
-        ${filas.map(([k,v]) => `
-          <tr>
-            <td style="padding:7px 0; color:#6b7280; width:45%; border-bottom:1px solid #f0f0f0;">${k}</td>
-            <td style="padding:7px 0; font-weight:500; border-bottom:1px solid #f0f0f0;">${v}</td>
-          </tr>`).join('')}
-      </table>`;
+    document.getElementById('resumen-card').innerHTML = `<table style="width:100%;border-collapse:collapse;font-size:0.86rem;">${filas.map(([k,v])=>`<tr><td style="padding:6px 0;color:#6b7280;width:45%;border-bottom:1px solid #f0f0f0">${k}</td><td style="padding:6px 0;font-weight:500;border-bottom:1px solid #f0f0f0">${v}</td></tr>`).join('')}</table>`;
   }
 
-  function val(id) { return document.getElementById(id)?.value || ''; }
+  function g(id) { return document.getElementById(id)?.value || ''; }
 
-  async function enviarInscripcion() {
-    if (!document.getElementById('acepta-lopd').checked) {
-      alert('Debes aceptar la política de protección de datos para continuar.');
+  async function enviar() {
+    if (!document.getElementById('acepta-lopd').checked || !document.getElementById('acepta-domiciliacion').checked) {
+      alert('Debes aceptar los términos obligatorios para continuar.');
       return;
     }
     const btn = document.getElementById('btn-enviar');
     btn.disabled = true;
     btn.innerHTML = '<span class="spinner"></span>Enviando...';
 
-    const finPrueba = new Date();
-    finPrueba.setDate(finPrueba.getDate() + 15);
-
-    const tallaCamiseta = ramaSeleccionada === 'escuela'
-      ? val('talla_camiseta_escuela') : val('talla_camiseta_adultos');
-    const tallaPantalon = ramaSeleccionada === 'adultos' ? val('talla_pantalon_adultos') : null;
+    const fin = new Date(); fin.setDate(fin.getDate() + 15);
+    const tc = rama === 'escuela' ? g('talla_camiseta_e') : g('talla_camiseta_a');
+    const tp = rama === 'adultos' ? g('talla_pantalon_a') : null;
 
     const datos = {
-      nombre: val('nombre').trim(),
-      apellidos: val('apellidos').trim(),
-      fecha_nacimiento: val('fecha_nacimiento'),
-      dni_nie: val('dni_nie').trim() || null,
-      nombre_padre: val('nombre_padre').trim() || null,
-      nombre_madre: val('nombre_madre').trim() || null,
-      telefono_contacto: val('telefono').trim(),
-      email_contacto: val('email').trim().toLowerCase(),
-      seccion: seccionSeleccionada,
+      nombre: g('nombre').trim(),
+      apellidos: g('apellidos').trim(),
+      fecha_nacimiento: g('fecha_nacimiento'),
+      dni_nie: g('dni_nie').trim() || null,
+      nombre_padre: g('nombre_padre').trim() || null,
+      nombre_madre: g('nombre_madre').trim() || null,
+      telefono_contacto: g('telefono').trim(),
+      email_contacto: g('email').trim().toLowerCase(),
+      seccion: seccion,
       estado: 'prueba',
-      fecha_prueba_fin: finPrueba.toISOString().split('T')[0],
-      talla_camiseta: tallaCamiseta || null,
-      talla_pantalon: tallaPantalon || null,
-      amigos_en_club: val('amigos_club').trim() || null,
+      fecha_prueba_fin: fin.toISOString().split('T')[0],
+      talla_camiseta: tc || null,
+      talla_pantalon: tp || null,
+      amigos_en_club: g('amigos_club').trim() || null,
       interes_actividades_padres: document.getElementById('interes_padres').checked,
-      tipo_actividad_padres: val('tipo_actividad').trim() || null,
-      observaciones: val('observaciones').trim() || null,
+      tipo_actividad_padres: g('tipo_actividad').trim() || null,
+      observaciones: (g('observaciones').trim() + (esSocio ? '' : ' | Sin socio')).trim() || null,
       estado_pago: 'pendiente',
     };
 
     try {
       const { data, error } = await db.from('atletas').insert([datos]).select();
       if (error) throw error;
-      const ref = 'APO-' + data[0].id.slice(0,8).toUpperCase();
-      document.getElementById('nombre-confirmado').textContent = datos.nombre + ' ' + datos.apellidos;
-      document.getElementById('ref-numero').textContent = ref;
-      document.getElementById('paso-6').classList.remove('activo');
+      document.getElementById('nombre-ok').textContent = datos.nombre + ' ' + datos.apellidos;
+      document.getElementById('ref-ok').textContent = 'APO-' + data[0].id.slice(0,8).toUpperCase();
+      document.getElementById('paso-7').classList.remove('activo');
       document.getElementById('paso-exito').classList.add('activo');
       document.querySelector('.progreso-wrap').style.display = 'none';
       window.scrollTo({ top: 0, behavior: 'smooth' });
-    } catch (err) {
-      console.error(err);
-      alert('Ha ocurrido un error. Por favor, inténtalo de nuevo o contacta con el club.');
+    } catch (e) {
+      console.error(e);
+      alert('Error al enviar. Inténtalo de nuevo o contacta con el club.');
       btn.disabled = false;
       btn.innerHTML = 'Enviar inscripción';
     }
