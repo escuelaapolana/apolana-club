@@ -188,12 +188,7 @@
   <div class="login-box">
     <div class="login-logo">
       <div class="login-logo-circle">
-        <svg viewBox="0 0 100 100" fill="none" width="24" height="24">
-          <circle cx="50" cy="50" r="46" stroke="#1a5f8f" stroke-width="5"/>
-          <rect x="38" y="27" width="24" height="42" rx="4" stroke="#1a5f8f" stroke-width="3.5"/>
-          <rect x="44" y="27" width="2.5" height="42" fill="#1a5f8f"/>
-          <ellipse cx="50" cy="27" rx="12" ry="8" fill="#1a5f8f"/>
-        </svg>
+        <img src="https://icaxokjsvhlreuwpyxeb.supabase.co/storage/v1/object/public/imagenes-club/logo.png" alt="Logo" style="width:32px;height:32px;object-fit:contain;" onerror="this.style.display='none'">
       </div>
       <div>
         <span style="font-weight:600;font-size:0.9rem;">Club Apolana</span>
@@ -215,11 +210,7 @@
   <aside class="sidebar">
     <div class="sb-logo">
       <div class="sb-logo-c">
-        <svg viewBox="0 0 100 100" fill="none" width="20" height="20">
-          <circle cx="50" cy="50" r="46" stroke="#1a5f8f" stroke-width="5"/>
-          <rect x="38" y="27" width="24" height="42" rx="4" stroke="#1a5f8f" stroke-width="3.5"/>
-          <ellipse cx="50" cy="27" rx="12" ry="8" fill="#1a5f8f"/>
-        </svg>
+        <img src="https://icaxokjsvhlreuwpyxeb.supabase.co/storage/v1/object/public/imagenes-club/logo.png" alt="Logo" style="width:24px;height:24px;object-fit:contain;" onerror="this.style.display='none'">
       </div>
       <div><span>Apolana</span><small>Administración</small></div>
     </div>
@@ -295,7 +286,12 @@
   <div class="main">
     <div class="topbar">
       <h1 id="topbar-title">Inicio</h1>
-      <div class="topbar-right" id="topbar-actions"></div>
+      <div class="topbar-right" id="topbar-actions">
+        <a href="index.html" target="_blank" class="btn btn-s">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          Ver web
+        </a>
+      </div>
     </div>
     <div class="content">
 
@@ -332,6 +328,31 @@
                 Ver impagados
               </button>
             </div>
+          </div>
+        </div>
+        <div style="margin-top:1rem;">
+          <div style="font-size:0.85rem;font-weight:600;margin-bottom:0.75rem;">Enlaces del club</div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:0.5rem;">
+            <a href="index.html" target="_blank" style="display:flex;align-items:center;gap:8px;padding:8px 12px;background:white;border:1px solid var(--gris-borde);border-radius:8px;text-decoration:none;color:var(--texto);font-size:0.82rem;transition:border-color 0.12s;" onmouseover="this.style.borderColor='var(--azul-claro)'" onmouseout="this.style.borderColor='var(--gris-borde)'">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>
+              Página principal
+            </a>
+            <a href="inscripcion.html" target="_blank" style="display:flex;align-items:center;gap:8px;padding:8px 12px;background:white;border:1px solid var(--gris-borde);border-radius:8px;text-decoration:none;color:var(--texto);font-size:0.82rem;transition:border-color 0.12s;" onmouseover="this.style.borderColor='var(--azul-claro)'" onmouseout="this.style.borderColor='var(--gris-borde)'">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              Formulario inscripción
+            </a>
+            <a href="entrenador.html" target="_blank" style="display:flex;align-items:center;gap:8px;padding:8px 12px;background:white;border:1px solid var(--gris-borde);border-radius:8px;text-decoration:none;color:var(--texto);font-size:0.82rem;transition:border-color 0.12s;" onmouseover="this.style.borderColor='var(--azul-claro)'" onmouseout="this.style.borderColor='var(--gris-borde)'">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+              Panel entrenador
+            </a>
+            <a href="padre.html" target="_blank" style="display:flex;align-items:center;gap:8px;padding:8px 12px;background:white;border:1px solid var(--gris-borde);border-radius:8px;text-decoration:none;color:var(--texto);font-size:0.82rem;transition:border-color 0.12s;" onmouseover="this.style.borderColor='var(--azul-claro)'" onmouseout="this.style.borderColor='var(--gris-borde)'">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              Portal familias
+            </a>
+            <a href="atleta.html" target="_blank" style="display:flex;align-items:center;gap:8px;padding:8px 12px;background:white;border:1px solid var(--gris-borde);border-radius:8px;text-decoration:none;color:var(--texto);font-size:0.82rem;transition:border-color 0.12s;" onmouseover="this.style.borderColor='var(--azul-claro)'" onmouseout="this.style.borderColor='var(--gris-borde)'">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+              Portal atleta
+            </a>
           </div>
         </div>
       </div>
@@ -716,6 +737,15 @@
       <div class="mf"><label>Lugar</label><input type="text" id="ev-lugar" placeholder="Estadio Ortiz de Zárate..."></div>
       <div class="mf"><label>Descripción</label><textarea id="ev-desc"></textarea></div>
       <div class="mf">
+        <label>Imagen del evento <span style="color:var(--texto-suave);font-weight:400;font-size:0.78rem;">(opcional)</span></label>
+        <label class="foto-upload" id="foto-evento-label">
+          <input type="file" accept="image/*" id="foto-evento-input" onchange="previewFoto(this,'foto-evento-preview','foto-evento-label')">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <p>Haz clic para subir una imagen del evento</p>
+          <img id="foto-evento-preview" class="foto-preview" alt="">
+        </label>
+      </div>
+      <div class="mf">
         <label>¿Inscripción abierta desde la app?</label>
         <select id="ev-inscripcion"><option value="false">No</option><option value="true">Sí</option></select>
       </div>
@@ -767,18 +797,19 @@
 <div class="modal-overlay" id="modal-usuario">
   <div class="modal">
     <div class="modal-head">
-      <h2>Crear usuario</h2>
+      <h2 id="modal-usuario-titulo">Crear usuario</h2>
       <button class="modal-close" onclick="cerrarModal('modal-usuario')">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
     </div>
     <div class="modal-body">
+      <input type="hidden" id="u-edit-id" value="">
       <div class="mf2">
         <div class="mf"><label>Nombre <span class="req">*</span></label><input type="text" id="u-nombre"></div>
         <div class="mf"><label>Apellidos <span class="req">*</span></label><input type="text" id="u-apellidos"></div>
       </div>
       <div class="mf"><label>Email <span class="req">*</span></label><input type="email" id="u-email"></div>
-      <div class="mf"><label>Contraseña temporal <span class="req">*</span></label><input type="text" id="u-pass" placeholder="Mínimo 8 caracteres"></div>
+      <div class="mf"><label>Contraseña <span id="u-pass-label" class="req">*</span></label><input type="text" id="u-pass" placeholder="Mínimo 8 caracteres"></div>
       <div class="mf2">
         <div class="mf"><label>Rol <span class="req">*</span></label>
           <select id="u-rol">
@@ -803,7 +834,7 @@
     </div>
     <div class="modal-foot">
       <button class="btn btn-s" onclick="cerrarModal('modal-usuario')">Cancelar</button>
-      <button class="btn btn-p" onclick="crearUsuario()">Crear usuario</button>
+      <button class="btn btn-p" onclick="guardarUsuario()">Guardar</button>
     </div>
   </div>
 </div>
@@ -1334,6 +1365,9 @@ async function cargarUsuarios() {
       <td>${u.seccion||'—'}</td>
       <td><span class="badge ${u.activo?'badge-activo':'badge-baja'}">${u.activo?'Activo':'Inactivo'}</span></td>
       <td>
+        <button class="action-btn" onclick="editarUsuario('${u.id}')" title="Editar">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        </button>
         <button class="action-btn" onclick="toggleUsuario('${u.id}',${u.activo})">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/>${u.activo?'<line x1="8" y1="12" x2="16" y2="12"/>':'<line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/>'}</svg>
         </button>
@@ -1341,7 +1375,16 @@ async function cargarUsuarios() {
     </tr>`).join('') : '<tr><td colspan="6" class="table-empty">No hay usuarios</td></tr>';
 }
 
-function abrirModalUsuario() { document.getElementById('modal-usuario').classList.add('v'); }
+function abrirModalUsuario() {
+  document.getElementById('u-edit-id').value = '';
+  document.getElementById('u-nombre').value = '';
+  document.getElementById('u-apellidos').value = '';
+  document.getElementById('u-email').value = '';
+  document.getElementById('u-pass').value = '';
+  document.getElementById('u-pass').placeholder = 'Mínimo 8 caracteres';
+  document.getElementById('modal-usuario-titulo').textContent = 'Crear usuario';
+  document.getElementById('modal-usuario').classList.add('v');
+}
 
 async function crearUsuario() {
   const email = document.getElementById('u-email').value.trim();
@@ -1361,6 +1404,40 @@ async function crearUsuario() {
 
 async function toggleUsuario(id, activo) {
   await db.from('perfiles').update({ activo: !activo }).eq('id', id); cargarUsuarios();
+}
+
+async function editarUsuario(id) {
+  const u = usuariosData.find(x => x.id === id); if (!u) return;
+  document.getElementById('u-nombre').value = u.nombre || '';
+  document.getElementById('u-apellidos').value = u.apellidos || '';
+  document.getElementById('u-email').value = u.email || '';
+  document.getElementById('u-rol').value = u.rol || 'atleta';
+  document.getElementById('u-seccion').value = u.seccion || '';
+  document.getElementById('u-pass').value = '';
+  document.getElementById('u-pass').placeholder = 'Dejar vacío para no cambiar';
+  document.getElementById('modal-usuario-titulo').textContent = 'Editar usuario';
+  document.getElementById('u-edit-id').value = id;
+  document.getElementById('modal-usuario').classList.add('v');
+}
+
+async function guardarUsuario() {
+  const editId = document.getElementById('u-edit-id').value;
+  const nombre = document.getElementById('u-nombre').value.trim();
+  const apellidos = document.getElementById('u-apellidos').value.trim();
+  const rol = document.getElementById('u-rol').value;
+  const seccion = document.getElementById('u-seccion').value || null;
+  if (!nombre) { alert('Introduce el nombre'); return; }
+  if (editId) {
+    await db.from('perfiles').update({ nombre, apellidos, rol, seccion }).eq('id', editId);
+  } else {
+    const email = document.getElementById('u-email').value.trim();
+    const pass = document.getElementById('u-pass').value;
+    if (!email || !pass) { alert('Rellena email y contraseña'); return; }
+    const { data, error } = await db.auth.admin.createUser({ email, password: pass, email_confirm: true });
+    if (error) { alert('Error: ' + error.message); return; }
+    await db.from('perfiles').insert([{ id: data.user.id, nombre, apellidos, email, rol, seccion }]);
+  }
+  cerrarModal('modal-usuario'); cargarUsuarios();
 }
 
 // =====================
