@@ -13,17 +13,8 @@
     }
     html { scroll-behavior: smooth; }
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--gris); color: var(--texto); }
-
-    nav { position: sticky; top: 0; z-index: 100; background: var(--azul); display: flex; align-items: center; justify-content: space-between; padding: 0 2rem; height: 58px; }
-    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
     .nav-logo img { width: 34px; height: 34px; border-radius: 50%; object-fit: contain; background: white; padding: 2px; }
     .nav-logo span { color: white; font-weight: 600; font-size: 0.95rem; }
-    .nav-links { display: flex; align-items: center; gap: 2px; }
-    .nav-link { color: rgba(255,255,255,0.8); text-decoration: none; padding: 6px 12px; border-radius: 6px; font-size: 0.85rem; transition: all 0.12s; }
-    .nav-link:hover { background: rgba(255,255,255,0.1); color: white; }
-    .nav-link.activo { color: white; background: rgba(255,255,255,0.15); }
-    .nav-btn { background: white; color: var(--azul); padding: 6px 16px; border-radius: 6px; font-size: 0.85rem; font-weight: 600; text-decoration: none; margin-left: 6px; }
-
     .page-header { background: var(--azul); padding: 3rem 2rem 2.5rem; }
     .page-header-inner { max-width: 1040px; margin: 0 auto; }
     .page-header h1 { color: white; font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; }
@@ -76,63 +67,16 @@
     @media (max-width: 640px) {
       .noticia-featured { grid-template-columns: 1fr; }
       .noticia-featured-img { height: 200px; }
-      nav { padding: 0 1rem; }
-      .nav-links .nav-link { display: none; }
       .page-wrap { padding: 1rem; }
       .ig-cta { flex-wrap: wrap; }
       .ig-btn { margin-left: 0; width: 100%; text-align: center; }
     }
   </style>
+<script src="nav.js"></script>
 </head>
 <body>
 
-<nav>
-  <a href="index.html" class="nav-logo">
-    <img src="https://icaxokjsvhlreuwpyxeb.supabase.co/storage/v1/object/public/imagenes-club/logo.png" alt="Club Apolana" onerror="this.style.display='none'">
-    <span>Club Apolana</span>
-  </a>
-    <div class="nav-links" id="nav-links">
-    <div class="nav-dropdown">
-      <button class="nav-link nav-dropdown-btn" onclick="toggleDropdown('dd-secciones')">
-        Secciones
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
-      </button>
-      <div class="nav-dropdown-menu" id="dd-secciones">
-        <a href="competicion.html" class="nav-dropdown-item">Atletismo pista</a>
-        <a href="running.html" class="nav-dropdown-item">Running</a>
-        <a href="triatlon.html" class="nav-dropdown-item">Triatlón</a>
-        <a href="natacion.html" class="nav-dropdown-item">Natación</a>
-        <a href="montana.html" class="nav-dropdown-item">Montaña</a>
-        <a href="instalaciones.html" class="nav-dropdown-item">Instalaciones</a>
-      </div>
-    </div>
-    <div class="nav-dropdown">
-      <button class="nav-link nav-dropdown-btn" onclick="toggleDropdown('dd-escuelas')">
-        Escuelas
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
-      </button>
-      <div class="nav-dropdown-menu" id="dd-escuelas">
-        <a href="escuela.html" class="nav-dropdown-item">Escuela atletismo</a>
-        <a href="escuela-natacion.html" class="nav-dropdown-item">Escuela natación</a>
-        <a href="escuela-municipal-atletismo.html" class="nav-dropdown-item">Atletismo municipal</a>
-        <a href="escuela-municipal-triatlon.html" class="nav-dropdown-item">Triatlón municipal</a>
-        <a href="escuela-deporte-adaptado.html" class="nav-dropdown-item">Deporte adaptado</a>
-      </div>
-    </div>
-    <a href="calendario.html" class="nav-link">Calendario</a>
-    <a href="noticias.html" class="nav-link">Noticias</a>
-    <a href="socio.html" class="nav-link">Hazte socio</a>
-    <a href="#acceso" class="nav-link">Mi perfil</a>
-    <a href="campus.html" class="nav-link">Campus</a>
-    <a href="https://instagram.com/apolana.alicante" target="_blank" class="nav-link nav-ig">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
-    </a>
-    <a href="inscripcion.html" class="nav-btn">Inscribirse</a>
-  </div>
-  <button class="nav-hamburger" onclick="toggleMenu()" aria-label="Menú">
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-  </button>
-</nav>
+
 
 <div class="page-header">
   <div class="page-header-inner">
@@ -252,21 +196,6 @@ async function cargarNoticias() {
 
 cargarNoticias();
 
-// NAV
-function toggleDropdown(id) {
-  document.querySelectorAll('.nav-dropdown-menu').forEach(m => { if(m.id !== id) m.classList.remove('visible'); });
-  const el = document.getElementById(id);
-  if(el) el.classList.toggle('visible');
-}
-function toggleMenu() {
-  const l = document.getElementById('nav-links');
-  if(l) l.classList.toggle('open');
-}
-document.addEventListener('click', function(e) {
-  if (!e.target.closest('.nav-dropdown')) {
-    document.querySelectorAll('.nav-dropdown-menu').forEach(m => m.classList.remove('visible'));
-  }
-});
 
 </script>
 </body>
