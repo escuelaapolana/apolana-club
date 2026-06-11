@@ -542,45 +542,110 @@
         <div style="font-size:0.78rem;font-weight:700;color:var(--azul);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.875rem;padding-bottom:0.5rem;border-bottom:2px solid var(--azul-bg);">📸 Fotos de secciones</div>
         <p style="font-size:0.8rem;color:var(--texto-suave);margin-bottom:1rem;">Estas fotos aparecen como imágenes circulares en la página principal y como fondo en cada página de sección.</p>
         <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem;margin-bottom:2rem;">
-          ${[
-            {id:'escuela', label:'Escuela', emoji:'🏃', desc:'Página escuela.html'},
-            {id:'atletismo', label:'Atletismo pista', emoji:'🏟️', desc:'Página competicion.html', file:'seccion-atletismo.jpg'},
-            {id:'running', label:'Running', emoji:'👟', desc:'Página running.html'},
-            {id:'triatlon', label:'Triatlón', emoji:'🚴', desc:'Página triatlon.html'},
-            {id:'natacion', label:'Natación', emoji:'🏊', desc:'Página natacion.html'},
-            {id:'instalaciones', label:'Instalaciones', emoji:'🏗️', desc:'Página instalaciones.html'},
-          ].map(s => `
           <div style="background:var(--gris);border-radius:10px;padding:1rem;border:1px solid var(--gris-borde);">
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:0.75rem;">
-              <span style="font-size:1.2rem;">${s.emoji}</span>
-              <div><div style="font-size:0.85rem;font-weight:600;">${s.label}</div><div style="font-size:0.72rem;color:var(--texto-suave);">${s.desc}</div></div>
+              <span style="font-size:1.2rem;">🏃</span>
+              <div><div style="font-size:0.85rem;font-weight:600;">Escuela</div><div style="font-size:0.72rem;color:var(--texto-suave);">Página escuela.html</div></div>
             </div>
-            <label class="img-slot" id="slot-${s.id}" style="margin:0;">
-              <input type="file" accept="image/jpeg,image/png,image/webp" onchange="subirFoto(this,'imagenes-club','${s.file || 'seccion-'+s.id+'.jpg'}','slot-${s.id}')">
+            <label class="img-slot" id="slot-escuela" style="margin:0;">
+              <input type="file" accept="image/jpeg,image/png,image/webp" onchange="subirFoto(this,'imagenes-club','seccion-escuela.jpg','slot-escuela')">
               <div class="img-slot-placeholder"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span>Subir foto</span></div>
               <span class="img-slot-label">Cambiar</span>
             </label>
-          </div>`).join('')}
+          </div>
+          <div style="background:var(--gris);border-radius:10px;padding:1rem;border:1px solid var(--gris-borde);">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:0.75rem;">
+              <span style="font-size:1.2rem;">🏟️</span>
+              <div><div style="font-size:0.85rem;font-weight:600;">Atletismo pista</div><div style="font-size:0.72rem;color:var(--texto-suave);">Página competicion.html</div></div>
+            </div>
+            <label class="img-slot" id="slot-atletismo" style="margin:0;">
+              <input type="file" accept="image/jpeg,image/png,image/webp" onchange="subirFoto(this,'imagenes-club','seccion-atletismo.jpg','slot-atletismo')">
+              <div class="img-slot-placeholder"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span>Subir foto</span></div>
+              <span class="img-slot-label">Cambiar</span>
+            </label>
+          </div>
+          <div style="background:var(--gris);border-radius:10px;padding:1rem;border:1px solid var(--gris-borde);">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:0.75rem;">
+              <span style="font-size:1.2rem;">👟</span>
+              <div><div style="font-size:0.85rem;font-weight:600;">Running</div><div style="font-size:0.72rem;color:var(--texto-suave);">Página running.html</div></div>
+            </div>
+            <label class="img-slot" id="slot-running" style="margin:0;">
+              <input type="file" accept="image/jpeg,image/png,image/webp" onchange="subirFoto(this,'imagenes-club','seccion-running.jpg','slot-running')">
+              <div class="img-slot-placeholder"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span>Subir foto</span></div>
+              <span class="img-slot-label">Cambiar</span>
+            </label>
+          </div>
+          <div style="background:var(--gris);border-radius:10px;padding:1rem;border:1px solid var(--gris-borde);">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:0.75rem;">
+              <span style="font-size:1.2rem;">🚴</span>
+              <div><div style="font-size:0.85rem;font-weight:600;">Triatlón</div><div style="font-size:0.72rem;color:var(--texto-suave);">Página triatlon.html</div></div>
+            </div>
+            <label class="img-slot" id="slot-triatlon" style="margin:0;">
+              <input type="file" accept="image/jpeg,image/png,image/webp" onchange="subirFoto(this,'imagenes-club','seccion-triatlon.jpg','slot-triatlon')">
+              <div class="img-slot-placeholder"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span>Subir foto</span></div>
+              <span class="img-slot-label">Cambiar</span>
+            </label>
+          </div>
+          <div style="background:var(--gris);border-radius:10px;padding:1rem;border:1px solid var(--gris-borde);">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:0.75rem;">
+              <span style="font-size:1.2rem;">🏊</span>
+              <div><div style="font-size:0.85rem;font-weight:600;">Natación</div><div style="font-size:0.72rem;color:var(--texto-suave);">Página natacion.html</div></div>
+            </div>
+            <label class="img-slot" id="slot-natacion" style="margin:0;">
+              <input type="file" accept="image/jpeg,image/png,image/webp" onchange="subirFoto(this,'imagenes-club','seccion-natacion.jpg','slot-natacion')">
+              <div class="img-slot-placeholder"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span>Subir foto</span></div>
+              <span class="img-slot-label">Cambiar</span>
+            </label>
+          </div>
+          <div style="background:var(--gris);border-radius:10px;padding:1rem;border:1px solid var(--gris-borde);">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:0.75rem;">
+              <span style="font-size:1.2rem;">🏗️</span>
+              <div><div style="font-size:0.85rem;font-weight:600;">Instalaciones</div><div style="font-size:0.72rem;color:var(--texto-suave);">Página instalaciones.html</div></div>
+            </div>
+            <label class="img-slot" id="slot-instalaciones" style="margin:0;">
+              <input type="file" accept="image/jpeg,image/png,image/webp" onchange="subirFoto(this,'imagenes-club','seccion-instalaciones.jpg','slot-instalaciones')">
+              <div class="img-slot-placeholder"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span>Subir foto</span></div>
+              <span class="img-slot-label">Cambiar</span>
+            </label>
+          </div>
         </div>
 
         <!-- COLABORADORES -->
         <div style="font-size:0.78rem;font-weight:700;color:var(--azul);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.875rem;padding-bottom:0.5rem;border-bottom:2px solid var(--azul-bg);">🤝 Logos colaboradores</div>
         <p style="font-size:0.8rem;color:var(--texto-suave);margin-bottom:1rem;">Aparecen en la sección de colaboradores de la página principal.</p>
         <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem;margin-bottom:2rem;">
-          ${[
-            {id:'colab-deportes', label:'Deportes Alicante', file:'colab-deportes-alicante.png'},
-            {id:'colab-comunitat', label:'Comunitat Valenciana', file:'colab-comunitat-esport.png'},
-            {id:'colab-diputacion', label:'Diputación Alicante', file:'colab-diputacion.png'},
-            {id:'colab-vithas', label:'Vithas Hospital', file:'colab-vithas.png'},
-          ].map(c => `
           <div style="background:var(--gris);border-radius:10px;padding:1rem;border:1px solid var(--gris-borde);">
-            <div style="font-size:0.85rem;font-weight:600;margin-bottom:4px;">${c.label}</div>
-            <label class="img-slot" id="slot-${c.id}" style="margin:0;">
-              <input type="file" accept="image/jpeg,image/png,image/webp,image/svg+xml" onchange="subirFoto(this,'imagenes-club','${c.file}','slot-${c.id}')">
+            <div style="font-size:0.85rem;font-weight:600;margin-bottom:8px;">Deportes Alicante</div>
+            <label class="img-slot" id="slot-colab-deportes" style="margin:0;">
+              <input type="file" accept="image/jpeg,image/png,image/webp,image/svg+xml" onchange="subirFoto(this,'imagenes-club','colab-deportes-alicante.png','slot-colab-deportes')">
               <div class="img-slot-placeholder"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span>Subir logo</span></div>
               <span class="img-slot-label">Cambiar</span>
             </label>
-          </div>`).join('')}
+          </div>
+          <div style="background:var(--gris);border-radius:10px;padding:1rem;border:1px solid var(--gris-borde);">
+            <div style="font-size:0.85rem;font-weight:600;margin-bottom:8px;">Comunitat Valenciana</div>
+            <label class="img-slot" id="slot-colab-comunitat" style="margin:0;">
+              <input type="file" accept="image/jpeg,image/png,image/webp,image/svg+xml" onchange="subirFoto(this,'imagenes-club','colab-comunitat-esport.png','slot-colab-comunitat')">
+              <div class="img-slot-placeholder"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span>Subir logo</span></div>
+              <span class="img-slot-label">Cambiar</span>
+            </label>
+          </div>
+          <div style="background:var(--gris);border-radius:10px;padding:1rem;border:1px solid var(--gris-borde);">
+            <div style="font-size:0.85rem;font-weight:600;margin-bottom:8px;">Diputación Alicante</div>
+            <label class="img-slot" id="slot-colab-diputacion" style="margin:0;">
+              <input type="file" accept="image/jpeg,image/png,image/webp,image/svg+xml" onchange="subirFoto(this,'imagenes-club','colab-diputacion.png','slot-colab-diputacion')">
+              <div class="img-slot-placeholder"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span>Subir logo</span></div>
+              <span class="img-slot-label">Cambiar</span>
+            </label>
+          </div>
+          <div style="background:var(--gris);border-radius:10px;padding:1rem;border:1px solid var(--gris-borde);">
+            <div style="font-size:0.85rem;font-weight:600;margin-bottom:8px;">Vithas Hospital</div>
+            <label class="img-slot" id="slot-colab-vithas" style="margin:0;">
+              <input type="file" accept="image/jpeg,image/png,image/webp,image/svg+xml" onchange="subirFoto(this,'imagenes-club','colab-vithas.png','slot-colab-vithas')">
+              <div class="img-slot-placeholder"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span>Subir logo</span></div>
+              <span class="img-slot-label">Cambiar</span>
+            </label>
+          </div>
         </div>
 
         <!-- FOTOS ESCUELA INTERIOR -->
