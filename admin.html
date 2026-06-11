@@ -626,9 +626,116 @@
               <span class="img-slot-label">Cambiar</span>
             </label>
           </div>
+
+          <!-- Montaña -->
+          <div style="background:var(--gris);border-radius:10px;padding:1rem;border:1px solid var(--gris-borde);">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+              <span style="font-size:1.2rem;">⛰️</span>
+              <div><div style="font-size:0.85rem;font-weight:600;">Montaña</div><div style="font-size:0.72rem;color:var(--texto-suave);">Página montana.html</div></div>
+            </div>
+            <label class="img-slot" id="slot-montana" style="margin:0;">
+              <input type="file" accept="image/jpeg,image/png,image/webp" onchange="subirFoto(this,'imagenes-club','seccion-montana.jpg','slot-montana')">
+              <div class="img-slot-placeholder"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span>Subir foto</span></div>
+              <span class="img-slot-label">Cambiar</span>
+            </label>
+          </div>
         </div>
 
-        <!-- COLABORADORES -->
+        <!-- ESCUELAS -->
+        <div style="font-size:0.78rem;font-weight:700;color:var(--azul);text-transform:uppercase;letter-spacing:0.08em;margin:2rem 0 0.875rem;padding-bottom:0.5rem;border-bottom:2px solid var(--azul-bg);">🏫 Fotos de escuelas</div>
+        <p style="font-size:0.8rem;color:var(--texto-suave);margin-bottom:1rem;">Estas fotos aparecen como fondo del hero en cada página de escuela.</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem;margin-bottom:2rem;">
+          <div style="background:var(--gris);border-radius:10px;padding:1rem;border:1px solid var(--gris-borde);">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+              <span style="font-size:1.2rem;">🏊</span>
+              <div><div style="font-size:0.85rem;font-weight:600;">Escuela natación</div><div style="font-size:0.72rem;color:var(--texto-suave);">escuela-natacion.html</div></div>
+            </div>
+            <label class="img-slot" id="slot-esc-natacion" style="margin:0;">
+              <input type="file" accept="image/jpeg,image/png,image/webp" onchange="subirFoto(this,'imagenes-club','seccion-escuela-natacion.jpg','slot-esc-natacion')">
+              <div class="img-slot-placeholder"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span>Subir foto</span></div>
+              <span class="img-slot-label">Cambiar</span>
+            </label>
+          </div>
+          <div style="background:var(--gris);border-radius:10px;padding:1rem;border:1px solid var(--gris-borde);">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+              <span style="font-size:1.2rem;">🏟️</span>
+              <div><div style="font-size:0.85rem;font-weight:600;">Atletismo municipal</div><div style="font-size:0.72rem;color:var(--texto-suave);">escuela-municipal-atletismo.html</div></div>
+            </div>
+            <label class="img-slot" id="slot-mun-atletismo" style="margin:0;">
+              <input type="file" accept="image/jpeg,image/png,image/webp" onchange="subirFoto(this,'imagenes-club','seccion-mun-atletismo.jpg','slot-mun-atletismo')">
+              <div class="img-slot-placeholder"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span>Subir foto</span></div>
+              <span class="img-slot-label">Cambiar</span>
+            </label>
+          </div>
+          <div style="background:var(--gris);border-radius:10px;padding:1rem;border:1px solid var(--gris-borde);">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+              <span style="font-size:1.2rem;">🚴</span>
+              <div><div style="font-size:0.85rem;font-weight:600;">Triatlón municipal</div><div style="font-size:0.72rem;color:var(--texto-suave);">escuela-municipal-triatlon.html</div></div>
+            </div>
+            <label class="img-slot" id="slot-mun-triatlon" style="margin:0;">
+              <input type="file" accept="image/jpeg,image/png,image/webp" onchange="subirFoto(this,'imagenes-club','seccion-mun-triatlon.jpg','slot-mun-triatlon')">
+              <div class="img-slot-placeholder"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span>Subir foto</span></div>
+              <span class="img-slot-label">Cambiar</span>
+            </label>
+          </div>
+          <div style="background:var(--gris);border-radius:10px;padding:1rem;border:1px solid var(--gris-borde);">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+              <span style="font-size:1.2rem;">♿</span>
+              <div><div style="font-size:0.85rem;font-weight:600;">Deporte adaptado</div><div style="font-size:0.72rem;color:var(--texto-suave);">escuela-deporte-adaptado.html</div></div>
+            </div>
+            <label class="img-slot" id="slot-deporte-adaptado" style="margin:0;">
+              <input type="file" accept="image/jpeg,image/png,image/webp" onchange="subirFoto(this,'imagenes-club','seccion-deporte-adaptado.jpg','slot-deporte-adaptado')">
+              <div class="img-slot-placeholder"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span>Subir foto</span></div>
+              <span class="img-slot-label">Cambiar</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- CABECERAS DE PÁGINAS -->
+        <div style="font-size:0.78rem;font-weight:700;color:var(--azul);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.875rem;padding-bottom:0.5rem;border-bottom:2px solid var(--azul-bg);">🖼️ Cabeceras de páginas</div>
+        <p style="font-size:0.8rem;color:var(--texto-suave);margin-bottom:1rem;">Foto de fondo del header de cada página secundaria. Formato horizontal recomendado.</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem;margin-bottom:2rem;">
+          <div style="background:var(--gris);border-radius:10px;padding:1rem;border:1px solid var(--gris-borde);">
+            <div style="font-size:0.85rem;font-weight:600;margin-bottom:8px;">📅 Calendario</div>
+            <label class="img-slot" id="slot-header-calendario" style="margin:0;">
+              <input type="file" accept="image/jpeg,image/png,image/webp" onchange="subirFoto(this,'imagenes-club','header-calendario.jpg','slot-header-calendario')">
+              <div class="img-slot-placeholder"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span>Subir foto</span></div>
+              <span class="img-slot-label">Cambiar</span>
+            </label>
+          </div>
+          <div style="background:var(--gris);border-radius:10px;padding:1rem;border:1px solid var(--gris-borde);">
+            <div style="font-size:0.85rem;font-weight:600;margin-bottom:8px;">📰 Noticias</div>
+            <label class="img-slot" id="slot-header-noticias" style="margin:0;">
+              <input type="file" accept="image/jpeg,image/png,image/webp" onchange="subirFoto(this,'imagenes-club','header-noticias.jpg','slot-header-noticias')">
+              <div class="img-slot-placeholder"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span>Subir foto</span></div>
+              <span class="img-slot-label">Cambiar</span>
+            </label>
+          </div>
+          <div style="background:var(--gris);border-radius:10px;padding:1rem;border:1px solid var(--gris-borde);">
+            <div style="font-size:0.85rem;font-weight:600;margin-bottom:8px;">🎽 Hazte socio</div>
+            <label class="img-slot" id="slot-header-socio" style="margin:0;">
+              <input type="file" accept="image/jpeg,image/png,image/webp" onchange="subirFoto(this,'imagenes-club','header-socio.jpg','slot-header-socio')">
+              <div class="img-slot-placeholder"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span>Subir foto</span></div>
+              <span class="img-slot-label">Cambiar</span>
+            </label>
+          </div>
+          <div style="background:var(--gris);border-radius:10px;padding:1rem;border:1px solid var(--gris-borde);">
+            <div style="font-size:0.85rem;font-weight:600;margin-bottom:8px;">☀️ Campus</div>
+            <label class="img-slot" id="slot-header-campus" style="margin:0;">
+              <input type="file" accept="image/jpeg,image/png,image/webp" onchange="subirFoto(this,'imagenes-club','header-campus.jpg','slot-header-campus')">
+              <div class="img-slot-placeholder"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span>Subir foto</span></div>
+              <span class="img-slot-label">Cambiar</span>
+            </label>
+          </div>
+          <div style="background:var(--gris);border-radius:10px;padding:1rem;border:1px solid var(--gris-borde);">
+            <div style="font-size:0.85rem;font-weight:600;margin-bottom:8px;">🏃 Secciones</div>
+            <label class="img-slot" id="slot-header-secciones" style="margin:0;">
+              <input type="file" accept="image/jpeg,image/png,image/webp" onchange="subirFoto(this,'imagenes-club','header-secciones.jpg','slot-header-secciones')">
+              <div class="img-slot-placeholder"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span>Subir foto</span></div>
+              <span class="img-slot-label">Cambiar</span>
+            </label>
+          </div>
+        </div>
         <div style="font-size:0.78rem;font-weight:700;color:var(--azul);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.875rem;padding-bottom:0.5rem;border-bottom:2px solid var(--azul-bg);">🤝 Logos colaboradores</div>
         <p style="font-size:0.8rem;color:var(--texto-suave);margin-bottom:1rem;">Aparecen en la sección de colaboradores de la página principal.</p>
         <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem;margin-bottom:2rem;">
@@ -1161,6 +1268,49 @@ function showPanel(id) {
   if (id === 'noticias-admin') cargarNoticiasAdmin();
   if (id === 'tienda') cargarTienda();
   if (id === 'usuarios') cargarUsuarios();
+  if (id === 'fotos') cargarFotosPanel();
+}
+
+function cargarFotosPanel() {
+  const slots = [
+    ['slot-hero',             'hero.jpg'],
+    ['slot-logo',             'logo.png'],
+    ['slot-escuela',          'seccion-escuela.jpg'],
+    ['slot-atletismo',        'seccion-atletismo.jpg'],
+    ['slot-running',          'seccion-running.jpg'],
+    ['slot-triatlon',         'seccion-triatlon.jpg'],
+    ['slot-natacion',         'seccion-natacion.jpg'],
+    ['slot-instalaciones',    'seccion-instalaciones.jpg'],
+    ['slot-montana',          'seccion-montana.jpg'],
+    ['slot-esc-natacion',     'seccion-escuela-natacion.jpg'],
+    ['slot-mun-atletismo',    'seccion-mun-atletismo.jpg'],
+    ['slot-mun-triatlon',     'seccion-mun-triatlon.jpg'],
+    ['slot-deporte-adaptado', 'seccion-deporte-adaptado.jpg'],
+    ['slot-colab-deportes',   'colab-deportes-alicante.png'],
+    ['slot-colab-comunitat',  'colab-comunitat-esport.png'],
+    ['slot-colab-diputacion', 'colab-diputacion.png'],
+    ['slot-colab-vithas',     'colab-vithas.png'],
+    ['slot-escuela-interior', 'escuela-interior.jpg'],
+    ['slot-header-calendario','header-calendario.jpg'],
+    ['slot-header-noticias',  'header-noticias.jpg'],
+    ['slot-header-socio',     'header-socio.jpg'],
+    ['slot-header-campus',    'header-campus.jpg'],
+    ['slot-header-secciones', 'header-secciones.jpg'],
+  ];
+  const base = SB_URL + '/storage/v1/object/public/imagenes-club/';
+  slots.forEach(([slotId, file]) => {
+    const slot = document.getElementById(slotId);
+    if (!slot) return;
+    const img = new Image();
+    img.onload = () => {
+      let existing = slot.querySelector('img:not(.foto-preview)');
+      if (!existing) { existing = document.createElement('img'); existing.style.cssText = 'width:100%;height:180px;object-fit:cover;display:block;'; slot.insertBefore(existing, slot.querySelector('.img-slot-placeholder')); }
+      existing.src = img.src;
+      const ph = slot.querySelector('.img-slot-placeholder');
+      if (ph) ph.style.display = 'none';
+    };
+    img.src = base + file + '?t=' + Date.now();
+  });
 }
 
 // =====================
