@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Campus de Verano · Club Apolana</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --azul: #1a5f8f; --azul-oscuro: #123f60; --azul-claro: #4a90c4; --azul-bg: #e8f2fa;
+      --gris: #f5f6f8; --gris-borde: #dde2e8; --texto: #1a1d23; --texto-suave: #6b7280;
+      --naranja: #ea580c; --naranja-bg: #fff7ed;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: white; color: var(--texto); }
+    nav { position: sticky; top: 0; z-index: 100; background: var(--azul); display: flex; align-items: center; justify-content: space-between; padding: 0 2rem; height: 60px; }
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .nav-logo img { width: 34px; height: 34px; border-radius: 50%; object-fit: contain; background: white; padding: 2px; }
+    .nav-logo span { color: white; font-weight: 600; font-size: 0.95rem; }
+    .nav-links { display: flex; align-items: center; gap: 2px; }
+    .nav-link { color: rgba(255,255,255,0.8); text-decoration: none; padding: 6px 11px; border-radius: 6px; font-size: 0.85rem; transition: all 0.12s; background: none; border: none; cursor: pointer; display: flex; align-items: center; gap: 5px; font-family: inherit; }
+    .nav-link:hover, .nav-link.activo { background: rgba(255,255,255,0.12); color: white; }
+    .nav-ig { padding: 6px 8px; }
+    .nav-btn { background: white; color: var(--azul); padding: 6px 16px; border-radius: 6px; font-size: 0.85rem; font-weight: 600; text-decoration: none; margin-left: 4px; }
+    .nav-dropdown { position: relative; }
+    .nav-dropdown-menu { display: none; position: absolute; top: calc(100% + 8px); left: 0; background: white; border-radius: 12px; border: 1px solid #dde2e8; box-shadow: 0 8px 24px rgba(0,0,0,0.12); min-width: 200px; overflow: hidden; z-index: 200; }
+    .nav-dropdown-menu.visible { display: block; }
+    .nav-dropdown-item { display: block; padding: 10px 16px; color: var(--texto); text-decoration: none; font-size: 0.85rem; transition: background 0.1s; }
+    .nav-dropdown-item:hover { background: var(--azul-bg); color: var(--azul); }
+    .nav-hamburger { display: none; background: none; border: none; color: white; cursor: pointer; padding: 4px; }
+    @media (max-width: 768px) {
+      nav { padding: 0 1rem; }
+      .nav-hamburger { display: flex; }
+      .nav-links { display: none; position: absolute; top: 60px; left: 0; right: 0; background: var(--azul-oscuro); flex-direction: column; align-items: stretch; padding: 0.5rem 0; gap: 0; z-index: 99; }
+      .nav-links.open { display: flex; }
+      .nav-link { border-radius: 0; padding: 10px 1.5rem; }
+      .nav-btn { margin: 0.5rem 1rem; text-align: center; padding: 10px; }
+      .nav-dropdown { width: 100%; }
+      .nav-dropdown-menu { position: static; box-shadow: none; border: none; border-radius: 0; background: rgba(0,0,0,0.2); }
+      .nav-dropdown-item { color: rgba(255,255,255,0.8); padding: 9px 2.5rem; }
+      .nav-ig { display: none; }
+    }
+
+    /* HERO */
+    .hero { background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%); position: relative; overflow: hidden; padding: 5rem 2rem 4rem; text-align: center; }
+    .hero::before { content:''; position:absolute; inset:0; background: repeating-linear-gradient(-45deg, transparent, transparent 40px, rgba(255,255,255,0.03) 40px, rgba(255,255,255,0.03) 80px); }
+    .hero-content { position: relative; max-width: 700px; margin: 0 auto; }
+    .hero-badge { display: inline-block; background: rgba(255,255,255,0.2); color: white; font-size: 0.8rem; font-weight: 600; padding: 5px 16px; border-radius: 20px; margin-bottom: 1rem; letter-spacing: 0.05em; }
+    .hero h1 { color: white; font-size: 2.8rem; font-weight: 800; line-height: 1.1; margin-bottom: 0.75rem; }
+    .hero-fechas { color: rgba(255,255,255,0.85); font-size: 1.1rem; margin-bottom: 0.5rem; font-weight: 500; }
+    .hero-sub { color: rgba(255,255,255,0.75); font-size: 0.95rem; margin-bottom: 2rem; line-height: 1.6; }
+    .hero-btns { display: flex; gap: 0.875rem; justify-content: center; flex-wrap: wrap; }
+    .btn-w { background: white; color: var(--naranja); padding: 12px 28px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 0.95rem; }
+    .btn-o { background: transparent; color: white; padding: 12px 28px; border-radius: 8px; text-decoration: none; font-weight: 500; font-size: 0.95rem; border: 1.5px solid rgba(255,255,255,0.4); }
+    @media (max-width: 600px) { .hero h1 { font-size: 2rem; } .hero { padding: 3rem 1rem 2.5rem; } }
+
+    /* WRAP */
+    .wrap { max-width: 1040px; margin: 0 auto; padding: 0 2rem; }
+
+    /* INFO STRIP */
+    .info-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); border: 1px solid var(--gris-borde); border-radius: 12px; overflow: hidden; margin: 2.5rem 0; background: var(--gris-borde); gap: 1px; }
+    .info-item { background: white; padding: 1.1rem 1.25rem; }
+    .info-label { font-size: 0.7rem; font-weight: 600; color: var(--naranja); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+    .info-val { font-size: 0.9rem; font-weight: 600; line-height: 1.4; }
+    .info-val small { font-size: 0.75rem; font-weight: 400; color: var(--texto-suave); display: block; }
+
+    /* SECCIONES */
+    .sec { padding: 2.5rem 0; }
+    .sec-title { font-size: 1.3rem; font-weight: 700; margin-bottom: 1rem; }
+    .sec-divider { border: none; border-top: 2px solid var(--naranja-bg); margin: 2.5rem 0; }
+
+    /* ACTIVIDADES */
+    .actividades-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 0.75rem; }
+    .actividad-item { background: var(--naranja-bg); border: 1px solid #fed7aa; border-radius: 8px; padding: 0.875rem; text-align: center; font-size: 0.85rem; font-weight: 600; color: var(--naranja); }
+    .actividad-emoji { font-size: 1.5rem; display: block; margin-bottom: 4px; }
+
+    /* HORARIO TABLA */
+    .horario-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; margin-top: 1rem; }
+    .horario-table th { background: var(--azul); color: white; padding: 8px 10px; text-align: center; font-size: 0.78rem; }
+    .horario-table td { padding: 7px 10px; text-align: center; border: 1px solid var(--gris-borde); font-size: 0.8rem; }
+    .ht-azul { background: #dbeafe; color: #1e40af; font-weight: 600; }
+    .ht-verde { background: #dcfce7; color: #166534; font-weight: 600; }
+    .ht-naranja { background: #fed7aa; color: #92400e; font-weight: 600; }
+    .ht-morado { background: #e0e7ff; color: #3730a3; font-weight: 600; }
+    .ht-gris { background: var(--gris); color: var(--texto-suave); }
+    .ht-viernes { background: #1a5f8f; color: white; font-weight: 600; }
+
+    /* PRECIOS */
+    .precios-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 1rem; margin-top: 1rem; }
+    .precio-card { border: 2px solid var(--gris-borde); border-radius: 12px; padding: 1.25rem; text-align: center; transition: border-color 0.12s; }
+    .precio-card:hover { border-color: var(--naranja); }
+    .precio-semanas { font-size: 0.78rem; font-weight: 600; color: var(--texto-suave); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; }
+    .precio-num { font-size: 1.6rem; font-weight: 700; color: var(--naranja); line-height: 1; }
+    .precio-num span { font-size: 0.9rem; }
+    .precio-nota { font-size: 0.72rem; color: var(--texto-suave); margin-top: 5px; }
+
+    /* INCLUYE */
+    .incluye-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.75rem; margin-top: 1rem; }
+    .incluye-item { display: flex; align-items: center; gap: 10px; padding: 0.875rem 1rem; background: var(--naranja-bg); border-radius: 8px; border: 1px solid #fed7aa; font-size: 0.87rem; font-weight: 500; color: #92400e; }
+
+    /* OPCIONALES */
+    .opcionales-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem; }
+    .opcional-card { background: var(--gris); border-radius: 10px; padding: 1.25rem; border: 1px solid var(--gris-borde); }
+    .opcional-titulo { font-size: 0.92rem; font-weight: 600; margin-bottom: 4px; display: flex; align-items: center; gap: 8px; }
+    .opcional-precio { font-size: 1.1rem; font-weight: 700; color: var(--naranja); margin-bottom: 6px; }
+    .opcional-desc { font-size: 0.82rem; color: var(--texto-suave); line-height: 1.5; }
+    @media (max-width: 500px) { .opcionales-grid { grid-template-columns: 1fr; } }
+
+    /* INSTALACIONES */
+    .instal-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem; }
+    .instal-item { background: var(--azul-bg); border: 1px solid #c8dff0; border-radius: 10px; padding: 1rem 1.25rem; }
+    .instal-titulo { font-size: 0.88rem; font-weight: 600; color: var(--azul); margin-bottom: 4px; }
+    .instal-desc { font-size: 0.8rem; color: var(--texto-suave); }
+
+    /* CTA */
+    .cta { background: var(--naranja); padding: 3.5rem 2rem; text-align: center; }
+    .cta h2 { color: white; font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .cta p { color: rgba(255,255,255,0.8); margin-bottom: 1.75rem; font-size: 0.92rem; }
+
+    /* CONTACTO */
+    .contacto-sec { background: var(--azul-oscuro); padding: 2.5rem 2rem; }
+    .contacto-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; max-width: 1040px; margin: 0 auto; }
+    .contacto-item { background: rgba(255,255,255,0.08); border-radius: 10px; padding: 1rem 1.25rem; display: flex; align-items: center; gap: 12px; text-decoration: none; transition: background 0.12s; }
+    .contacto-item:hover { background: rgba(255,255,255,0.14); }
+    .c-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .contacto-item span { display: block; font-size: 0.7rem; color: rgba(255,255,255,0.45); }
+    .contacto-item strong { color: white; font-size: 0.88rem; display: block; }
+
+    footer { background: var(--azul-oscuro); padding: 2rem; border-top: 1px solid rgba(255,255,255,0.08); }
+    .footer-inner { max-width: 1040px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+    .footer-logo { display: flex; align-items: center; gap: 8px; }
+    .footer-logo img { width: 26px; height: 26px; border-radius: 50%; background: white; padding: 2px; object-fit: contain; }
+    .footer-logo span { color: white; font-weight: 600; font-size: 0.85rem; }
+    .footer-links a { color: rgba(255,255,255,0.45); text-decoration: none; font-size: 0.78rem; margin-left: 1.25rem; }
+    .footer-links a:hover { color: white; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">
+    <img src="https://icaxokjsvhlreuwpyxeb.supabase.co/storage/v1/object/public/imagenes-club/logo.png" alt="Club Apolana" onerror="this.style.display='none'">
+    <span>Club Apolana</span>
+  </a>
+  <div class="nav-links" id="nav-links">
+    <div class="nav-dropdown">
+      <button class="nav-link nav-dropdown-btn" onclick="toggleDropdown('dd-secciones')">
+        Secciones
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="nav-dropdown-menu" id="dd-secciones">
+        <a href="competicion.html" class="nav-dropdown-item">Atletismo pista</a>
+        <a href="running.html" class="nav-dropdown-item">Running</a>
+        <a href="triatlon.html" class="nav-dropdown-item">Triatlón</a>
+        <a href="natacion.html" class="nav-dropdown-item">Natación</a>
+        <a href="montana.html" class="nav-dropdown-item">Montaña</a>
+        <a href="instalaciones.html" class="nav-dropdown-item">Instalaciones</a>
+      </div>
+    </div>
+    <div class="nav-dropdown">
+      <button class="nav-link nav-dropdown-btn" onclick="toggleDropdown('dd-escuelas')">
+        Escuelas
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="nav-dropdown-menu" id="dd-escuelas">
+        <a href="escuela.html" class="nav-dropdown-item">Escuela atletismo</a>
+        <a href="escuela-natacion.html" class="nav-dropdown-item">Escuela natación</a>
+        <a href="escuela-municipal-atletismo.html" class="nav-dropdown-item">Atletismo municipal</a>
+        <a href="escuela-municipal-triatlon.html" class="nav-dropdown-item">Triatlón municipal</a>
+        <a href="escuela-deporte-adaptado.html" class="nav-dropdown-item">Deporte adaptado</a>
+      </div>
+    </div>
+    <a href="calendario.html" class="nav-link">Calendario</a>
+    <a href="noticias.html" class="nav-link">Noticias</a>
+    <a href="socio.html" class="nav-link">Hazte socio</a>
+    <a href="campus.html" class="nav-link activo">Campus</a>
+    <a href="https://instagram.com/apolana.alicante" target="_blank" class="nav-link nav-ig">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+    </a>
+    <a href="inscripcion.html" class="nav-btn">Inscribirse</a>
+  </div>
+  <button class="nav-hamburger" onclick="toggleMenu()" aria-label="Menú">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-content">
+    <div class="hero-badge">☀️ Verano 2026 · Plazas limitadas</div>
+    <h1>Campus Deportivo Apolana</h1>
+    <p class="hero-fechas">Del 29 de junio al 31 de julio de 2026</p>
+    <p class="hero-sub">Atletismo, multideporte, natación, pádel, excursiones y talleres para niños y niñas de 3 a 16 años. ¡El verano más activo de Alicante!</p>
+    <div class="hero-btns">
+      <a href="https://wa.me/34636061700" target="_blank" class="btn-w">Inscribirse ahora</a>
+      <a href="#precios" class="btn-o">Ver precios</a>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="info-strip">
+    <div class="info-item"><div class="info-label">Fechas</div><div class="info-val">29 jun – 31 jul<small>Verano 2026</small></div></div>
+    <div class="info-item"><div class="info-label">Edades</div><div class="info-val">3 a 16 años</div></div>
+    <div class="info-item"><div class="info-label">Horario</div><div class="info-val">9:00 – 14:00 h<small>Entrada desde 8:30 h</small></div></div>
+    <div class="info-item"><div class="info-label">Lugar</div><div class="info-val">Ciudad Deportiva<small>Alicante</small></div></div>
+    <div class="info-item"><div class="info-label">Contacto</div><div class="info-val">636 061 700</div></div>
+  </div>
+
+  <!-- ACTIVIDADES -->
+  <div class="sec">
+    <h2 class="sec-title">¿Qué se hace en el campus?</h2>
+    <p style="font-size:0.92rem;color:var(--texto-suave);margin-bottom:1.25rem;line-height:1.7;">Todos los participantes realizarán múltiples actividades desde un enfoque lúdico, con el objetivo de practicar actividad física divirtiéndose. Los grupos se organizan por edades.</p>
+    <div class="actividades-grid">
+      <div class="actividad-item"><span class="actividad-emoji">🏃</span>Atletismo</div>
+      <div class="actividad-item"><span class="actividad-emoji">⚽</span>Multideporte</div>
+      <div class="actividad-item"><span class="actividad-emoji">🏊</span>Natación</div>
+      <div class="actividad-item"><span class="actividad-emoji">🏸</span>Pádel</div>
+      <div class="actividad-item"><span class="actividad-emoji">🏐</span>Vóleibol</div>
+      <div class="actividad-item"><span class="actividad-emoji">🏀</span>Baloncesto</div>
+      <div class="actividad-item"><span class="actividad-emoji">🎨</span>Talleres</div>
+      <div class="actividad-item"><span class="actividad-emoji">🚌</span>Excursiones</div>
+      <div class="actividad-item"><span class="actividad-emoji">💦</span>Juegos agua</div>
+      <div class="actividad-item"><span class="actividad-emoji">🎯</span>Gymkanas</div>
+    </div>
+    <p style="font-size:0.8rem;color:var(--texto-suave);margin-top:0.875rem;">Excursiones: Palmeral de Elche, Palmeral de Alicante, Universidad, Castillo Santa Bárbara y San Fernando.</p>
+  </div>
+
+  <hr class="sec-divider">
+
+  <!-- HORARIO SEMANAL -->
+  <div class="sec">
+    <h2 class="sec-title">Horario semanal</h2>
+    <div style="overflow-x:auto;">
+      <table class="horario-table">
+        <thead>
+          <tr>
+            <th>Hora</th><th>Lunes</th><th>Martes</th><th>Miércoles</th><th>Jueves</th><th>Viernes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="ht-gris">7:40–8:45</td><td class="ht-gris">Matinera*</td><td class="ht-gris">Matinera*</td><td class="ht-gris">Matinera*</td><td class="ht-gris">Matinera*</td><td class="ht-gris">Matinera*</td></tr>
+          <tr><td>9:00–10:30</td><td class="ht-azul">Atletismo</td><td class="ht-verde">Multideporte</td><td class="ht-azul">Atletismo</td><td class="ht-verde">Multideporte</td><td rowspan="4" class="ht-viernes">⛵<br>EXCURSIÓN<br>SEMANAL</td></tr>
+          <tr><td class="ht-gris">10:30–11:00</td><td class="ht-gris">Almuerzo</td><td class="ht-gris">Almuerzo</td><td class="ht-gris">Almuerzo</td><td class="ht-gris">Almuerzo</td></tr>
+          <tr><td>11:00–12:00</td><td class="ht-naranja">Piscina / Agua</td><td class="ht-naranja">Piscina / Agua</td><td class="ht-naranja">Piscina / Agua</td><td class="ht-naranja">Piscina / Agua</td></tr>
+          <tr><td class="ht-gris">12:00–12:30</td><td class="ht-gris">Almuerzo</td><td class="ht-gris">Almuerzo</td><td class="ht-gris">Almuerzo</td><td class="ht-gris">Almuerzo</td></tr>
+          <tr><td>12:30–14:00</td><td class="ht-morado">Talleres</td><td class="ht-morado">Talleres</td><td class="ht-morado">Talleres</td><td class="ht-morado">Talleres</td><td class="ht-gris"></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:0.78rem;color:var(--texto-suave);margin-top:0.75rem;">*Matinera opcional (7:40–9:00 h) · Los días de piscina pueden variar según disponibilidad de instalaciones municipales.</p>
+  </div>
+
+  <hr class="sec-divider">
+
+  <!-- PRECIOS -->
+  <div class="sec" id="precios">
+    <h2 class="sec-title">Tarifas</h2>
+    <p style="font-size:0.88rem;color:var(--texto-suave);margin-bottom:1rem;">Elige las semanas que mejor se adapten a tus vacaciones. Descuento del 15% para el segundo hermano.</p>
+    <div class="precios-grid">
+      <div class="precio-card">
+        <div class="precio-semanas">5 semanas</div>
+        <div class="precio-num">349<span>€</span></div>
+        <div class="precio-nota">Temporada completa</div>
+      </div>
+      <div class="precio-card">
+        <div class="precio-semanas">4 semanas</div>
+        <div class="precio-num">299<span>€</span></div>
+        <div class="precio-nota"></div>
+      </div>
+      <div class="precio-card">
+        <div class="precio-semanas">3 semanas</div>
+        <div class="precio-num">249<span>€</span></div>
+        <div class="precio-nota"></div>
+      </div>
+      <div class="precio-card">
+        <div class="precio-semanas">2 semanas</div>
+        <div class="precio-num">189<span>€</span></div>
+        <div class="precio-nota">Solo sem. 20 y 27 jul</div>
+      </div>
+      <div class="precio-card" style="opacity:0.6;">
+        <div class="precio-semanas">1 semana</div>
+        <div class="precio-num">99<span>€</span></div>
+        <div class="precio-nota">Sin plazas disponibles</div>
+      </div>
+    </div>
+    <div style="background:var(--naranja-bg);border:1px solid #fed7aa;border-radius:10px;padding:1rem 1.25rem;margin-top:1rem;font-size:0.85rem;color:#92400e;">
+      <strong>Formas de pago:</strong> 100% · 50% + 50% · Fraccionado en 3 cuotas &nbsp;·&nbsp; <strong>15% dto. 2º hermano</strong> (no aplica en comedor)
+    </div>
+  </div>
+
+  <hr class="sec-divider">
+
+  <!-- QUÉ INCLUYE -->
+  <div class="sec">
+    <h2 class="sec-title">¿Qué incluye?</h2>
+    <div class="incluye-grid">
+      <div class="incluye-item">👕 Camiseta del campus</div>
+      <div class="incluye-item">🏊 Gorro de piscina</div>
+      <div class="incluye-item">🚌 Excursión semanal</div>
+      <div class="incluye-item">🛡️ Seguro de accidentes</div>
+      <div class="incluye-item">👨‍🏫 Monitores titulados</div>
+      <div class="incluye-item">🎨 Talleres y manualidades</div>
+    </div>
+  </div>
+
+  <hr class="sec-divider">
+
+  <!-- SERVICIOS OPCIONALES -->
+  <div class="sec">
+    <h2 class="sec-title">Servicios opcionales</h2>
+    <div class="opcionales-grid">
+      <div class="opcional-card">
+        <div class="opcional-titulo">🌅 Matinera</div>
+        <div class="opcional-precio">+12 €/semana</div>
+        <div class="opcional-desc">Servicio de 7:40 a 9:00 h para los que llegan antes. Ideal para familias que trabajan.</div>
+      </div>
+      <div class="opcional-card">
+        <div class="opcional-titulo">🍽️ Comedor</div>
+        <div class="opcional-precio">42 €/semana</div>
+        <div class="opcional-desc">Servicio de comedor con recogida hasta las 15:30 h (recogida de 15:00 a 15:30 h).</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="sec-divider">
+
+  <!-- INSTALACIONES -->
+  <div class="sec">
+    <h2 class="sec-title">Instalaciones</h2>
+    <div class="instal-grid">
+      <div class="instal-item">
+        <div class="instal-titulo">🏟️ Estadio Joaquín Villar</div>
+        <div class="instal-desc">Atletismo y carrera</div>
+      </div>
+      <div class="instal-item">
+        <div class="instal-titulo">🏋️ Centro Tecnificación</div>
+        <div class="instal-desc">Multideporte y talleres</div>
+      </div>
+      <div class="instal-item">
+        <div class="instal-titulo">🏊 Piscina Monte Tossal</div>
+        <div class="instal-desc">Natación y juegos de agua</div>
+      </div>
+    </div>
+    <p style="font-size:0.8rem;color:var(--texto-suave);margin-top:0.875rem;">Organiza: Club Atletismo Apolana · Gestiona: Itaka Deporte y Recreación · Colabora: Deportes Alicante</p>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta">
+  <h2>¡Plazas limitadas!</h2>
+  <p>No esperes demasiado. Inscribe a tu hijo/a por WhatsApp o formulario online.</p>
+  <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+    <a href="https://wa.me/34636061700" target="_blank" class="btn-w">WhatsApp 636 061 700</a>
+    <a href="mailto:escuela.apolana@gmail.com" class="btn-o">escuela.apolana@gmail.com</a>
+  </div>
+</div>
+
+<!-- CONTACTO -->
+<div class="contacto-sec">
+  <div class="contacto-grid">
+    <a href="tel:+34636061700" class="contacto-item">
+      <div class="c-icon" style="background:rgba(255,255,255,0.1);">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.79 19.79 0 0 1 11.63 19 19.5 19.5 0 0 1 4.5 12 19.79 19.79 0 0 1 1.12 3.18 2 2 0 0 1 3.1 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6z"/></svg>
+      </div>
+      <div><span>Teléfono / WhatsApp</span><strong>636 061 700</strong></div>
+    </a>
+    <a href="mailto:escuela.apolana@gmail.com" class="contacto-item">
+      <div class="c-icon" style="background:rgba(255,255,255,0.1);">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      </div>
+      <div><span>Email</span><strong>escuela.apolana@gmail.com</strong></div>
+    </a>
+    <a href="https://instagram.com/apolana.alicante" target="_blank" class="contacto-item">
+      <div class="c-icon" style="background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="white" stroke="none"/></svg>
+      </div>
+      <div><span>Instagram</span><strong>@apolana.alicante</strong></div>
+    </a>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">
+      <img src="https://icaxokjsvhlreuwpyxeb.supabase.co/storage/v1/object/public/imagenes-club/logo.png" alt="Logo" onerror="this.style.display='none'">
+      <span>Club Apolana · Alicante</span>
+    </div>
+    <div class="footer-links">
+      <a href="index.html">Inicio</a>
+      <a href="inscripcion.html">Inscripción</a>
+      <a href="calendario.html">Calendario</a>
+      <a href="noticias.html">Noticias</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+function toggleDropdown(id) {
+  document.querySelectorAll('.nav-dropdown-menu').forEach(m => { if(m.id !== id) m.classList.remove('visible'); });
+  const el = document.getElementById(id);
+  if(el) el.classList.toggle('visible');
+}
+function toggleMenu() { document.getElementById('nav-links').classList.toggle('open'); }
+document.addEventListener('click', e => {
+  if (!e.target.closest('.nav-dropdown')) document.querySelectorAll('.nav-dropdown-menu').forEach(m => m.classList.remove('visible'));
+});
+</script>
+</body>
+</html>

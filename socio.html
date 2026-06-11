@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hazte socio · Club Apolana</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --azul: #1a5f8f; --azul-oscuro: #123f60; --azul-claro: #4a90c4; --azul-bg: #e8f2fa;
+      --gris: #f5f6f8; --gris-borde: #dde2e8; --texto: #1a1d23; --texto-suave: #6b7280;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: white; color: var(--texto); }
+    nav { position: sticky; top: 0; z-index: 100; background: var(--azul); display: flex; align-items: center; justify-content: space-between; padding: 0 2rem; height: 60px; }
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .nav-logo img { width: 34px; height: 34px; border-radius: 50%; object-fit: contain; background: white; padding: 2px; }
+    .nav-logo span { color: white; font-weight: 600; font-size: 0.95rem; }
+    .nav-links { display: flex; align-items: center; gap: 2px; }
+    .nav-link { color: rgba(255,255,255,0.8); text-decoration: none; padding: 6px 11px; border-radius: 6px; font-size: 0.85rem; transition: all 0.12s; background: none; border: none; cursor: pointer; display: flex; align-items: center; gap: 5px; font-family: inherit; }
+    .nav-link:hover, .nav-link.activo { background: rgba(255,255,255,0.12); color: white; }
+    .nav-ig { padding: 6px 8px; }
+    .nav-btn { background: white; color: var(--azul); padding: 6px 16px; border-radius: 6px; font-size: 0.85rem; font-weight: 600; text-decoration: none; margin-left: 4px; }
+    .nav-dropdown { position: relative; }
+    .nav-dropdown-menu { display: none; position: absolute; top: calc(100% + 8px); left: 0; background: white; border-radius: 12px; border: 1px solid #dde2e8; box-shadow: 0 8px 24px rgba(0,0,0,0.12); min-width: 200px; overflow: hidden; z-index: 200; }
+    .nav-dropdown-menu.visible { display: block; }
+    .nav-dropdown-item { display: block; padding: 10px 16px; color: var(--texto); text-decoration: none; font-size: 0.85rem; transition: background 0.1s; }
+    .nav-dropdown-item:hover { background: var(--azul-bg); color: var(--azul); }
+    .nav-hamburger { display: none; background: none; border: none; color: white; cursor: pointer; padding: 4px; }
+    @media (max-width: 768px) {
+      nav { padding: 0 1rem; }
+      .nav-hamburger { display: flex; }
+      .nav-links { display: none; position: absolute; top: 60px; left: 0; right: 0; background: var(--azul-oscuro); flex-direction: column; align-items: stretch; padding: 0.5rem 0; gap: 0; z-index: 99; }
+      .nav-links.open { display: flex; }
+      .nav-link { border-radius: 0; padding: 10px 1.5rem; }
+      .nav-btn { margin: 0.5rem 1rem; text-align: center; padding: 10px; }
+      .nav-dropdown { width: 100%; }
+      .nav-dropdown-menu { position: static; box-shadow: none; border: none; border-radius: 0; background: rgba(0,0,0,0.2); }
+      .nav-dropdown-item { color: rgba(255,255,255,0.8); padding: 9px 2.5rem; }
+      .nav-ig { display: none; }
+    }
+
+    .hero { background: linear-gradient(135deg, var(--azul-oscuro) 0%, var(--azul) 100%); padding: 5rem 2rem 4rem; text-align: center; }
+    .hero h1 { color: white; font-size: 2.6rem; font-weight: 700; margin-bottom: 0.75rem; }
+    .hero p { color: rgba(255,255,255,0.75); font-size: 1rem; max-width: 560px; margin: 0 auto 2rem; line-height: 1.7; }
+    .hero-btns { display: flex; gap: 0.875rem; justify-content: center; flex-wrap: wrap; }
+    .btn-w { background: white; color: var(--azul); padding: 11px 28px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.92rem; }
+    .btn-o { background: transparent; color: white; padding: 11px 28px; border-radius: 8px; text-decoration: none; font-weight: 500; font-size: 0.92rem; border: 1.5px solid rgba(255,255,255,0.4); }
+    @media (max-width: 600px) { .hero h1 { font-size: 1.9rem; } .hero { padding: 3rem 1rem 2.5rem; } }
+
+    .wrap { max-width: 1040px; margin: 0 auto; padding: 0 2rem; }
+    .sec { padding: 2.5rem 0; }
+    .sec-title { font-size: 1.3rem; font-weight: 700; margin-bottom: 1rem; }
+    .sec-divider { border: none; border-top: 2px solid var(--azul-bg); margin: 2.5rem 0; }
+
+    /* PRECIOS */
+    .precios-socio { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 1rem; }
+    .precio-socio { border-radius: 14px; padding: 1.75rem; text-align: center; }
+    .precio-socio.principal { background: var(--azul); color: white; }
+    .precio-socio.secundario { background: var(--gris); border: 1px solid var(--gris-borde); }
+    .precio-socio.especial { background: var(--azul-bg); border: 1px solid #c8dff0; }
+    .ps-label { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.75rem; opacity: 0.75; }
+    .ps-precio { font-size: 2.4rem; font-weight: 700; line-height: 1; }
+    .ps-precio span { font-size: 1rem; font-weight: 500; }
+    .ps-desc { font-size: 0.82rem; margin-top: 0.5rem; opacity: 0.75; }
+    @media (max-width: 500px) { .precios-socio { grid-template-columns: 1fr; } }
+
+    /* BENEFICIOS */
+    .beneficios-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 0.875rem; margin-top: 1rem; }
+    .beneficio-item { display: flex; align-items: flex-start; gap: 12px; padding: 1rem 1.1rem; background: var(--azul-bg); border-radius: 10px; border: 1px solid #c8dff0; }
+    .ben-check { width: 24px; height: 24px; border-radius: 50%; background: var(--azul); display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+    .ben-check svg { color: white; }
+    .ben-text { font-size: 0.88rem; font-weight: 500; line-height: 1.4; }
+
+    /* PROCESO */
+    .pasos { display: flex; flex-direction: column; gap: 1rem; margin-top: 1rem; }
+    .paso { display: flex; align-items: flex-start; gap: 1rem; padding: 1.25rem; background: var(--gris); border-radius: 10px; border: 1px solid var(--gris-borde); }
+    .paso-num { width: 32px; height: 32px; border-radius: 50%; background: var(--azul); color: white; font-size: 0.88rem; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .paso-titulo { font-size: 0.92rem; font-weight: 600; margin-bottom: 3px; }
+    .paso-desc { font-size: 0.83rem; color: var(--texto-suave); line-height: 1.5; }
+
+    /* CUENTA BANCARIA */
+    .cuenta-card { background: var(--azul-oscuro); border-radius: 12px; padding: 1.5rem; margin-top: 1rem; }
+    .cuenta-label { font-size: 0.7rem; font-weight: 600; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
+    .cuenta-iban { font-size: 1.1rem; font-weight: 700; color: white; letter-spacing: 0.05em; margin-bottom: 8px; font-family: monospace; }
+    .cuenta-banco { font-size: 0.85rem; color: rgba(255,255,255,0.6); }
+    .cuenta-concepto { display: inline-block; background: rgba(255,255,255,0.12); color: white; font-size: 0.82rem; padding: 4px 12px; border-radius: 6px; margin-top: 8px; }
+
+    /* FAQ */
+    .faq-item { border-bottom: 1px solid var(--gris-borde); }
+    .faq-pregunta { padding: 1rem 0; font-size: 0.92rem; font-weight: 600; cursor: pointer; display: flex; justify-content: space-between; align-items: center; user-select: none; }
+    .faq-pregunta:hover { color: var(--azul); }
+    .faq-respuesta { font-size: 0.88rem; color: var(--texto-suave); line-height: 1.7; padding-bottom: 1rem; display: none; }
+    .faq-respuesta.open { display: block; }
+    .faq-arrow { transition: transform 0.2s; flex-shrink: 0; }
+    .faq-arrow.open { transform: rotate(180deg); }
+
+    .contacto-sec { background: var(--azul-oscuro); padding: 2.5rem 2rem; }
+    .contacto-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; max-width: 1040px; margin: 0 auto; }
+    .contacto-item { background: rgba(255,255,255,0.08); border-radius: 10px; padding: 1rem 1.25rem; display: flex; align-items: center; gap: 12px; text-decoration: none; transition: background 0.12s; }
+    .contacto-item:hover { background: rgba(255,255,255,0.14); }
+    .c-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .contacto-item span { display: block; font-size: 0.7rem; color: rgba(255,255,255,0.45); }
+    .contacto-item strong { color: white; font-size: 0.88rem; display: block; }
+
+    footer { background: var(--azul-oscuro); padding: 2rem; border-top: 1px solid rgba(255,255,255,0.08); }
+    .footer-inner { max-width: 1040px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+    .footer-logo { display: flex; align-items: center; gap: 8px; }
+    .footer-logo img { width: 26px; height: 26px; border-radius: 50%; background: white; padding: 2px; object-fit: contain; }
+    .footer-logo span { color: white; font-weight: 600; font-size: 0.85rem; }
+    .footer-links a { color: rgba(255,255,255,0.45); text-decoration: none; font-size: 0.78rem; margin-left: 1.25rem; }
+    .footer-links a:hover { color: white; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">
+    <img src="https://icaxokjsvhlreuwpyxeb.supabase.co/storage/v1/object/public/imagenes-club/logo.png" alt="Club Apolana" onerror="this.style.display='none'">
+    <span>Club Apolana</span>
+  </a>
+  <div class="nav-links" id="nav-links">
+    <div class="nav-dropdown">
+      <button class="nav-link nav-dropdown-btn" onclick="toggleDropdown('dd-secciones')">
+        Secciones <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="nav-dropdown-menu" id="dd-secciones">
+        <a href="competicion.html" class="nav-dropdown-item">Atletismo pista</a>
+        <a href="running.html" class="nav-dropdown-item">Running</a>
+        <a href="triatlon.html" class="nav-dropdown-item">Triatlón</a>
+        <a href="natacion.html" class="nav-dropdown-item">Natación</a>
+        <a href="montana.html" class="nav-dropdown-item">Montaña</a>
+        <a href="instalaciones.html" class="nav-dropdown-item">Instalaciones</a>
+      </div>
+    </div>
+    <div class="nav-dropdown">
+      <button class="nav-link nav-dropdown-btn" onclick="toggleDropdown('dd-escuelas')">
+        Escuelas <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="nav-dropdown-menu" id="dd-escuelas">
+        <a href="escuela.html" class="nav-dropdown-item">Escuela atletismo</a>
+        <a href="escuela-natacion.html" class="nav-dropdown-item">Escuela natación</a>
+        <a href="escuela-municipal-atletismo.html" class="nav-dropdown-item">Atletismo municipal</a>
+        <a href="escuela-municipal-triatlon.html" class="nav-dropdown-item">Triatlón municipal</a>
+        <a href="escuela-deporte-adaptado.html" class="nav-dropdown-item">Deporte adaptado</a>
+      </div>
+    </div>
+    <a href="calendario.html" class="nav-link">Calendario</a>
+    <a href="noticias.html" class="nav-link">Noticias</a>
+    <a href="socio.html" class="nav-link activo">Hazte socio</a>
+    <a href="campus.html" class="nav-link">Campus</a>
+    <a href="https://instagram.com/apolana.alicante" target="_blank" class="nav-link nav-ig">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+    </a>
+    <a href="inscripcion.html" class="nav-btn">Inscribirse</a>
+  </div>
+  <button class="nav-hamburger" onclick="toggleMenu()" aria-label="Menú">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+</nav>
+
+<div class="hero">
+  <h1>Hazte socio del Club Apolana</h1>
+  <p>¿Te gusta el deporte y quieres pertenecer a nuestro club? Compartir aficiones, hacer nuevas amistades y disfrutar de todos los beneficios de ser parte de la familia Apolana. ¡Te esperamos!</p>
+  <div class="hero-btns">
+    <a href="#proceso" class="btn-w">Cómo hacerse socio</a>
+    <a href="#beneficios" class="btn-o">Ver beneficios</a>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- PRECIOS -->
+  <div class="sec">
+    <h2 class="sec-title">Cuota de socio</h2>
+    <div class="precios-socio">
+      <div class="precio-socio principal">
+        <div class="ps-label">Alta nuevo socio</div>
+        <div class="ps-precio">125<span> €</span></div>
+        <div class="ps-desc">Primer año · Incluye equipación completa</div>
+      </div>
+      <div class="precio-socio secundario">
+        <div class="ps-label" style="color:var(--texto-suave);">Renovación anual</div>
+        <div class="ps-precio" style="color:var(--azul);">110<span style="font-size:1rem;"> €</span></div>
+        <div class="ps-desc" style="color:var(--texto-suave);">Socios que renuevan cada temporada</div>
+      </div>
+      <div class="precio-socio especial">
+        <div class="ps-label" style="color:var(--azul-claro);">Alta en junio</div>
+        <div class="ps-precio" style="color:var(--azul);">65<span style="font-size:1rem;"> €</span></div>
+        <div class="ps-desc" style="color:var(--texto-suave);">Solo camiseta del club · Oferta especial</div>
+      </div>
+    </div>
+    <p style="font-size:0.82rem;color:var(--texto-suave);margin-top:0.875rem;">La cuota de alta en junio por 65€ incluye únicamente la camiseta del club y no da acceso a todos los beneficios de socio hasta el inicio de la próxima temporada.</p>
+  </div>
+
+  <hr class="sec-divider">
+
+  <!-- BENEFICIOS -->
+  <div class="sec" id="beneficios">
+    <h2 class="sec-title">¿Qué incluye ser socio?</h2>
+    <div class="beneficios-grid">
+      <div class="beneficio-item">
+        <div class="ben-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <span class="ben-text">Camiseta técnica del club</span>
+      </div>
+      <div class="beneficio-item">
+        <div class="ben-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <span class="ben-text">Sudadera del club</span>
+      </div>
+      <div class="beneficio-item">
+        <div class="ben-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <span class="ben-text">3 entradas/semana a la pista de atletismo</span>
+      </div>
+      <div class="beneficio-item">
+        <div class="ben-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <span class="ben-text">1 carrera al año subvencionada por el club</span>
+      </div>
+      <div class="beneficio-item">
+        <div class="ben-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <span class="ben-text">Descuentos en actividades del club</span>
+      </div>
+      <div class="beneficio-item">
+        <div class="ben-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <span class="ben-text">Descuentos para familias de las escuelas deportivas</span>
+      </div>
+    </div>
+  </div>
+
+  <hr class="sec-divider">
+
+  <!-- PROCESO -->
+  <div class="sec" id="proceso">
+    <h2 class="sec-title">Cómo hacerse socio</h2>
+    <p style="font-size:0.88rem;color:var(--texto-suave);margin-bottom:1.25rem;">El proceso es sencillo. Sigue estos pasos y estarás dentro en menos de una semana.</p>
+    <div class="pasos">
+      <div class="paso">
+        <div class="paso-num">1</div>
+        <div>
+          <div class="paso-titulo">Rellena el formulario de alta online</div>
+          <div class="paso-desc">Completa el formulario de alta de socio/a y la hoja de protección de datos. Puedes hacerlo desde el enlace de inscripción o pidiendo la documentación por email.</div>
+        </div>
+      </div>
+      <div class="paso">
+        <div class="paso-num">2</div>
+        <div>
+          <div class="paso-titulo">Rellena el formulario SEPA de domiciliación bancaria</div>
+          <div class="paso-desc">Necesitamos tu autorización de domiciliación bancaria para cobrar la cuota anual de forma automática.</div>
+        </div>
+      </div>
+      <div class="paso">
+        <div class="paso-num">3</div>
+        <div>
+          <div class="paso-titulo">Realiza el ingreso en la cuenta del club</div>
+          <div class="paso-desc">Ingresa 125 € (primer año) en la cuenta bancaria del club indicando el concepto correcto.</div>
+          <div class="cuenta-card">
+            <div class="cuenta-label">Cuenta bancaria del club</div>
+            <div class="cuenta-iban">ES32 0081 1057 5300 0110 4916</div>
+            <div class="cuenta-banco">Banco Sabadell</div>
+            <div class="cuenta-concepto">Concepto: alta_socio + nombre y apellidos</div>
+          </div>
+        </div>
+      </div>
+      <div class="paso">
+        <div class="paso-num">4</div>
+        <div>
+          <div class="paso-titulo">Envía el justificante de pago</div>
+          <div class="paso-desc">Manda el comprobante del ingreso a <strong>administracion@atletismoapolana.com</strong> junto con la documentación cumplimentada. En breve recibirás confirmación y tu equipación.</div>
+        </div>
+      </div>
+    </div>
+    <p style="font-size:0.82rem;color:var(--texto-suave);margin-top:1rem;">También puedes entregar la documentación en papel solicitándola al correo anterior o dejándola en un sobre cerrado en el buzón del Estadio de Atletismo Joaquín Villar de Alicante.</p>
+  </div>
+
+  <hr class="sec-divider">
+
+  <!-- FAQ -->
+  <div class="sec">
+    <h2 class="sec-title">Preguntas frecuentes</h2>
+    <div style="margin-top:1rem;">
+      <div class="faq-item">
+        <div class="faq-pregunta" onclick="toggleFaq(this)">
+          ¿El alta como socio vale para cualquier sección del club?
+          <svg class="faq-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-respuesta">Sí, la cuota de socio te da acceso a todos los beneficios del club independientemente de la sección en la que practiques: atletismo, running, triatlón, natación o montaña.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-pregunta" onclick="toggleFaq(this)">
+          ¿Puedo hacerme socio si ya estoy inscrito en la escuela?
+          <svg class="faq-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-respuesta">Sí. La cuota de socio es independiente de la inscripción en la escuela. Ser socio te da beneficios adicionales como descuentos en actividades del club y acceso a las instalaciones.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-pregunta" onclick="toggleFaq(this)">
+          ¿Cuándo pago la cuota de socio cada año?
+          <svg class="faq-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-respuesta">La cuota se renueva anualmente al inicio de cada temporada (septiembre-octubre). El cargo se realiza por domiciliación bancaria según el formulario SEPA que habrás firmado al darte de alta.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-pregunta" onclick="toggleFaq(this)">
+          ¿Qué pasa si me doy de alta en junio por 65€?
+          <svg class="faq-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-respuesta">El alta de junio por 65€ incluye únicamente la camiseta del club. Es una opción especial para el mes de junio. Los beneficios completos de socio se activarán a partir del inicio de la nueva temporada en septiembre.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-pregunta" onclick="toggleFaq(this)">
+          ¿Hay obligaciones al hacerse socio?
+          <svg class="faq-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-respuesta">Sí, hay dos obligaciones: federarse si practicas montaña, triatlón (obligatorio) o atletismo y natación (muy recomendable). Y participar en la lotería de Navidad del club (5 décimos a 3€ comisión, o abonar 15€ al club en su defecto).</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="contacto-sec">
+  <div class="contacto-grid">
+    <a href="tel:+34625473830" class="contacto-item">
+      <div class="c-icon" style="background:rgba(255,255,255,0.1);">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.79 19.79 0 0 1 11.63 19 19.5 19.5 0 0 1 4.5 12 19.79 19.79 0 0 1 1.12 3.18 2 2 0 0 1 3.1 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6z"/></svg>
+      </div>
+      <div><span>Socios / Adultos</span><strong>625 47 38 30</strong></div>
+    </a>
+    <a href="https://wa.me/34625473830" target="_blank" class="contacto-item">
+      <div class="c-icon" style="background:#25d366;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+      </div>
+      <div><span>WhatsApp</span><strong>625 47 38 30</strong></div>
+    </a>
+    <a href="mailto:administracion@atletismoapolana.com" class="contacto-item">
+      <div class="c-icon" style="background:rgba(255,255,255,0.1);">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      </div>
+      <div><span>Email administración</span><strong>administracion@atletismoapolana.com</strong></div>
+    </a>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">
+      <img src="https://icaxokjsvhlreuwpyxeb.supabase.co/storage/v1/object/public/imagenes-club/logo.png" alt="Logo" onerror="this.style.display='none'">
+      <span>Club Apolana · Alicante</span>
+    </div>
+    <div class="footer-links">
+      <a href="index.html">Inicio</a>
+      <a href="inscripcion.html">Inscripción</a>
+      <a href="calendario.html">Calendario</a>
+      <a href="noticias.html">Noticias</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+function toggleFaq(el) {
+  const resp = el.nextElementSibling;
+  const arrow = el.querySelector('.faq-arrow');
+  resp.classList.toggle('open');
+  arrow.classList.toggle('open');
+}
+function toggleDropdown(id) {
+  document.querySelectorAll('.nav-dropdown-menu').forEach(m => { if(m.id !== id) m.classList.remove('visible'); });
+  const el = document.getElementById(id);
+  if(el) el.classList.toggle('visible');
+}
+function toggleMenu() { document.getElementById('nav-links').classList.toggle('open'); }
+document.addEventListener('click', e => {
+  if (!e.target.closest('.nav-dropdown')) document.querySelectorAll('.nav-dropdown-menu').forEach(m => m.classList.remove('visible'));
+});
+</script>
+</body>
+</html>
