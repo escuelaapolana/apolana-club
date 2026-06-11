@@ -108,6 +108,7 @@
           </svg>
         </button>
         <div class="nav-dropdown-menu" id="dd-secciones">
+          <a href="secciones.html" class="nav-dropdown-item" style="font-weight:600;border-bottom:1px solid #eee;">Ver todas las secciones</a>
           <a href="competicion.html" class="nav-dropdown-item">Atletismo pista</a>
           <a href="running.html" class="nav-dropdown-item">Running</a>
           <a href="triatlon.html" class="nav-dropdown-item">Triatlón</a>
@@ -231,8 +232,41 @@
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initSesionNav);
   } else {
-    // Pequeño delay por si el script de Supabase aún no ejecutó
     setTimeout(initSesionNav, 100);
+  }
+
+  // ── 7. Animaciones fade-in globales ─────────────────────
+  const animCSS = document.createElement('style');
+  animCSS.textContent = `
+    .fade-in {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  `;
+  document.head.appendChild(animCSS);
+
+  function initAnimaciones() {
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach((e, i) => {
+        if (e.isIntersecting) {
+          // Pequeño escalonado para grupos de elementos
+          setTimeout(() => e.target.classList.add('visible'), i * 60);
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAnimaciones);
+  } else {
+    initAnimaciones();
   }
 
 })();
