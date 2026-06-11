@@ -134,7 +134,6 @@
       <a href="calendario.html" class="nav-link" data-nav-page="calendario">Calendario</a>
       <a href="noticias.html" class="nav-link" data-nav-page="noticias">Noticias</a>
       <a href="socio.html" class="nav-link" data-nav-page="socio">Hazte socio</a>
-      <a href="#acceso" class="nav-link" id="nav-mi-perfil">Mi perfil</a>
       <a href="campus.html" class="nav-link" data-nav-page="campus">Campus</a>
       <a href="https://instagram.com/apolana.alicante" target="_blank" class="nav-link nav-ig">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -143,6 +142,7 @@
           <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
         </svg>
       </a>
+      <a href="#acceso" class="nav-link" id="nav-mi-perfil">Mi perfil</a>
       <a href="inscripcion.html" class="nav-btn">Inscribirse</a>
     </div>
     <button class="nav-hamburger" onclick="navToggleMenu()" aria-label="Menú">
