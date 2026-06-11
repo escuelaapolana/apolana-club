@@ -197,8 +197,42 @@
   });
 
   // ── 5. Compatibilidad: aliases para el código antiguo ────
-  // (las páginas que llamen a toggleDropdown/toggleMenu seguirán funcionando)
   window.toggleDropdown = window.navToggleDropdown;
   window.toggleMenu = window.navToggleMenu;
+
+  // ── 6. Sesión: actualizar "Mi perfil" con nombre y destino correcto ──
+  const DESTINOS = {
+    admin: 'admin.html', coordinador: 'admin.html',
+    entrenador: 'entrenador.html', atleta: 'atleta.html', padre: 'padre.html'
+  };
+
+  function initSesionNav() {
+    // Supabase debe estar cargado por la página host
+    if (typeof supabase === 'undefined') return;
+    const SB_URL = 'https://icaxokjsvhlreuwpyxeb.supabase.co';
+    const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImljYXhva2pzdmhscmV1d3B5eGViIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEwNzE2NTgsImV4cCI6MjA5NjY0NzY1OH0.xn1ZY-otHY0-l7g64uutSVjiU8DbkHxxZmTvu77IaHA';
+    const db = supabase.createClient(SB_URL, SB_KEY);
+
+    db.auth.getSession().then(({ data }) => {
+      if (!data.session) return;
+      db.from('perfiles').select('rol,nombre').eq('id', data.session.user.id).single()
+        .then(({ data: p }) => {
+          if (!p) return;
+          const btn = document.getElementById('nav-mi-perfil');
+          if (btn) {
+            btn.textContent = p.nombre?.split(' ')[0] || 'Mi perfil';
+            btn.href = DESTINOS[p.rol] || '#';
+          }
+        });
+    });
+  }
+
+  // Esperar a que Supabase esté disponible (lo carga la página host)
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initSesionNav);
+  } else {
+    // Pequeño delay por si el script de Supabase aún no ejecutó
+    setTimeout(initSesionNav, 100);
+  }
 
 })();
