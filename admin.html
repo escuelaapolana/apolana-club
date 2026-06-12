@@ -2188,9 +2188,9 @@ async function guardarContenido() {
     dirigido_a: document.getElementById('cs-dirigido').value.trim(),
     descripcion: document.getElementById('cs-desc').value.trim(),
     horarios: document.getElementById('cs-horarios').value.trim(),
-    precio_texto: document.getElementById('cs-precio').value.trim(),
+    precio: document.getElementById('cs-precio').value.trim(),
     grupos: document.getElementById('cs-grupos').value.trim(),
-    destacados: document.getElementById('cs-destacados').value.trim(),
+    puntos_destacados: document.getElementById('cs-destacados').value.trim(),
     updated_at: new Date().toISOString(),
   };
   const { error } = await db.from('contenido_secciones').upsert({ seccion: seccionContenidoActual, ...datos }, { onConflict: 'seccion' });
