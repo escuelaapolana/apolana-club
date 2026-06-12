@@ -1200,7 +1200,24 @@
 <script>
 const SB_URL = 'https://icaxokjsvhlreuwpyxeb.supabase.co';
 const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImljYXhva2pzdmhscmV1d3B5eGViIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEwNzE2NTgsImV4cCI6MjA5NjY0NzY1OH0.xn1ZY-otHY0-l7g64uutSVjiU8DbkHxxZmTvu77IaHA';
+const SB_SECRET = 'sb_secret_rxguO6-NNwgcU1Wl0abbRA_CxDWSI5Q';
 const db = supabase.createClient(SB_URL, SB_KEY);
+
+// Crear usuario via REST API (compatible con nuevo sistema de claves Supabase)
+async function crearUsuarioSupabase(email, password) {
+  const res = await fetch(SB_URL + '/auth/v1/admin/users', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'apikey': SB_SECRET,
+      'Authorization': 'Bearer ' + SB_SECRET,
+    },
+    body: JSON.stringify({ email, password, email_confirm: true })
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.message || data.error || 'Error al crear usuario');
+  return data;
+}
 
 let atletasData = [], gruposData = [], usuariosData = [];
 
@@ -2065,12 +2082,11 @@ async function crearUsuario() {
   const rol = document.getElementById('u-rol').value;
   const seccion = document.getElementById('u-seccion').value || null;
   if (!email || !pass || !nombre) { alert('Rellena todos los campos obligatorios'); return; }
-  // Crear usuario en Auth
-  const { data, error } = await db.auth.admin.createUser({ email, password: pass, email_confirm: true });
-  if (error) { alert('Error al crear usuario: ' + error.message); return; }
-  // Crear perfil
-  await db.from('perfiles').insert([{ id: data.user.id, nombre, apellidos, email, rol, seccion }]);
-  cerrarModal('modal-usuario'); cargarUsuarios();
+  try {
+    const user = await crearUsuarioSupabase(email, pass);
+    await db.from('perfiles').insert([{ id: user.id, nombre, apellidos, email, rol, seccion }]);
+    cerrarModal('modal-usuario'); cargarUsuarios();
+  } catch(e) { alert('Error al crear usuario: ' + e.message); }
 }
 
 async function toggleUsuario(id, activo) {
@@ -2104,9 +2120,10 @@ async function guardarUsuario() {
     const email = document.getElementById('u-email').value.trim();
     const pass = document.getElementById('u-pass').value;
     if (!email || !pass) { alert('Rellena email y contraseña'); return; }
-    const { data, error } = await db.auth.admin.createUser({ email, password: pass, email_confirm: true });
-    if (error) { alert('Error: ' + error.message); return; }
-    await db.from('perfiles').insert([{ id: data.user.id, nombre, apellidos, email, rol, seccion }]);
+    try {
+      const user = await crearUsuarioSupabase(email, pass);
+      await db.from('perfiles').insert([{ id: user.id, nombre, apellidos, email, rol, seccion }]);
+    } catch(e) { alert('Error: ' + e.message); return; }
   }
   cerrarModal('modal-usuario'); cargarUsuarios();
 }
