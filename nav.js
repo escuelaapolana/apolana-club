@@ -143,7 +143,7 @@
           <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
         </svg>
       </a>
-      <a href="#acceso" class="nav-link" id="nav-mi-perfil">Mi perfil</a>
+      <a href="login.html" class="nav-link" id="nav-mi-perfil">Mi perfil</a>
       <a href="inscripcion.html" class="nav-btn">Inscribirse</a>
     </div>
     <button class="nav-hamburger" onclick="navToggleMenu()" aria-label="Menú">
