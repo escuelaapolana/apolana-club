@@ -2056,27 +2056,7 @@ async function marcarPedidoListo(id) {
 // USUARIOS
 // =====================
 async function cargarUsuarios() {
-  const secret = getSecret();
-  let data = [];
-  if (secret) {
-    // Usar la secret key para saltarse RLS y ver todos los perfiles
-    const res = await fetch(SB_URL + '/rest/v1/perfiles?select=*&order=nombre', {
-      headers: {
-        'apikey': secret,
-        'Authorization': 'Bearer ' + secret,
-      }
-    });
-    if (res.ok) data = await res.json();
-    else {
-      // Si la clave falla, borrarla y usar la normal
-      localStorage.removeItem(SB_SECRET_LS);
-      const { data: d } = await db.from('perfiles').select('*').order('nombre');
-      data = d || [];
-    }
-  } else {
-    const { data: d } = await db.from('perfiles').select('*').order('nombre');
-    data = d || [];
-  }
+  const { data } = await db.from('perfiles').select('*').order('nombre');
   usuariosData = data || [];
   const tbody = document.getElementById('tbody-usuarios');
   tbody.innerHTML = data?.length ? data.map(u => `
