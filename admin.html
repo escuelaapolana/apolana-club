@@ -1200,22 +1200,36 @@
 <script>
 const SB_URL = 'https://icaxokjsvhlreuwpyxeb.supabase.co';
 const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImljYXhva2pzdmhscmV1d3B5eGViIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEwNzE2NTgsImV4cCI6MjA5NjY0NzY1OH0.xn1ZY-otHY0-l7g64uutSVjiU8DbkHxxZmTvu77IaHA';
-const SB_SECRET = 'sb_secret_rxguO6-NNwgcU1Wl0abbRA_CxDWSI5Q';
 const db = supabase.createClient(SB_URL, SB_KEY);
 
-// Crear usuario via REST API (compatible con nuevo sistema de claves Supabase)
+// La secret key se guarda en localStorage (no en el código fuente)
+const SB_SECRET_LS = 'apolana_sb_secret';
+function getSecret() {
+  let s = localStorage.getItem(SB_SECRET_LS);
+  if (!s) {
+    s = prompt('Introduce la clave de administración de Supabase\n(se guarda en este navegador y no se pide más):');
+    if (s) localStorage.setItem(SB_SECRET_LS, s.trim());
+  }
+  return s;
+}
+
 async function crearUsuarioSupabase(email, password) {
+  const secret = getSecret();
+  if (!secret) throw new Error('Clave no introducida');
   const res = await fetch(SB_URL + '/auth/v1/admin/users', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'apikey': SB_SECRET,
-      'Authorization': 'Bearer ' + SB_SECRET,
+      'apikey': secret,
+      'Authorization': 'Bearer ' + secret,
     },
     body: JSON.stringify({ email, password, email_confirm: true })
   });
   const data = await res.json();
-  if (!res.ok) throw new Error(data.message || data.error || 'Error al crear usuario');
+  if (!res.ok) {
+    if (res.status === 401) { localStorage.removeItem(SB_SECRET_LS); }
+    throw new Error(data.message || data.error || 'Error al crear usuario');
+  }
   return data;
 }
 
