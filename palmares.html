@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Palmarés | Club Atletismo Apolana Alicante</title>
+  <meta name="description" content="Palmarés del Club Atletismo Apolana: campeonatos, podios y logros deportivos del club en competiciones nacionales, autonómicas y provinciales.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://escuelaapolana.github.io/apolana-club/palmares.html">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Palmarés | Club Atletismo Apolana">
+  <meta property="og:description" content="Los logros deportivos del Club Atletismo Apolana de Alicante.">
+  <meta property="og:image" content="https://icaxokjsvhlreuwpyxeb.supabase.co/storage/v1/object/public/imagenes-club/hero.jpg">
+  <meta name="theme-color" content="#1a5f8f">
+  <link rel="icon" type="image/png" href="https://icaxokjsvhlreuwpyxeb.supabase.co/storage/v1/object/public/imagenes-club/logo.png">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="nav.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --azul: #1a5f8f; --azul-oscuro: #123f60; --azul-claro: #4a90c4; --azul-bg: #e8f2fa;
+      --gris: #f5f6f8; --gris-borde: #dde2e8; --texto: #1a1d23; --texto-suave: #6b7280;
+      --oro: #d4a017; --oro-bg: #fef9e7; --plata: #94a3b8; --plata-bg: #f1f5f9; --bronce: #b45309; --bronce-bg: #fff7ed;
+    }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: white; color: var(--texto); line-height: 1.65; position: relative; }
+    body::before { content:''; position:fixed; top:10%; right:-240px; width:620px; height:620px; border-radius:50%; background:radial-gradient(circle, rgba(212,160,23,0.07) 0%, transparent 70%); pointer-events:none; z-index:0; }
+    body::after { content:''; position:fixed; bottom:5%; left:-280px; width:680px; height:680px; border-radius:50%; background:radial-gradient(circle, rgba(26,95,143,0.06) 0%, transparent 70%); pointer-events:none; z-index:0; }
+    .page-header, .wrap, .cta, footer { position: relative; z-index: 1; }
+
+    .page-header { position: relative; background: var(--azul-oscuro); padding: 3rem 2rem 2.5rem; text-align: center; overflow: hidden; }
+    .page-header-bg { position: absolute; inset: 0; background-size: cover; background-position: center; opacity: 0.22; }
+    .ph-inner { position: relative; }
+    .ph-breadcrumb { color: rgba(255,255,255,0.55); font-size: 0.78rem; margin-bottom: 0.75rem; }
+    .ph-breadcrumb a { color: rgba(255,255,255,0.55); text-decoration: none; }
+    .ph-breadcrumb a:hover { color: white; }
+    .page-header h1 { color: white; font-size: 2.2rem; font-weight: 800; margin-bottom: 0.4rem; letter-spacing: -0.02em; }
+    .page-header p { color: rgba(255,255,255,0.72); font-size: 0.95rem; }
+
+    .wrap { max-width: 940px; margin: 0 auto; padding: 3rem 2rem 4rem; }
+
+    /* FILTROS */
+    .filtros { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 2rem; justify-content: center; }
+    .filtro { padding: 7px 16px; border-radius: 20px; border: 1.5px solid var(--gris-borde); background: white; font-size: 0.83rem; font-weight: 600; color: var(--texto-suave); cursor: pointer; font-family: inherit; transition: all 0.15s; }
+    .filtro:hover { border-color: var(--azul-claro); color: var(--azul); }
+    .filtro.activo { background: var(--azul); border-color: var(--azul); color: white; }
+
+    /* AÑO */
+    .anyo-bloque { margin-bottom: 2.5rem; }
+    .anyo-titulo { font-size: 1.5rem; font-weight: 800; color: var(--azul); margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid var(--azul-bg); display: flex; align-items: baseline; gap: 0.75rem; }
+    .anyo-count { font-size: 0.78rem; font-weight: 600; color: var(--texto-suave); }
+
+    /* LOGRO */
+    .logros { display: flex; flex-direction: column; gap: 0.75rem; }
+    .logro { display: flex; gap: 1rem; padding: 1.1rem 1.25rem; background: white; border: 1px solid var(--gris-borde); border-radius: 12px; align-items: flex-start; transition: all 0.15s; }
+    .logro:hover { border-color: var(--azul-claro); box-shadow: 0 3px 14px rgba(26,95,143,0.07); }
+    .medalla { width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; font-weight: 800; flex-shrink: 0; }
+    .m-oro { background: var(--oro-bg); color: var(--oro); border: 2px solid var(--oro); }
+    .m-plata { background: var(--plata-bg); color: var(--plata); border: 2px solid var(--plata); }
+    .m-bronce { background: var(--bronce-bg); color: var(--bronce); border: 2px solid var(--bronce); }
+    .m-otro { background: var(--azul-bg); color: var(--azul); border: 2px solid var(--azul-claro); }
+    .logro-info { flex: 1; min-width: 0; }
+    .logro-titulo { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.2rem; line-height: 1.35; }
+    .logro-meta { font-size: 0.82rem; color: var(--texto-suave); }
+    .logro-atleta { font-size: 0.83rem; color: var(--azul); font-weight: 600; margin-top: 0.25rem; }
+    .logro-badge { font-size: 0.66rem; font-weight: 700; padding: 3px 9px; border-radius: 12px; text-transform: uppercase; letter-spacing: 0.05em; background: var(--gris); color: var(--texto-suave); white-space: nowrap; align-self: flex-start; }
+
+    .vacio { text-align: center; padding: 3.5rem 2rem; }
+    .vacio-icono { font-size: 2.5rem; margin-bottom: 1rem; opacity: 0.4; }
+    .vacio h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .vacio p { font-size: 0.88rem; color: var(--texto-suave); max-width: 420px; margin: 0 auto; }
+
+    .cta { background: var(--azul-oscuro); padding: 3rem 2rem; text-align: center; }
+    .cta h2 { color: white; font-size: 1.4rem; font-weight: 800; margin-bottom: 0.5rem; }
+    .cta p { color: rgba(255,255,255,0.7); font-size: 0.9rem; margin-bottom: 1.5rem; }
+    .btn-w { background: white; color: var(--azul); padding: 11px 26px; border-radius: 9px; text-decoration: none; font-weight: 700; font-size: 0.9rem; }
+
+    footer { background: #0f172a; padding: 2rem; }
+    .footer-inner { max-width: 1040px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+    .footer-logo { display: flex; align-items: center; gap: 10px; }
+    .footer-logo img { width: 32px; height: 32px; border-radius: 50%; }
+    .footer-logo span { color: white; font-size: 0.85rem; font-weight: 600; }
+    .footer-links { display: flex; gap: 1.25rem; flex-wrap: wrap; }
+    .footer-links a { color: rgba(255,255,255,0.5); font-size: 0.82rem; text-decoration: none; }
+    .footer-links a:hover { color: white; }
+
+    @media (max-width: 768px) {
+      .wrap { padding: 2rem 1.25rem 3rem; }
+      .page-header h1 { font-size: 1.65rem; }
+      .logro { flex-wrap: wrap; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="page-header-bg" style="background-image:url('https://icaxokjsvhlreuwpyxeb.supabase.co/storage/v1/object/public/imagenes-club/hero.jpg');"></div>
+  <div class="ph-inner">
+    <div class="ph-breadcrumb"><a href="index.html">Club Apolana</a> / Palmarés</div>
+    <h1>Palmarés del club</h1>
+    <p>Campeonatos, podios y logros de nuestros atletas</p>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="filtros" id="filtros"></div>
+  <div id="contenido">
+    <div class="vacio">
+      <div class="vacio-icono">🏆</div>
+      <h3>Cargando palmarés...</h3>
+    </div>
+  </div>
+</div>
+
+<div class="cta">
+  <h2>¿Quieres formar parte del próximo capítulo?</h2>
+  <p>Entrena con nosotros y escribe tu nombre en esta lista</p>
+  <a href="secciones.html" class="btn-w">Ver secciones</a>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">
+      <img src="https://icaxokjsvhlreuwpyxeb.supabase.co/storage/v1/object/public/imagenes-club/logo.png" alt="Club Apolana" onerror="this.style.display='none'">
+      <span>Club Atletismo Apolana · Alicante</span>
+    </div>
+    <div class="footer-links">
+      <a href="club.html">El club</a>
+      <a href="palmares.html">Palmarés</a>
+      <a href="records.html">Récords</a>
+      <a href="contacto.html">Contacto</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+const SB_URL = 'https://icaxokjsvhlreuwpyxeb.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImljYXhva2pzdmhscmV1d3B5eGViIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEwNzE2NTgsImV4cCI6MjA5NjY0NzY1OH0.xn1ZY-otHY0-l7g64uutSVjiU8DbkHxxZmTvu77IaHA';
+const db = supabase.createClient(SB_URL, SB_KEY);
+
+let datos = [], filtroActivo = 'todos';
+
+const MEDALLA = { 1: ['m-oro','1º'], 2: ['m-plata','2º'], 3: ['m-bronce','3º'] };
+
+async function cargar() {
+  const { data } = await db.from('palmares').select('*').order('anyo', { ascending: false }).order('posicion');
+  datos = data || [];
+  if (!datos.length) { vacio(); return; }
+  renderFiltros();
+  render();
+}
+
+function vacio() {
+  document.getElementById('contenido').innerHTML = `
+    <div class="vacio">
+      <div class="vacio-icono">🏆</div>
+      <h3>El palmarés se está preparando</h3>
+      <p>Pronto recogeremos aquí todos los campeonatos y podios conseguidos por los atletas del club a lo largo de su historia.</p>
+    </div>`;
+  document.getElementById('filtros').style.display = 'none';
+}
+
+function renderFiltros() {
+  const ambitos = [...new Set(datos.map(d => d.ambito).filter(Boolean))];
+  document.getElementById('filtros').innerHTML =
+    `<button class="filtro activo" onclick="filtrar('todos',this)">Todos</button>` +
+    ambitos.map(a => `<button class="filtro" onclick="filtrar('${a}',this)">${a}</button>`).join('');
+}
+
+function filtrar(a, btn) {
+  filtroActivo = a;
+  document.querySelectorAll('.filtro').forEach(f => f.classList.remove('activo'));
+  btn.classList.add('activo');
+  render();
+}
+
+function render() {
+  const lista = filtroActivo === 'todos' ? datos : datos.filter(d => d.ambito === filtroActivo);
+  const porAnyo = {};
+  lista.forEach(d => { (porAnyo[d.anyo] = porAnyo[d.anyo] || []).push(d); });
+
+  const anyos = Object.keys(porAnyo).sort((a,b) => b - a);
+  document.getElementById('contenido').innerHTML = anyos.map(anyo => {
+    const items = porAnyo[anyo];
+    return `<div class="anyo-bloque">
+      <div class="anyo-titulo">${anyo} <span class="anyo-count">${items.length} ${items.length === 1 ? 'logro' : 'logros'}</span></div>
+      <div class="logros">
+        ${items.map(l => {
+          const [cls, txt] = MEDALLA[l.posicion] || ['m-otro', l.posicion || '—'];
+          return `<div class="logro">
+            <div class="medalla ${cls}">${txt}</div>
+            <div class="logro-info">
+              <div class="logro-titulo">${l.competicion || ''}</div>
+              <div class="logro-meta">${[l.prueba, l.categoria, l.sede].filter(Boolean).join(' · ')}</div>
+              ${l.atleta ? `<div class="logro-atleta">${l.atleta}</div>` : ''}
+            </div>
+            ${l.ambito ? `<span class="logro-badge">${l.ambito}</span>` : ''}
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+cargar();
+</script>
+
+</body>
+</html>

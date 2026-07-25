@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>El Club | Historia del Club Atletismo Apolana desde 1988</title>
+  <meta name="description" content="Historia del Club Atletismo Apolana de Alicante. Fundado en 1988 por un grupo de amigos, hoy somos más de 420 personas en atletismo, running, triatlón, natación y montaña.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://escuelaapolana.github.io/apolana-club/club.html">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="El Club | Club Atletismo Apolana">
+  <meta property="og:description" content="Más de 35 años haciendo atletismo en Alicante.">
+  <meta property="og:image" content="https://icaxokjsvhlreuwpyxeb.supabase.co/storage/v1/object/public/imagenes-club/hero.jpg">
+  <meta name="theme-color" content="#1a5f8f">
+  <link rel="icon" type="image/png" href="https://icaxokjsvhlreuwpyxeb.supabase.co/storage/v1/object/public/imagenes-club/logo.png">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="nav.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --azul: #1a5f8f; --azul-oscuro: #123f60; --azul-claro: #4a90c4; --azul-bg: #e8f2fa;
+      --gris: #f5f6f8; --gris-borde: #dde2e8; --texto: #1a1d23; --texto-suave: #6b7280;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: white; color: var(--texto); line-height: 1.7; position: relative; }
+    body::before { content:''; position:fixed; top:10%; right:-240px; width:620px; height:620px; border-radius:50%; background:radial-gradient(circle, rgba(74,144,196,0.08) 0%, transparent 70%); pointer-events:none; z-index:0; }
+    body::after { content:''; position:fixed; bottom:5%; left:-280px; width:680px; height:680px; border-radius:50%; background:radial-gradient(circle, rgba(26,95,143,0.06) 0%, transparent 70%); pointer-events:none; z-index:0; }
+    .page-header, .wrap, .cta, footer { position: relative; z-index: 1; }
+
+    .page-header { position: relative; height: 340px; background: var(--azul-oscuro); display: flex; align-items: flex-end; overflow: hidden; }
+    .page-header-bg { position: absolute; inset: 0; background-size: cover; background-position: center; opacity: 0.3; }
+    .ph-inner { position: relative; max-width: 1040px; width: 100%; margin: 0 auto; padding: 2.5rem 2rem; }
+    .ph-breadcrumb { color: rgba(255,255,255,0.55); font-size: 0.78rem; margin-bottom: 0.6rem; }
+    .ph-breadcrumb a { color: rgba(255,255,255,0.55); text-decoration: none; }
+    .ph-breadcrumb a:hover { color: white; }
+    .page-header h1 { color: white; font-size: 2.5rem; font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; margin-bottom: 0.5rem; }
+    .page-header p { color: rgba(255,255,255,0.75); font-size: 1rem; max-width: 540px; }
+
+    /* NÚMEROS */
+    .numeros { background: var(--azul-oscuro); border-top: 1px solid rgba(255,255,255,0.1); }
+    .numeros-inner { max-width: 1040px; margin: 0 auto; padding: 1.75rem 2rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1.5rem; }
+    .numero { text-align: center; }
+    .numero-val { font-size: 1.9rem; font-weight: 800; color: white; line-height: 1; }
+    .numero-lbl { font-size: 0.72rem; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 0.3rem; }
+
+    .wrap { max-width: 900px; margin: 0 auto; padding: 3.5rem 2rem 4rem; }
+    .sec { margin-bottom: 3.5rem; }
+    .sec-label { font-size: 0.68rem; font-weight: 700; color: var(--azul-claro); text-transform: uppercase; letter-spacing: 0.13em; margin-bottom: 0.4rem; }
+    .sec h2 { font-size: 1.6rem; font-weight: 800; margin-bottom: 1rem; letter-spacing: -0.02em; }
+    .sec p { font-size: 0.98rem; color: var(--texto-suave); margin-bottom: 1rem; }
+    .sec p strong { color: var(--texto); font-weight: 600; }
+
+    .destacado { font-size: 1.15rem !important; color: var(--texto) !important; font-weight: 500; line-height: 1.6; border-left: 4px solid var(--azul-claro); padding-left: 1.25rem; margin: 1.5rem 0 !important; }
+
+    /* BANDA */
+    .banda { background: linear-gradient(180deg,#f8fafc 0%,#f1f5f9 100%); margin-left: calc(-50vw + 50%); margin-right: calc(-50vw + 50%); padding: 3rem calc(50vw - 50% + 2rem); border-top: 1px solid var(--gris-borde); border-bottom: 1px solid var(--gris-borde); }
+
+    /* TIMELINE */
+    .timeline { position: relative; padding-left: 2rem; margin: 1.5rem 0; }
+    .timeline::before { content: ''; position: absolute; left: 7px; top: 8px; bottom: 8px; width: 2px; background: linear-gradient(180deg, var(--azul-claro), var(--gris-borde)); }
+    .hito { position: relative; padding-bottom: 1.75rem; }
+    .hito:last-child { padding-bottom: 0; }
+    .hito::before { content: ''; position: absolute; left: -2rem; top: 5px; width: 16px; height: 16px; border-radius: 50%; background: white; border: 3px solid var(--azul-claro); }
+    .hito-anyo { font-size: 0.72rem; font-weight: 800; color: var(--azul); letter-spacing: 0.08em; margin-bottom: 0.2rem; }
+    .hito-titulo { font-size: 1rem; font-weight: 700; margin-bottom: 0.3rem; }
+    .hito-texto { font-size: 0.9rem; color: var(--texto-suave); }
+
+    /* FUNDADORES */
+    .fundadores { background: white; border: 1px solid var(--gris-borde); border-radius: 14px; padding: 1.5rem; margin: 1.5rem 0; }
+    .fundadores-titulo { font-size: 0.7rem; font-weight: 700; color: var(--texto-suave); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.875rem; }
+    .fundadores-lista { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 0.5rem; }
+    .fundador { font-size: 0.88rem; color: var(--texto); padding: 0.4rem 0 0.4rem 1.1rem; position: relative; }
+    .fundador::before { content: ''; position: absolute; left: 0; top: 14px; width: 5px; height: 5px; border-radius: 50%; background: var(--azul-claro); }
+
+    /* CITA */
+    .cita { background: var(--azul-oscuro); border-radius: 16px; padding: 2rem; margin: 2rem 0; position: relative; }
+    .cita-texto { color: rgba(255,255,255,0.92); font-size: 1.02rem; line-height: 1.75; font-style: italic; margin-bottom: 1rem; }
+    .cita-autor { color: rgba(255,255,255,0.55); font-size: 0.83rem; }
+    .cita-autor strong { color: white; display: block; font-style: normal; }
+    .cita::before { content: '"'; position: absolute; top: 0.5rem; right: 1.5rem; font-size: 5rem; color: rgba(255,255,255,0.08); font-family: Georgia, serif; line-height: 1; }
+
+    /* DATOS LEGALES */
+    .datos-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.875rem; margin-top: 1.25rem; }
+    .dato { background: white; border: 1px solid var(--gris-borde); border-radius: 10px; padding: 0.9rem 1.1rem; }
+    .dato-lbl { font-size: 0.68rem; color: var(--texto-suave); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 3px; }
+    .dato-val { font-size: 0.9rem; font-weight: 700; }
+
+    /* GALERÍA HISTÓRICA */
+    .galeria-hist { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 0.6rem; margin-top: 1.25rem; }
+    .gh-item { aspect-ratio: 4/3; border-radius: 10px; overflow: hidden; background: linear-gradient(135deg, var(--azul-oscuro), var(--azul)); position: relative; }
+    .gh-item img { width: 100%; height: 100%; object-fit: cover; }
+    .gh-vacio { display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.25); }
+
+    .cta { background: var(--azul-oscuro); padding: 3rem 2rem; text-align: center; }
+    .cta h2 { color: white; font-size: 1.5rem; font-weight: 800; margin-bottom: 0.5rem; }
+    .cta p { color: rgba(255,255,255,0.7); font-size: 0.92rem; margin-bottom: 1.5rem; }
+    .cta-btns { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; }
+    .btn-w { background: white; color: var(--azul); padding: 11px 26px; border-radius: 9px; text-decoration: none; font-weight: 700; font-size: 0.9rem; }
+    .btn-o { background: transparent; color: white; border: 1.5px solid rgba(255,255,255,0.4); padding: 11px 26px; border-radius: 9px; text-decoration: none; font-weight: 600; font-size: 0.9rem; }
+
+    footer { background: #0f172a; padding: 2rem; }
+    .footer-inner { max-width: 1040px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+    .footer-logo { display: flex; align-items: center; gap: 10px; }
+    .footer-logo img { width: 32px; height: 32px; border-radius: 50%; }
+    .footer-logo span { color: white; font-size: 0.85rem; font-weight: 600; }
+    .footer-links { display: flex; gap: 1.25rem; flex-wrap: wrap; }
+    .footer-links a { color: rgba(255,255,255,0.5); font-size: 0.82rem; text-decoration: none; }
+    .footer-links a:hover { color: white; }
+
+    @media (max-width: 768px) {
+      .page-header { height: 260px; }
+      .page-header h1 { font-size: 1.75rem; }
+      .wrap { padding: 2.5rem 1.25rem 3rem; }
+      .banda { padding: 2.25rem calc(50vw - 50% + 1.25rem); }
+      .numeros-inner { padding: 1.25rem; gap: 1rem; }
+      .numero-val { font-size: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="page-header-bg" style="background-image:url('https://icaxokjsvhlreuwpyxeb.supabase.co/storage/v1/object/public/imagenes-club/hero.jpg');"></div>
+  <div class="ph-inner">
+    <div class="ph-breadcrumb"><a href="index.html">Club Apolana</a> / El club</div>
+    <h1>Más de 35 años<br>corriendo juntos</h1>
+    <p>Lo que empezó como un grupo de amigos que se juntaba en el hipódromo es hoy uno de los clubes de referencia de Alicante</p>
+  </div>
+</div>
+
+<div class="numeros">
+  <div class="numeros-inner">
+    <div class="numero"><div class="numero-val">1988</div><div class="numero-lbl">Año de fundación</div></div>
+    <div class="numero"><div class="numero-val">420+</div><div class="numero-lbl">Deportistas</div></div>
+    <div class="numero"><div class="numero-val">5</div><div class="numero-lbl">Secciones</div></div>
+    <div class="numero"><div class="numero-val">15</div><div class="numero-lbl">Entrenadores</div></div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- QUIÉNES SOMOS -->
+  <div class="sec">
+    <div class="sec-label">Quiénes somos</div>
+    <h2>Un club tradicional, abierto a todos</h2>
+    <p class="destacado">El Club Atletismo Apol·Ana es un club orientado al entrenamiento federado y popular, la competición y el ocio del atletismo, el triatlón y las carreras de montaña.</p>
+    <p>Nos alegramos de contar entre nuestros grupos con atletas federados, pero también de tener grupos de aficionados —jóvenes y adultos— que se juntan simplemente para disfrutar de este deporte.</p>
+    <p>No hacemos diferencias entre nuestros socios. Quien lo desee puede convertirse en miembro del club. Nuestros entrenadores se adaptan sin problemas a cada persona, están cualificados y asesoran con gusto sobre cuál es el plan de entrenamiento más adecuado para lo que cada uno pretenda hacer.</p>
+    <p>Siempre nos entusiasma recibir nuevos miembros interesados en participar en los acontecimientos del club, organizar actividades o excursiones, y que se sientan bien en la comunidad.</p>
+  </div>
+
+</div>
+
+<div class="banda">
+  <div style="max-width:900px;margin:0 auto;">
+    <div class="sec" style="margin-bottom:0;">
+      <div class="sec-label">Nuestra historia</div>
+      <h2>Cómo empezó todo</h2>
+
+      <div class="timeline">
+        <div class="hito">
+          <div class="hito-anyo">MEDIADOS DE LOS 80</div>
+          <div class="hito-titulo">Un grupo de locos en el hipódromo</div>
+          <div class="hito-texto">Ponerse unas zapatillas, un pantalón y una camiseta y salir a correr era entonces una cosa de locos. Influidos por el <em>jogging</em> o <em>footing</em> que empezaba a hacer furor fuera de España, algunos alicantinos se juntaban en el hipódromo a correr y, por qué no decirlo, a sentirse cada día mejor.</div>
+        </div>
+        <div class="hito">
+          <div class="hito-anyo">1988</div>
+          <div class="hito-titulo">Nace el club</div>
+          <div class="hito-texto">De verse casi a diario sin conocerse, se formó un grupo de amigos que se picaban en los entrenamientos y se animaban unos a otros. El <strong>26 de enero de 1988</strong> ese grupo funda un club de atletismo en Alicante que, gracias al patrocinio conseguido, se denominó <strong>Club Atletismo Publicidad Benacantil</strong>.</div>
+        </div>
+        <div class="hito">
+          <div class="hito-anyo">1988</div>
+          <div class="hito-titulo">Debut con un toro miura</div>
+          <div class="hito-texto">La primera carrera que se disputó con la camiseta azul y blanca fueron los <strong>100 km de Santander</strong>, en cuya edición de 1988 se disputaba el Campeonato del Mundo de la distancia. El club iniciaba su andadura por todo lo alto, pero salieron bien parados los que fueron a disputarla: Javier Cano Cáceres, Jaime Agulló Sánchez, Ramón Gil López y Roberto García Martí.</div>
+        </div>
+        <div class="hito">
+          <div class="hito-anyo">1990</div>
+          <div class="hito-titulo">Llega el nombre Apol·Ana</div>
+          <div class="hito-texto">El club adopta la denominación <strong>APOL·ANA</strong> gracias a un nuevo patrocinador, una fábrica de lámparas con sede en Alicante. El acuerdo fue posible gracias a uno de los atletas fundadores, Francisco González-Tejero Expósito, que trabajaba en dicha empresa.</div>
+        </div>
+        <div class="hito">
+          <div class="hito-anyo">AÑOS 90 Y 2000</div>
+          <div class="hito-titulo">La subida al Balcón de Alicante</div>
+          <div class="hito-texto">A nivel interno se celebraba anualmente la carrera <strong>Subida al Balcón de Alicante</strong>, en la sierra del Maigmó. En ella participaban todos los componentes del club así como antiguos socios, y después se degustaba una buena comida en armonía y buena compañía.</div>
+        </div>
+        <div class="hito">
+          <div class="hito-anyo">2018</div>
+          <div class="hito-titulo">Subcampeones de España Sub-23</div>
+          <div class="hito-texto">El equipo consigue el subcampeonato de España Sub-23 en el Campeonato de Campo a Través, una de las mayores alegrías de la historia del club en la disciplina que más satisfacciones nos ha dado.</div>
+        </div>
+        <div class="hito">
+          <div class="hito-anyo">HOY</div>
+          <div class="hito-titulo">Cinco secciones, más de 420 personas</div>
+          <div class="hito-texto">Escuela de atletismo y natación, atletismo de pista, running, triatlón, natación de adultos y montaña. El espíritu sigue siendo el mismo que en 1988: un grupo de amigos al que le gusta correr.</div>
+        </div>
+      </div>
+
+      <div class="fundadores">
+        <div class="fundadores-titulo">Socios fundadores · 26 de enero de 1988</div>
+        <div class="fundadores-lista">
+          <div class="fundador">Juan Ramón Garrigós Gosálvez</div>
+          <div class="fundador">Jaime Vicente Agulló Sánchez</div>
+          <div class="fundador">Julián Sánchez Chico</div>
+          <div class="fundador">Rafael Manuel Expósito Méndez</div>
+          <div class="fundador">Jesús Carlos Álvarez González</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- CITA -->
+  <div class="cita">
+    <div class="cita-texto">Actualmente, y tras haber cumplido más de treinta años de existencia, el espíritu del club sigue persistiendo como un grupo de amigos al que le gusta correr.</div>
+    <div class="cita-autor">
+      <strong>Jaime Vicente Agulló Sánchez</strong>
+      Socio fundador · Crónica del club
+    </div>
+  </div>
+
+  <!-- GALERÍA HISTÓRICA -->
+  <div class="sec">
+    <div class="sec-label">Archivo</div>
+    <h2>Imágenes de nuestra historia</h2>
+    <p>Fotografías de equipos, competiciones y momentos del club a lo largo de las décadas.</p>
+    <div class="galeria-hist" id="galeria-hist">
+      <div class="gh-item gh-vacio"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+      <div class="gh-item gh-vacio"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+      <div class="gh-item gh-vacio"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+      <div class="gh-item gh-vacio"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+      <div class="gh-item gh-vacio"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+      <div class="gh-item gh-vacio"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+    </div>
+  </div>
+
+  <!-- DATOS -->
+  <div class="sec" style="margin-bottom:0;">
+    <div class="sec-label">Datos de la entidad</div>
+    <h2>Información oficial</h2>
+    <div class="datos-grid">
+      <div class="dato"><div class="dato-lbl">Denominación</div><div class="dato-val">Club Atletismo Apolana</div></div>
+      <div class="dato"><div class="dato-lbl">CIF</div><div class="dato-val">G-03845500</div></div>
+      <div class="dato"><div class="dato-lbl">Registro de Entidades Deportivas</div><div class="dato-val">Nº 1443</div></div>
+      <div class="dato"><div class="dato-lbl">Fundación</div><div class="dato-val">26 de enero de 1988</div></div>
+      <div class="dato"><div class="dato-lbl">Naturaleza</div><div class="dato-val">Entidad sin ánimo de lucro</div></div>
+      <div class="dato"><div class="dato-lbl">Sede</div><div class="dato-val">Estadio Joaquín Villar, Alicante</div></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="cta">
+  <h2>¿Quieres formar parte de esta historia?</h2>
+  <p>Llevamos más de 35 años sumando gente. Te esperamos.</p>
+  <div class="cta-btns">
+    <a href="socio.html" class="btn-w">Hazte socio</a>
+    <a href="secciones.html" class="btn-o">Ver secciones</a>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">
+      <img src="https://icaxokjsvhlreuwpyxeb.supabase.co/storage/v1/object/public/imagenes-club/logo.png" alt="Club Apolana" onerror="this.style.display='none'">
+      <span>Club Atletismo Apolana · Alicante</span>
+    </div>
+    <div class="footer-links">
+      <a href="club.html">El club</a>
+      <a href="junta.html">Junta</a>
+      <a href="normativa.html">Normativa</a>
+      <a href="contacto.html">Contacto</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Galería histórica desde Supabase
+(function() {
+  const IMG = 'https://icaxokjsvhlreuwpyxeb.supabase.co/storage/v1/object/public/imagenes-club/';
+  const grid = document.getElementById('galeria-hist');
+  const encontradas = [];
+  let pendientes = 12;
+  for (let n = 1; n <= 12; n++) {
+    const url = IMG + 'historia-' + n + '.jpg';
+    const img = new Image();
+    img.onload = () => { encontradas.push({n, url}); if (--pendientes === 0) pintar(); };
+    img.onerror = () => { if (--pendientes === 0) pintar(); };
+    img.src = url;
+  }
+  function pintar() {
+    if (!encontradas.length) return;
+    grid.innerHTML = encontradas.sort((a,b) => a.n - b.n)
+      .map(f => `<div class="gh-item"><img src="${f.url}" alt="Historia del club ${f.n}" loading="lazy"></div>`).join('');
+  }
+})();
+</script>
+
+</body>
+</html>

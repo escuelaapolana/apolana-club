@@ -101,6 +101,19 @@
     </a>
     <div class="nav-links" id="nav-links">
       <div class="nav-dropdown">
+        <button class="nav-link nav-dropdown-btn" onclick="navToggleDropdown('dd-nosotros')">
+          Nosotros
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="nav-dropdown-menu" id="dd-nosotros">
+          <a href="club.html" class="nav-dropdown-item">El club</a>
+          <a href="junta.html" class="nav-dropdown-item">Junta directiva</a>
+          <a href="normativa.html" class="nav-dropdown-item">Normativa</a>
+          <a href="palmares.html" class="nav-dropdown-item">Palmarés</a>
+          <a href="records.html" class="nav-dropdown-item">Récords del club</a>
+        </div>
+      </div>
+      <div class="nav-dropdown">
         <button class="nav-link nav-dropdown-btn" onclick="navToggleDropdown('dd-secciones')">
           Secciones
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
@@ -135,8 +148,6 @@
       <a href="calendario.html" class="nav-link" data-nav-page="calendario">Calendario</a>
       <a href="noticias.html" class="nav-link" data-nav-page="noticias">Noticias</a>
       <a href="socio.html" class="nav-link" data-nav-page="socio">Hazte socio</a>
-      <a href="junta.html" class="nav-link" data-nav-page="junta">Junta</a>
-      <a href="normativa.html" class="nav-link" data-nav-page="normativa">Normativa</a>
       <a href="contacto.html" class="nav-link" data-nav-page="contacto">Contacto</a>
       <a href="https://instagram.com/apolana.alicante" target="_blank" class="nav-link nav-ig">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
