@@ -110,7 +110,54 @@
     .footer-logo span { color: white; font-weight: 600; font-size: 0.85rem; }
     .footer-links a { color: rgba(255,255,255,0.45); text-decoration: none; font-size: 0.78rem; margin-left: 1.25rem; }
     .footer-links a:hover { color: white; }
-  </style>
+  
+    /* ═══ RITMO VISUAL: bandas alternas ═══ */
+    .wrap > .sec.banda {
+      background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+      margin-left: calc(-50vw + 50%);
+      margin-right: calc(-50vw + 50%);
+      padding: 3rem calc(50vw - 50% + 2rem);
+      position: relative;
+    }
+    .wrap > .sec.banda::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gris-borde) 20%, var(--gris-borde) 80%, transparent);
+    }
+    .wrap > .sec.banda::after {
+      content: '';
+      position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gris-borde) 20%, var(--gris-borde) 80%, transparent);
+    }
+    /* Las tarjetas dentro de banda pasan a blanco para destacar */
+    .sec.banda .incluye-item,
+    .sec.banda .horario-card { background: white; }
+    /* Ocultar separadores donde hay banda */
+    .sec.banda + .sec-divider,
+    .sec-divider + .sec.banda { display: none; }
+    .sec-divider:has(+ .sec.banda) { display: none; }
+
+    /* Formas decorativas de fondo */
+    body::before {
+      content: '';
+      position: fixed; top: -180px; right: -180px;
+      width: 520px; height: 520px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(74,144,196,0.07) 0%, transparent 68%);
+      pointer-events: none; z-index: 0;
+    }
+    body::after {
+      content: '';
+      position: fixed; bottom: -220px; left: -220px;
+      width: 600px; height: 600px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(26,95,143,0.05) 0%, transparent 68%);
+      pointer-events: none; z-index: 0;
+    }
+    .wrap, nav, .cta, footer, .hero, .page-header { position: relative; z-index: 1; }
+
+    @media (max-width: 768px) {
+      .wrap > .sec.banda { padding: 2.25rem calc(50vw - 50% + 1.25rem); }
+    }
+</style>
 <script src="nav.js"></script>
 </head>
 <body>
@@ -234,6 +281,21 @@ const heroImg = new Image();
 heroImg.onload = () => { document.getElementById('hero-bg').style.backgroundImage = 'url(' + IMG + 'seccion-triatlon.jpg)'; };
 heroImg.src = IMG + 'seccion-triatlon.jpg';
 
+
+// Ritmo visual: alternar fondos de sección
+(function() {
+  document.querySelectorAll('.wrap').forEach(w => {
+    const secs = Array.from(w.children).filter(el => el.classList.contains('sec'));
+    secs.forEach((s, i) => { if (i % 2 === 1) s.classList.add('banda'); });
+  });
+  // Ocultar los <hr> que quedan pegados a una banda
+  document.querySelectorAll('.sec-divider').forEach(hr => {
+    const prev = hr.previousElementSibling, next = hr.nextElementSibling;
+    if ((prev && prev.classList.contains('banda')) || (next && next.classList.contains('banda'))) {
+      hr.style.display = 'none';
+    }
+  });
+})();
 </script>
 </body>
 </html>
