@@ -286,6 +286,16 @@
       Tienda
     </button>
 
+    <div class="sb-section">Historia del club</div>
+    <button class="sb-item" onclick="showPanel('palmares')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+      Palmarés
+    </button>
+    <button class="sb-item" onclick="showPanel('records')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      Récords
+    </button>
+
     <div class="sb-section">Sistema</div>
     <button class="sb-item" onclick="showPanel('usuarios')">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
@@ -947,6 +957,41 @@
         </div>
       </div>
 
+
+      <!-- PALMARÉS -->
+      <div class="panel" id="panel-palmares">
+        <div class="tabla-wrap">
+          <div class="tabla-header">
+            <h3>Palmarés del club</h3>
+            <button class="btn btn-p" onclick="abrirModalPalmares()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Añadir logro
+            </button>
+          </div>
+          <table>
+            <thead><tr><th>Año</th><th>Competición</th><th>Prueba</th><th>Cat.</th><th>Pos.</th><th>Atleta</th><th>Ámbito</th><th></th></tr></thead>
+            <tbody id="tabla-palmares"><tr><td colspan="8" style="text-align:center;padding:2rem;color:var(--texto-suave);">Cargando...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- RÉCORDS -->
+      <div class="panel" id="panel-records">
+        <div class="tabla-wrap">
+          <div class="tabla-header">
+            <h3>Récords del club</h3>
+            <button class="btn btn-p" onclick="abrirModalRecord()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Añadir récord
+            </button>
+          </div>
+          <table>
+            <thead><tr><th>Categoría</th><th>Prueba</th><th>Marca</th><th>Atleta</th><th>Año</th><th>Sede</th><th></th></tr></thead>
+            <tbody id="tabla-records"><tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--texto-suave);">Cargando...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
       <!-- PANEL USUARIOS -->
       <div class="panel" id="panel-usuarios">
         <div class="table-wrap">
@@ -1276,6 +1321,87 @@
   </div>
 </div>
 
+
+<!-- MODAL PALMARÉS -->
+<div class="modal-overlay" id="modal-palmares">
+  <div class="modal" style="max-width:560px;">
+    <div class="modal-header">
+      <h3 id="modal-palmares-titulo">Añadir logro</h3>
+      <button class="modal-close" onclick="cerrarModal('modal-palmares')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="mf"><label>Año *</label><input type="number" id="pm-anyo" placeholder="2018" min="1988" max="2100"></div>
+        <div class="mf"><label>Posición</label>
+          <select id="pm-posicion">
+            <option value="1">1º — Campeón</option>
+            <option value="2">2º — Subcampeón</option>
+            <option value="3">3º — Tercero</option>
+            <option value="4">4º</option>
+            <option value="5">5º</option>
+            <option value="6">6º</option>
+            <option value="">Otro / sin posición</option>
+          </select>
+        </div>
+        <div class="mf form-full"><label>Competición *</label><input type="text" id="pm-competicion" placeholder="Campeonato de España de Campo a Través"></div>
+        <div class="mf"><label>Prueba</label><input type="text" id="pm-prueba" placeholder="400 m vallas"></div>
+        <div class="mf"><label>Categoría</label><input type="text" id="pm-categoria" placeholder="Sub-23"></div>
+        <div class="mf"><label>Atleta o equipo</label><input type="text" id="pm-atleta" placeholder="Nombre del atleta"></div>
+        <div class="mf"><label>Ámbito</label>
+          <select id="pm-ambito">
+            <option value="Nacional">Nacional</option>
+            <option value="Autonómico">Autonómico</option>
+            <option value="Provincial">Provincial</option>
+            <option value="Internacional">Internacional</option>
+          </select>
+        </div>
+        <div class="mf form-full"><label>Sede</label><input type="text" id="pm-sede" placeholder="Gijón"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <input type="hidden" id="pm-edit-id">
+      <button class="btn btn-g" onclick="cerrarModal('modal-palmares')">Cancelar</button>
+      <button class="btn btn-p" onclick="guardarPalmares()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL RÉCORD -->
+<div class="modal-overlay" id="modal-record">
+  <div class="modal" style="max-width:560px;">
+    <div class="modal-header">
+      <h3 id="modal-record-titulo">Añadir récord</h3>
+      <button class="modal-close" onclick="cerrarModal('modal-record')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="mf"><label>Prueba *</label><input type="text" id="rc-prueba" placeholder="100 m lisos"></div>
+        <div class="mf"><label>Marca *</label><input type="text" id="rc-marca" placeholder="10.85"></div>
+        <div class="mf"><label>Categoría</label><input type="text" id="rc-categoria" placeholder="Absoluto masculino" list="cats-record"></div>
+        <div class="mf"><label>Atleta</label><input type="text" id="rc-atleta" placeholder="Nombre del atleta"></div>
+        <div class="mf"><label>Año</label><input type="number" id="rc-anyo" placeholder="2024" min="1988" max="2100"></div>
+        <div class="mf"><label>Orden en la lista</label><input type="number" id="rc-orden" placeholder="0" value="0"></div>
+        <div class="mf"><label>Sede</label><input type="text" id="rc-sede" placeholder="Alicante"></div>
+        <div class="mf"><label>Competición</label><input type="text" id="rc-competicion" placeholder="Cto. Autonómico"></div>
+      </div>
+      <datalist id="cats-record">
+        <option value="Absoluto masculino"><option value="Absoluto femenino">
+        <option value="Sub-23 masculino"><option value="Sub-23 femenino">
+        <option value="Sub-20 masculino"><option value="Sub-20 femenino">
+        <option value="Sub-18 masculino"><option value="Sub-18 femenino">
+        <option value="Sub-16 masculino"><option value="Sub-16 femenino">
+        <option value="Máster masculino"><option value="Máster femenino">
+      </datalist>
+      <p style="font-size:0.78rem;color:var(--texto-suave);margin-top:0.5rem;">El campo <strong>orden</strong> controla la posición dentro de su categoría. Déjalo a 0 y se ordenará alfabéticamente por prueba.</p>
+    </div>
+    <div class="modal-footer">
+      <input type="hidden" id="rc-edit-id">
+      <button class="btn btn-g" onclick="cerrarModal('modal-record')">Cancelar</button>
+      <button class="btn btn-p" onclick="guardarRecord()">Guardar</button>
+    </div>
+  </div>
+</div>
+
 <script>
 const SB_URL = 'https://icaxokjsvhlreuwpyxeb.supabase.co';
 const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImljYXhva2pzdmhscmV1d3B5eGViIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEwNzE2NTgsImV4cCI6MjA5NjY0NzY1OH0.xn1ZY-otHY0-l7g64uutSVjiU8DbkHxxZmTvu77IaHA';
@@ -1361,7 +1487,7 @@ async function doLogout() {
 // =====================
 // NAVEGACIÓN
 // =====================
-const PANEL_TITLES = { inicio:'Inicio', atletas:'Inscritos', grupos:'Grupos', prueba:'En prueba', ropa:'Control de ropa', pagos:'Pagos', fotos:'Fotos del club', 'noticias-admin':'Noticias', eventos:'Eventos y calendario', tienda:'Tienda', usuarios:'Usuarios del sistema', contenido:'Contenido web' };
+const PANEL_TITLES = { inicio:'Inicio', atletas:'Inscritos', grupos:'Grupos', prueba:'En prueba', ropa:'Control de ropa', pagos:'Pagos', fotos:'Fotos del club', 'noticias-admin':'Noticias', eventos:'Eventos y calendario', tienda:'Tienda', usuarios:'Usuarios del sistema', contenido:'Contenido web', palmares:'Palmarés del club', records:'Récords del club' };
 
 function showPanel(id) {
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('activo'));
@@ -1379,6 +1505,8 @@ function showPanel(id) {
   if (id === 'tienda') cargarTienda();
   if (id === 'usuarios') cargarUsuarios();
   if (id === 'fotos') cargarFotosPanel();
+  if (id === 'palmares') cargarPalmares();
+  if (id === 'records') cargarRecords();
 }
 
 function cargarFotosPanel() {
@@ -2298,6 +2426,171 @@ document.querySelectorAll('.modal-overlay').forEach(el => {
 
 // INIT
 checkSession();
+
+// ═══════════════════════════════════════════
+// PALMARÉS
+// ═══════════════════════════════════════════
+let palmaresData = [];
+const POS_TXT = {1:'🥇 1º', 2:'🥈 2º', 3:'🥉 3º'};
+
+async function cargarPalmares() {
+  const { data } = await db.from('palmares').select('*').order('anyo', {ascending:false}).order('posicion');
+  palmaresData = data || [];
+  const tb = document.getElementById('tabla-palmares');
+  if (!palmaresData.length) {
+    tb.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:2.5rem;color:var(--texto-suave);">Sin logros registrados. Añade el primero.</td></tr>';
+    return;
+  }
+  tb.innerHTML = palmaresData.map(p => `<tr>
+    <td style="font-weight:700;">${p.anyo}</td>
+    <td>${p.competicion || ''}</td>
+    <td style="font-size:0.8rem;color:var(--texto-suave);">${p.prueba || '—'}</td>
+    <td style="font-size:0.8rem;">${p.categoria || '—'}</td>
+    <td>${POS_TXT[p.posicion] || (p.posicion ? p.posicion+'º' : '—')}</td>
+    <td style="font-size:0.82rem;">${p.atleta || '—'}</td>
+    <td><span class="badge badge-azul">${p.ambito || '—'}</span></td>
+    <td style="white-space:nowrap;">
+      <button class="btn btn-g" style="padding:4px 9px;font-size:0.72rem;" onclick="editarPalmares('${p.id}')">Editar</button>
+      <button class="btn btn-g" style="padding:4px 9px;font-size:0.72rem;color:#dc2626;" onclick="borrarPalmares('${p.id}')">Borrar</button>
+    </td>
+  </tr>`).join('');
+}
+
+function abrirModalPalmares() {
+  ['pm-competicion','pm-prueba','pm-categoria','pm-atleta','pm-sede'].forEach(i => document.getElementById(i).value = '');
+  document.getElementById('pm-anyo').value = new Date().getFullYear();
+  document.getElementById('pm-posicion').value = '1';
+  document.getElementById('pm-ambito').value = 'Nacional';
+  document.getElementById('pm-edit-id').value = '';
+  document.getElementById('modal-palmares-titulo').textContent = 'Añadir logro';
+  document.getElementById('modal-palmares').classList.add('v');
+}
+
+function editarPalmares(id) {
+  const p = palmaresData.find(x => x.id === id); if (!p) return;
+  document.getElementById('pm-anyo').value = p.anyo || '';
+  document.getElementById('pm-competicion').value = p.competicion || '';
+  document.getElementById('pm-prueba').value = p.prueba || '';
+  document.getElementById('pm-categoria').value = p.categoria || '';
+  document.getElementById('pm-posicion').value = p.posicion || '';
+  document.getElementById('pm-atleta').value = p.atleta || '';
+  document.getElementById('pm-ambito').value = p.ambito || 'Nacional';
+  document.getElementById('pm-sede').value = p.sede || '';
+  document.getElementById('pm-edit-id').value = id;
+  document.getElementById('modal-palmares-titulo').textContent = 'Editar logro';
+  document.getElementById('modal-palmares').classList.add('v');
+}
+
+async function guardarPalmares() {
+  const anyo = parseInt(document.getElementById('pm-anyo').value);
+  const competicion = document.getElementById('pm-competicion').value.trim();
+  if (!anyo || !competicion) { alert('El año y la competición son obligatorios'); return; }
+  const pos = document.getElementById('pm-posicion').value;
+  const datos = {
+    anyo, competicion,
+    prueba: document.getElementById('pm-prueba').value.trim() || null,
+    categoria: document.getElementById('pm-categoria').value.trim() || null,
+    posicion: pos ? parseInt(pos) : null,
+    atleta: document.getElementById('pm-atleta').value.trim() || null,
+    ambito: document.getElementById('pm-ambito').value || null,
+    sede: document.getElementById('pm-sede').value.trim() || null,
+  };
+  const editId = document.getElementById('pm-edit-id').value;
+  const { error } = editId
+    ? await db.from('palmares').update(datos).eq('id', editId)
+    : await db.from('palmares').insert([datos]);
+  if (error) { alert('Error: ' + error.message); return; }
+  cerrarModal('modal-palmares');
+  cargarPalmares();
+}
+
+async function borrarPalmares(id) {
+  const p = palmaresData.find(x => x.id === id);
+  if (!confirm(`¿Borrar "${p?.competicion}" (${p?.anyo})?`)) return;
+  await db.from('palmares').delete().eq('id', id);
+  cargarPalmares();
+}
+
+// ═══════════════════════════════════════════
+// RÉCORDS
+// ═══════════════════════════════════════════
+let recordsData = [];
+
+async function cargarRecords() {
+  const { data } = await db.from('records_club').select('*').order('categoria').order('orden').order('prueba');
+  recordsData = data || [];
+  const tb = document.getElementById('tabla-records');
+  if (!recordsData.length) {
+    tb.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:2.5rem;color:var(--texto-suave);">Sin récords registrados. Añade el primero.</td></tr>';
+    return;
+  }
+  tb.innerHTML = recordsData.map(r => `<tr>
+    <td style="font-size:0.8rem;">${r.categoria || '—'}</td>
+    <td style="font-weight:600;">${r.prueba || ''}</td>
+    <td style="font-weight:800;color:var(--azul);font-variant-numeric:tabular-nums;">${r.marca || '—'}</td>
+    <td style="font-size:0.82rem;">${r.atleta || '—'}</td>
+    <td>${r.anyo || '—'}</td>
+    <td style="font-size:0.8rem;color:var(--texto-suave);">${r.sede || '—'}</td>
+    <td style="white-space:nowrap;">
+      <button class="btn btn-g" style="padding:4px 9px;font-size:0.72rem;" onclick="editarRecord('${r.id}')">Editar</button>
+      <button class="btn btn-g" style="padding:4px 9px;font-size:0.72rem;color:#dc2626;" onclick="borrarRecord('${r.id}')">Borrar</button>
+    </td>
+  </tr>`).join('');
+}
+
+function abrirModalRecord() {
+  ['rc-prueba','rc-marca','rc-categoria','rc-atleta','rc-sede','rc-competicion'].forEach(i => document.getElementById(i).value = '');
+  document.getElementById('rc-anyo').value = new Date().getFullYear();
+  document.getElementById('rc-orden').value = '0';
+  document.getElementById('rc-edit-id').value = '';
+  document.getElementById('modal-record-titulo').textContent = 'Añadir récord';
+  document.getElementById('modal-record').classList.add('v');
+}
+
+function editarRecord(id) {
+  const r = recordsData.find(x => x.id === id); if (!r) return;
+  document.getElementById('rc-prueba').value = r.prueba || '';
+  document.getElementById('rc-marca').value = r.marca || '';
+  document.getElementById('rc-categoria').value = r.categoria || '';
+  document.getElementById('rc-atleta').value = r.atleta || '';
+  document.getElementById('rc-anyo').value = r.anyo || '';
+  document.getElementById('rc-sede').value = r.sede || '';
+  document.getElementById('rc-competicion').value = r.competicion || '';
+  document.getElementById('rc-orden').value = r.orden || 0;
+  document.getElementById('rc-edit-id').value = id;
+  document.getElementById('modal-record-titulo').textContent = 'Editar récord';
+  document.getElementById('modal-record').classList.add('v');
+}
+
+async function guardarRecord() {
+  const prueba = document.getElementById('rc-prueba').value.trim();
+  const marca = document.getElementById('rc-marca').value.trim();
+  if (!prueba || !marca) { alert('La prueba y la marca son obligatorias'); return; }
+  const anyo = document.getElementById('rc-anyo').value;
+  const datos = {
+    prueba, marca,
+    categoria: document.getElementById('rc-categoria').value.trim() || null,
+    atleta: document.getElementById('rc-atleta').value.trim() || null,
+    anyo: anyo ? parseInt(anyo) : null,
+    sede: document.getElementById('rc-sede').value.trim() || null,
+    competicion: document.getElementById('rc-competicion').value.trim() || null,
+    orden: parseInt(document.getElementById('rc-orden').value) || 0,
+  };
+  const editId = document.getElementById('rc-edit-id').value;
+  const { error } = editId
+    ? await db.from('records_club').update(datos).eq('id', editId)
+    : await db.from('records_club').insert([datos]);
+  if (error) { alert('Error: ' + error.message); return; }
+  cerrarModal('modal-record');
+  cargarRecords();
+}
+
+async function borrarRecord(id) {
+  const r = recordsData.find(x => x.id === id);
+  if (!confirm(`¿Borrar el récord de ${r?.prueba} (${r?.marca})?`)) return;
+  await db.from('records_club').delete().eq('id', id);
+  cargarRecords();
+}
 </script>
 </body>
 </html>
