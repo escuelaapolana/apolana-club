@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Junta Directiva 2025-2029 | Club Atletismo Apolana</title>
+  <meta name="description" content="Conoce a la Junta Directiva del Club Atletismo Apolana de Alicante: presidencia, vicepresidencia, secretaría, tesorería, vocalías y direcciones de sección.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://escuelaapolana.github.io/apolana-club/junta.html">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Junta Directiva | Club Atletismo Apolana">
+  <meta property="og:description" content="El equipo que dirige el Club Atletismo Apolana de Alicante.">
+  <meta property="og:image" content="https://icaxokjsvhlreuwpyxeb.supabase.co/storage/v1/object/public/imagenes-club/hero.jpg">
+  <meta name="theme-color" content="#1a5f8f">
+  <link rel="icon" type="image/png" href="https://icaxokjsvhlreuwpyxeb.supabase.co/storage/v1/object/public/imagenes-club/logo.png">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="nav.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --azul: #1a5f8f; --azul-oscuro: #123f60; --azul-claro: #4a90c4; --azul-bg: #e8f2fa;
+      --gris: #f5f6f8; --gris-borde: #dde2e8; --texto: #1a1d23; --texto-suave: #6b7280;
+      --verde: #2d5a27; --verde-bg: #f0f7ef;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: white; color: var(--texto); line-height: 1.6; }
+
+    .page-header { position: relative; background: var(--azul-oscuro); padding: 3rem 2rem 2.5rem; text-align: center; overflow: hidden; }
+    .page-header-bg { position: absolute; inset: 0; background-size: cover; background-position: center; opacity: 0.22; }
+    .ph-inner { position: relative; }
+    .page-header-breadcrumb { color: rgba(255,255,255,0.55); font-size: 0.78rem; margin-bottom: 0.75rem; }
+    .page-header-breadcrumb a { color: rgba(255,255,255,0.55); text-decoration: none; }
+    .page-header-breadcrumb a:hover { color: white; }
+    .page-header h1 { color: white; font-size: 2.1rem; font-weight: 800; margin-bottom: 0.4rem; letter-spacing: -0.02em; }
+    .page-header p { color: rgba(255,255,255,0.72); font-size: 0.95rem; }
+    .header-badge { display: inline-flex; align-items: center; gap: 7px; background: rgba(255,255,255,0.14); border-radius: 20px; padding: 5px 15px; font-size: 0.76rem; font-weight: 600; color: white; margin-top: 1rem; letter-spacing: 0.03em; }
+
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 3rem 2rem 4rem; }
+
+    /* AGRADECIMIENTO */
+    .intro { background: var(--azul-bg); border-radius: 16px; padding: 1.75rem 2rem; margin-bottom: 3rem; border: 1px solid #c8dff0; }
+    .intro p { font-size: 0.95rem; color: var(--azul-oscuro); line-height: 1.75; }
+    .intro p + p { margin-top: 0.75rem; }
+    .intro strong { font-weight: 700; }
+
+    .grupo-titulo { font-size: 0.7rem; font-weight: 700; color: var(--azul-claro); text-transform: uppercase; letter-spacing: 0.12em; margin: 2.5rem 0 1.1rem; padding-bottom: 0.6rem; border-bottom: 2px solid var(--azul-bg); }
+    .grupo-titulo:first-of-type { margin-top: 0; }
+
+    /* TARJETAS */
+    .miembros-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.25rem; }
+    .miembro { background: white; border: 1px solid var(--gris-borde); border-radius: 16px; overflow: hidden; transition: all 0.18s; display: flex; flex-direction: column; }
+    .miembro:hover { border-color: var(--azul-claro); box-shadow: 0 6px 24px rgba(26,95,143,0.09); transform: translateY(-2px); }
+
+    .m-head { padding: 1.25rem 1.4rem; display: flex; align-items: center; gap: 1rem; border-bottom: 1px solid var(--gris-borde); }
+    .m-avatar { width: 58px; height: 58px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; font-weight: 800; background-size: cover; background-position: center; }
+    .m-info { min-width: 0; }
+    .m-cargo { font-size: 0.66rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.09em; margin-bottom: 3px; }
+    .m-nombre { font-size: 1.02rem; font-weight: 800; letter-spacing: -0.01em; line-height: 1.25; }
+
+    /* Colores por tipo de cargo */
+    .m-presidencia .m-avatar { background-color: var(--azul); color: white; }
+    .m-presidencia .m-cargo { color: var(--azul); }
+    .m-directiva .m-avatar { background-color: var(--azul-bg); color: var(--azul); }
+    .m-directiva .m-cargo { color: var(--azul-claro); }
+    .m-seccion .m-avatar { background-color: var(--verde-bg); color: var(--verde); }
+    .m-seccion .m-cargo { color: var(--verde); }
+
+    .m-body { padding: 1.1rem 1.4rem; flex: 1; }
+    .m-lista { list-style: none; }
+    .m-lista li { font-size: 0.82rem; color: var(--texto-suave); padding: 0.28rem 0 0.28rem 1.1rem; position: relative; line-height: 1.5; }
+    .m-lista li::before { content: ''; position: absolute; left: 0; top: 12px; width: 5px; height: 5px; border-radius: 50%; background: var(--gris-borde); }
+    .m-lista li.destacado { color: var(--texto); font-weight: 600; }
+    .m-lista li.destacado::before { background: var(--azul-claro); }
+
+    .m-foot { padding: 0.85rem 1.4rem; border-top: 1px solid var(--gris-borde); background: var(--gris); }
+    .m-mail { display: inline-flex; align-items: center; gap: 7px; font-size: 0.8rem; color: var(--azul); text-decoration: none; font-weight: 500; word-break: break-all; }
+    .m-mail:hover { text-decoration: underline; }
+
+    /* LOGRO DESTACADO */
+    .m-logro { background: #fef9e7; border-left: 3px solid #f59e0b; border-radius: 0 8px 8px 0; padding: 0.65rem 0.9rem; margin-top: 0.75rem; }
+    .m-logro-txt { font-size: 0.79rem; color: #92400e; line-height: 1.5; }
+
+    /* CIERRE */
+    .cierre { background: var(--gris); border-radius: 16px; padding: 2rem; text-align: center; margin-top: 3rem; }
+    .cierre h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.4rem; }
+    .cierre p { font-size: 0.88rem; color: var(--texto-suave); margin-bottom: 1.25rem; max-width: 520px; margin-left: auto; margin-right: auto; }
+    .cta-btns { display: flex; gap: 0.7rem; justify-content: center; flex-wrap: wrap; }
+    .btn-p { background: var(--azul); color: white; padding: 10px 24px; border-radius: 9px; text-decoration: none; font-weight: 600; font-size: 0.87rem; }
+    .btn-s { background: white; color: var(--azul); border: 1.5px solid var(--gris-borde); padding: 10px 24px; border-radius: 9px; text-decoration: none; font-weight: 600; font-size: 0.87rem; }
+
+    footer { background: #0f172a; padding: 2rem; }
+    .footer-inner { max-width: 1040px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+    .footer-logo { display: flex; align-items: center; gap: 10px; }
+    .footer-logo img { width: 32px; height: 32px; border-radius: 50%; }
+    .footer-logo span { color: white; font-size: 0.85rem; font-weight: 600; }
+    .footer-links { display: flex; gap: 1.25rem; flex-wrap: wrap; }
+    .footer-links a { color: rgba(255,255,255,0.5); font-size: 0.82rem; text-decoration: none; }
+    .footer-links a:hover { color: white; }
+
+    @media (max-width: 768px) {
+      .wrap { padding: 2rem 1.25rem 3rem; }
+      .page-header { padding: 2rem 1.25rem 1.75rem; }
+      .page-header h1 { font-size: 1.6rem; }
+      .miembros-grid { grid-template-columns: 1fr; }
+      .intro { padding: 1.35rem 1.4rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="page-header-bg" style="background-image:url('https://icaxokjsvhlreuwpyxeb.supabase.co/storage/v1/object/public/imagenes-club/hero.jpg');"></div>
+  <div class="ph-inner">
+    <div class="page-header-breadcrumb"><a href="index.html">Club Apolana</a> / Junta Directiva</div>
+    <h1>La Junta del Club</h1>
+    <p>Las personas que hacen posible el Club Atletismo Apolana</p>
+    <div class="header-badge">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      Legislatura 2025 – 2029
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <div class="intro">
+    <p>El equipo organizativo del Club Atletismo Apol·Ana no solo lo integran las personas de la Junta Directiva. Lo forman también <strong>socios, atletas y voluntarios</strong> que colaboran y cuya función es tan importante o más, y sin la cual la labor de nuestra organización como club no sería posible.</p>
+    <p>A todos ellos, nuestra más sincera gratitud.</p>
+  </div>
+
+  <!-- PRESIDENCIA Y CARGOS -->
+  <div class="grupo-titulo">Cargos directivos</div>
+  <div class="miembros-grid">
+
+    <!-- PRESIDENTE -->
+    <div class="miembro m-presidencia">
+      <div class="m-head">
+        <div class="m-avatar" id="foto-adrian">AO</div>
+        <div class="m-info">
+          <div class="m-cargo">Presidente</div>
+          <div class="m-nombre">Adrián Onandía Bieco</div>
+        </div>
+      </div>
+      <div class="m-body">
+        <ul class="m-lista">
+          <li class="destacado">Licenciado en Ciencias de la Actividad Física y el Deporte</li>
+          <li class="destacado">Entrenador Nacional de Atletismo</li>
+          <li>Maestro Especialista en Educación Física</li>
+          <li>Entrenador Nivel 2 de Triatlón</li>
+          <li>Experto Universitario en Psicomotricidad</li>
+          <li>Monitor de tiempo libre</li>
+          <li>Atleta y socio del club desde 2012</li>
+          <li>Federado RFEA con licencia nacional desde 2000</li>
+        </ul>
+        <div class="m-logro">
+          <div class="m-logro-txt">12 años de experiencia como entrenador en categorías menores y juvenil</div>
+        </div>
+      </div>
+      <div class="m-foot">
+        <a href="mailto:adri.apolana@gmail.com" class="m-mail">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          adri.apolana@gmail.com
+        </a>
+      </div>
+    </div>
+
+    <!-- VICEPRESIDENTE -->
+    <div class="miembro m-directiva">
+      <div class="m-head">
+        <div class="m-avatar" id="foto-miguel">MP</div>
+        <div class="m-info">
+          <div class="m-cargo">Vicepresidente 1º · Responsable de atletismo</div>
+          <div class="m-nombre">Miguel Á. Pellín Córdoba</div>
+        </div>
+      </div>
+      <div class="m-body">
+        <ul class="m-lista">
+          <li class="destacado">Maestro especialista en Educación Física</li>
+          <li class="destacado">Profesor de EF en el CEIP Raspeig de San Vicente</li>
+          <li>Monitor deportivo en los Juegos Escolares de San Vicente</li>
+          <li>Coordinador del programa STARS de movilidad sostenible, en colaboración con la Concejalía de Medio Ambiente de San Vicente y la DGT</li>
+          <li>Monitor de tiempo libre</li>
+          <li>Atleta federado RFEA con el club desde 1999</li>
+          <li>Federado en montaña por la FEMECV</li>
+        </ul>
+      </div>
+      <div class="m-foot">
+        <a href="mailto:zahori1974@gmail.com" class="m-mail">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          zahori1974@gmail.com
+        </a>
+      </div>
+    </div>
+
+    <!-- SECRETARIO -->
+    <div class="miembro m-directiva">
+      <div class="m-head">
+        <div class="m-avatar" id="foto-mario">MC</div>
+        <div class="m-info">
+          <div class="m-cargo">Secretario</div>
+          <div class="m-nombre">Mario Clavero Serrano</div>
+        </div>
+      </div>
+      <div class="m-body">
+        <ul class="m-lista">
+          <li class="destacado">Licenciado en Ciencias de la Actividad Física y el Deporte</li>
+          <li class="destacado">Máster en Dirección y Gestión de Entidades Deportivas</li>
+          <li>Atleta y socio del club desde 2005</li>
+          <li>Federado RFEA con licencia nacional desde 2005</li>
+          <li>Federado en natación desde 2023</li>
+          <li>Federado en triatlón desde la temporada 2023/24</li>
+        </ul>
+        <div class="m-logro">
+          <div class="m-logro-txt"><strong>Campeón de España Máster 60+</strong> en 200 m espalda · Subcampeón en 100 m y 50 m</div>
+        </div>
+      </div>
+      <div class="m-foot">
+        <a href="mailto:mariocl1@gmail.com" class="m-mail">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          mariocl1@gmail.com
+        </a>
+      </div>
+    </div>
+
+    <!-- TESORERO -->
+    <div class="miembro m-directiva">
+      <div class="m-head">
+        <div class="m-avatar" id="foto-andres">AC</div>
+        <div class="m-info">
+          <div class="m-cargo">Tesorero</div>
+          <div class="m-nombre">Andrés Clavero Giménez</div>
+        </div>
+      </div>
+      <div class="m-body">
+        <ul class="m-lista">
+          <li class="destacado">Graduado en Ciencias de la Actividad Física y el Deporte</li>
+          <li class="destacado">Técnico Superior en Animación de Actividades Físicas y Deportivas (TAFAD)</li>
+          <li>Entrenador-monitor responsable de las escuelas del club</li>
+        </ul>
+        <div class="m-logro">
+          <div class="m-logro-txt">10 años de experiencia como entrenador de atletismo</div>
+        </div>
+      </div>
+      <div class="m-foot">
+        <a href="mailto:andres.apolana@gmail.com" class="m-mail">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          andres.apolana@gmail.com
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- VOCALES -->
+  <div class="grupo-titulo">Vocales</div>
+  <div class="miembros-grid">
+
+    <div class="miembro m-directiva">
+      <div class="m-head">
+        <div class="m-avatar" id="foto-irene">IF</div>
+        <div class="m-info">
+          <div class="m-cargo">Vocal</div>
+          <div class="m-nombre">Irene Ferriz Mejías</div>
+        </div>
+      </div>
+      <div class="m-body">
+        <ul class="m-lista">
+          <li class="destacado">Monitora nacional de atletismo</li>
+          <li>Grado en Maestra de Educación Infantil</li>
+          <li>Monitora de tiempo libre</li>
+          <li>Atleta y socia del club desde 2008</li>
+          <li>Federada RFEA con licencia nacional</li>
+          <li>Federada en montaña por la FEMECV</li>
+        </ul>
+      </div>
+      <div class="m-foot">
+        <a href="mailto:irene20fm@gmail.com" class="m-mail">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          irene20fm@gmail.com
+        </a>
+      </div>
+    </div>
+
+    <div class="miembro m-directiva">
+      <div class="m-head">
+        <div class="m-avatar" id="foto-maribel">MG</div>
+        <div class="m-info">
+          <div class="m-cargo">Vocal</div>
+          <div class="m-nombre">Maribel García Saavedra</div>
+        </div>
+      </div>
+      <div class="m-body">
+        <ul class="m-lista">
+          <li class="destacado">Sección de Natación</li>
+          <li>Socia del club desde 2012</li>
+        </ul>
+      </div>
+      <div class="m-foot">
+        <a href="mailto:cruelasu@hotmail.com" class="m-mail">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          cruelasu@hotmail.com
+        </a>
+      </div>
+    </div>
+
+    <div class="miembro m-directiva">
+      <div class="m-head">
+        <div class="m-avatar" id="foto-mateo">MB</div>
+        <div class="m-info">
+          <div class="m-cargo">Vocal</div>
+          <div class="m-nombre">Mateo Brian Cano</div>
+        </div>
+      </div>
+      <div class="m-body">
+        <ul class="m-lista">
+          <li class="destacado">Atleta y socio del club</li>
+        </ul>
+      </div>
+      <div class="m-foot">
+        <a href="mailto:mateobrianc@gmail.com" class="m-mail">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          mateobrianc@gmail.com
+        </a>
+      </div>
+    </div>
+
+    <div class="miembro m-directiva">
+      <div class="m-head">
+        <div class="m-avatar" id="foto-almudena">AC</div>
+        <div class="m-info">
+          <div class="m-cargo">Vocal</div>
+          <div class="m-nombre">Almudena Coral Cortés Pérez</div>
+        </div>
+      </div>
+      <div class="m-body">
+        <ul class="m-lista">
+          <li class="destacado">Psicóloga</li>
+          <li>Atleta y socia del club</li>
+        </ul>
+      </div>
+      <div class="m-foot">
+        <a href="mailto:psicologacoral@gmail.com" class="m-mail">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          psicologacoral@gmail.com
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- DIRECCIONES DE SECCIÓN -->
+  <div class="grupo-titulo">Direcciones de sección</div>
+  <div class="miembros-grid">
+
+    <div class="miembro m-seccion">
+      <div class="m-head">
+        <div class="m-avatar" id="foto-enrique">EG</div>
+        <div class="m-info">
+          <div class="m-cargo">Dirección · Sección de Montaña</div>
+          <div class="m-nombre">Enrique Gallego Busto</div>
+        </div>
+      </div>
+      <div class="m-body">
+        <ul class="m-lista">
+          <li class="destacado">Federado en montaña por la FEMECV con el Club Atletismo Apolana</li>
+          <li>Federado RFEA con licencia nacional desde 1999</li>
+        </ul>
+      </div>
+      <div class="m-foot">
+        <a href="mailto:kikegbusto@gmail.com" class="m-mail">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          kikegbusto@gmail.com
+        </a>
+      </div>
+    </div>
+
+    <div class="miembro m-seccion">
+      <div class="m-head">
+        <div class="m-avatar" id="foto-jose">JF</div>
+        <div class="m-info">
+          <div class="m-cargo">Dirección · Sección de Triatlón</div>
+          <div class="m-nombre">José Fernández Sáez</div>
+        </div>
+      </div>
+      <div class="m-body">
+        <ul class="m-lista">
+          <li class="destacado">Doctor en Salud Pública por la Universidad de Alicante</li>
+          <li class="destacado">Profesor de Epidemiología Avanzada</li>
+          <li>Licenciado en Ciencias Matemáticas — rama de Probabilidad, Estadística, Investigación Operativa y Cálculo Numérico</li>
+          <li>Máster Oficial en Salud Pública y Gestión Sanitaria por la Universidad Miguel Hernández</li>
+          <li>Atleta y socio del club desde 2012</li>
+          <li>Federado en triatlón y montaña</li>
+        </ul>
+      </div>
+      <div class="m-foot">
+        <a href="mailto:j.fernandezsaez@gmail.com" class="m-mail">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          j.fernandezsaez@gmail.com
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="cierre">
+    <h3>¿Quieres colaborar con el club?</h3>
+    <p>Siempre necesitamos voluntarios para las competiciones, eventos y actividades. Cualquier ayuda suma.</p>
+    <div class="cta-btns">
+      <a href="contacto.html" class="btn-p">Contactar</a>
+      <a href="socio.html" class="btn-s">Hazte socio</a>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">
+      <img src="https://icaxokjsvhlreuwpyxeb.supabase.co/storage/v1/object/public/imagenes-club/logo.png" alt="Club Apolana" onerror="this.style.display='none'">
+      <span>Club Atletismo Apolana · Alicante</span>
+    </div>
+    <div class="footer-links">
+      <a href="index.html">Inicio</a>
+      <a href="junta.html">Junta Directiva</a>
+      <a href="normativa.html">Normativa</a>
+      <a href="contacto.html">Contacto</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Cargar fotos de los miembros si están subidas en Supabase
+(function() {
+  const IMG = 'https://icaxokjsvhlreuwpyxeb.supabase.co/storage/v1/object/public/imagenes-club/';
+  const miembros = ['adrian','miguel','mario','andres','irene','maribel','mateo','almudena','enrique','jose'];
+  miembros.forEach(n => {
+    const el = document.getElementById('foto-' + n);
+    if (!el) return;
+    const img = new Image();
+    img.onload = () => { el.textContent = ''; el.style.backgroundImage = 'url(' + IMG + 'junta-' + n + '.jpg)'; };
+    img.src = IMG + 'junta-' + n + '.jpg';
+  });
+})();
+</script>
+
+</body>
+</html>
