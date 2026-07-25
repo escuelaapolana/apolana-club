@@ -135,6 +135,7 @@
       <a href="calendario.html" class="nav-link" data-nav-page="calendario">Calendario</a>
       <a href="noticias.html" class="nav-link" data-nav-page="noticias">Noticias</a>
       <a href="socio.html" class="nav-link" data-nav-page="socio">Hazte socio</a>
+      <a href="normativa.html" class="nav-link" data-nav-page="normativa">Normativa</a>
       <a href="contacto.html" class="nav-link" data-nav-page="contacto">Contacto</a>
       <a href="https://instagram.com/apolana.alicante" target="_blank" class="nav-link nav-ig">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
