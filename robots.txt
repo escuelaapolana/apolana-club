@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /admin.html
+Disallow: /entrenador.html
+Disallow: /atleta.html
+Disallow: /padre.html
+
+Sitemap: https://escuelaapolana.github.io/apolana-club/sitemap.xml

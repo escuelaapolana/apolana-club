@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contacto | Club Atletismo Apolana Alicante</title>
+  <meta name="description" content="Contacta con el Club Atletismo Apolana de Alicante. Teléfonos de cada sección, email, dirección del Estadio Joaquín Villar y formulario de contacto.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://escuelaapolana.github.io/apolana-club/contacto.html">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Contacto | Club Atletismo Apolana Alicante">
+  <meta property="og:description" content="Contacta con el Club Atletismo Apolana de Alicante.">
+  <meta property="og:image" content="https://icaxokjsvhlreuwpyxeb.supabase.co/storage/v1/object/public/imagenes-club/hero.jpg">
+  <meta name="theme-color" content="#1a5f8f">
+  <link rel="icon" type="image/png" href="https://icaxokjsvhlreuwpyxeb.supabase.co/storage/v1/object/public/imagenes-club/logo.png">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="nav.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --azul: #1a5f8f; --azul-oscuro: #123f60; --azul-claro: #4a90c4; --azul-bg: #e8f2fa;
+      --gris: #f5f6f8; --gris-borde: #dde2e8; --texto: #1a1d23; --texto-suave: #6b7280;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: white; color: var(--texto); }
+
+    .page-header { position: relative; height: 260px; background: var(--azul-oscuro); display: flex; align-items: center; justify-content: center; text-align: center; overflow: hidden; }
+    .page-header-bg { position: absolute; inset: 0; background-size: cover; background-position: center; opacity: 0.3; }
+    .page-header-inner { position: relative; padding: 2rem; }
+    .page-header-breadcrumb { color: rgba(255,255,255,0.6); font-size: 0.78rem; margin-bottom: 0.75rem; }
+    .page-header-breadcrumb a { color: rgba(255,255,255,0.6); text-decoration: none; }
+    .page-header-breadcrumb a:hover { color: white; }
+    .page-header h1 { color: white; font-size: 2.4rem; font-weight: 800; margin-bottom: 0.4rem; }
+    .page-header p { color: rgba(255,255,255,0.72); font-size: 0.98rem; }
+
+    .wrap { max-width: 1040px; margin: 0 auto; padding: 3rem 2rem; }
+    .sec-title { font-size: 1.35rem; font-weight: 700; margin-bottom: 0.4rem; }
+    .sec-sub { font-size: 0.9rem; color: var(--texto-suave); margin-bottom: 1.5rem; line-height: 1.6; }
+
+    /* CONTACTOS POR SECCIÓN */
+    .contactos-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem; margin-bottom: 3rem; }
+    .contacto-card { background: white; border: 1px solid var(--gris-borde); border-radius: 14px; overflow: hidden; transition: all 0.15s; }
+    .contacto-card:hover { border-color: var(--azul-claro); box-shadow: 0 4px 16px rgba(26,95,143,0.08); }
+    .cc-head { padding: 1rem 1.25rem; border-bottom: 1px solid var(--gris-borde); display: flex; align-items: center; gap: 10px; }
+    .cc-icon { width: 38px; height: 38px; border-radius: 10px; background: var(--azul-bg); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0; }
+    .cc-titulo { font-size: 0.92rem; font-weight: 700; }
+    .cc-sub { font-size: 0.72rem; color: var(--texto-suave); }
+    .cc-body { padding: 1rem 1.25rem; }
+    .cc-persona { font-size: 0.85rem; font-weight: 600; margin-bottom: 0.25rem; }
+    .cc-tel { font-size: 1.05rem; font-weight: 800; color: var(--azul); margin-bottom: 0.75rem; }
+    .cc-btns { display: flex; gap: 0.5rem; }
+    .cc-btn { flex: 1; display: flex; align-items: center; justify-content: center; gap: 5px; padding: 8px; border-radius: 8px; text-decoration: none; font-size: 0.78rem; font-weight: 600; transition: opacity 0.12s; }
+    .cc-btn:hover { opacity: 0.85; }
+    .cc-wa { background: #25d366; color: white; }
+    .cc-mail { background: var(--azul-bg); color: var(--azul); }
+
+    /* INFO GENERAL */
+    .info-general { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: start; }
+    .info-bloque { background: var(--gris); border-radius: 14px; padding: 1.5rem; }
+    .info-bloque h3 { font-size: 1rem; font-weight: 700; margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
+    .info-fila { display: flex; gap: 12px; padding: 0.7rem 0; border-bottom: 1px solid var(--gris-borde); align-items: flex-start; }
+    .info-fila:last-child { border-bottom: none; }
+    .info-fila svg { flex-shrink: 0; margin-top: 2px; color: var(--azul-claro); }
+    .info-label { font-size: 0.72rem; color: var(--texto-suave); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; }
+    .info-val { font-size: 0.88rem; font-weight: 600; }
+    .info-val a { color: var(--azul); text-decoration: none; }
+    .info-val a:hover { text-decoration: underline; }
+
+    /* MAPA */
+    .mapa-wrap { border-radius: 14px; overflow: hidden; height: 280px; border: 1px solid var(--gris-borde); }
+    .mapa-wrap iframe { width: 100%; height: 100%; border: 0; }
+
+    /* CTA */
+    .cta { background: var(--azul-oscuro); padding: 3rem 2rem; text-align: center; }
+    .cta h2 { color: white; font-size: 1.5rem; font-weight: 800; margin-bottom: 0.5rem; }
+    .cta p { color: rgba(255,255,255,0.7); font-size: 0.92rem; margin-bottom: 1.5rem; }
+    .cta-btns { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; }
+    .btn-w { background: white; color: var(--azul); padding: 11px 26px; border-radius: 9px; text-decoration: none; font-weight: 700; font-size: 0.9rem; }
+    .btn-o { background: transparent; color: white; border: 1.5px solid rgba(255,255,255,0.4); padding: 11px 26px; border-radius: 9px; text-decoration: none; font-weight: 600; font-size: 0.9rem; }
+
+    footer { background: #0f172a; padding: 2rem; }
+    .footer-inner { max-width: 1040px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+    .footer-logo { display: flex; align-items: center; gap: 10px; }
+    .footer-logo img { width: 32px; height: 32px; border-radius: 50%; }
+    .footer-logo span { color: white; font-size: 0.85rem; font-weight: 600; }
+    .footer-links { display: flex; gap: 1.25rem; flex-wrap: wrap; }
+    .footer-links a { color: rgba(255,255,255,0.5); font-size: 0.82rem; text-decoration: none; }
+    .footer-links a:hover { color: white; }
+
+    @media (max-width: 768px) {
+      .wrap { padding: 2rem 1.25rem; }
+      .info-general { grid-template-columns: 1fr; }
+      .page-header { height: 200px; }
+      .page-header h1 { font-size: 1.7rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="page-header-bg" style="background-image:url('https://icaxokjsvhlreuwpyxeb.supabase.co/storage/v1/object/public/imagenes-club/hero.jpg');"></div>
+  <div class="page-header-inner">
+    <div class="page-header-breadcrumb"><a href="index.html">Club Apolana</a> / Contacto</div>
+    <h1>Contacto</h1>
+    <p>Estamos aquí para resolver cualquier duda</p>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- CONTACTOS POR SECCIÓN -->
+  <h2 class="sec-title">¿Con quién quieres hablar?</h2>
+  <p class="sec-sub">Cada sección tiene su responsable. Escribe directamente a quien mejor pueda ayudarte.</p>
+
+  <div class="contactos-grid">
+
+    <div class="contacto-card">
+      <div class="cc-head">
+        <div class="cc-icon">🏫</div>
+        <div><div class="cc-titulo">Escuela de Atletismo</div><div class="cc-sub">3 a 18 años</div></div>
+      </div>
+      <div class="cc-body">
+        <div class="cc-tel">636 061 700</div>
+        <div class="cc-btns">
+          <a href="https://wa.me/34636061700" target="_blank" rel="noopener" class="cc-btn cc-wa">WhatsApp</a>
+          <a href="mailto:escuela.apolana@gmail.com" class="cc-btn cc-mail">Email</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="contacto-card">
+      <div class="cc-head">
+        <div class="cc-icon">🏊</div>
+        <div><div class="cc-titulo">Escuela de Natación</div><div class="cc-sub">Desde 6 años</div></div>
+      </div>
+      <div class="cc-body">
+        <div class="cc-persona">Mario Clavero</div>
+        <div class="cc-tel">666 03 30 44</div>
+        <div class="cc-btns">
+          <a href="https://wa.me/34666033044" target="_blank" rel="noopener" class="cc-btn cc-wa">WhatsApp</a>
+          <a href="mailto:mario.apolana@gmail.com" class="cc-btn cc-mail">Email</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="contacto-card">
+      <div class="cc-head">
+        <div class="cc-icon">🏃</div>
+        <div><div class="cc-titulo">Running · La Tribu</div><div class="cc-sub">Nivel avanzado</div></div>
+      </div>
+      <div class="cc-body">
+        <div class="cc-persona">Nicolás Tucci</div>
+        <div class="cc-tel">660 800 898</div>
+        <div class="cc-btns">
+          <a href="https://wa.me/34660800898" target="_blank" rel="noopener" class="cc-btn cc-wa">WhatsApp</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="contacto-card">
+      <div class="cc-head">
+        <div class="cc-icon">🌱</div>
+        <div><div class="cc-titulo">Running · Madre Tierra</div><div class="cc-sub">Iniciación</div></div>
+      </div>
+      <div class="cc-body">
+        <div class="cc-persona">Claudia Otero</div>
+        <div class="cc-tel">644 244 332</div>
+        <div class="cc-btns">
+          <a href="https://wa.me/34644244332" target="_blank" rel="noopener" class="cc-btn cc-wa">WhatsApp</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="contacto-card">
+      <div class="cc-head">
+        <div class="cc-icon">🤝</div>
+        <div><div class="cc-titulo">Socios y administración</div><div class="cc-sub">Altas, bajas y cuotas</div></div>
+      </div>
+      <div class="cc-body">
+        <div class="cc-tel">625 473 830</div>
+        <div class="cc-btns">
+          <a href="https://wa.me/34625473830" target="_blank" rel="noopener" class="cc-btn cc-wa">WhatsApp</a>
+          <a href="mailto:administracion@atletismoapolana.com" class="cc-btn cc-mail">Email</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="contacto-card">
+      <div class="cc-head">
+        <div class="cc-icon">⛰️</div>
+        <div><div class="cc-titulo">Montaña</div><div class="cc-sub">Senderismo y trail</div></div>
+      </div>
+      <div class="cc-body">
+        <div class="cc-persona">Enrique Gallego · Director</div>
+        <div style="font-size:0.82rem;color:var(--texto-suave);margin-bottom:0.75rem;">Consulta el calendario de rutas o escríbenos para unirte al grupo.</div>
+        <div class="cc-btns">
+          <a href="calendario.html" class="cc-btn cc-mail">Ver calendario</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- INFO GENERAL + MAPA -->
+  <div class="info-general">
+
+    <div class="info-bloque">
+      <h3>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--azul)" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        Dónde estamos
+      </h3>
+      <div class="info-fila">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        <div>
+          <div class="info-label">Dirección</div>
+          <div class="info-val">C/ Hondón de las Nieves, 4<br><span style="font-weight:400;color:var(--texto-suave);font-size:0.82rem;">Estadio de Atletismo Joaquín Villar<br>03005 Alicante</span></div>
+        </div>
+      </div>
+      <div class="info-fila">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        <div>
+          <div class="info-label">Email general</div>
+          <div class="info-val"><a href="mailto:administracion@atletismoapolana.com">administracion@atletismoapolana.com</a></div>
+        </div>
+      </div>
+      <div class="info-fila">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+        <div>
+          <div class="info-label">Instagram</div>
+          <div class="info-val"><a href="https://instagram.com/apolana.alicante" target="_blank" rel="noopener">@apolana.alicante</a></div>
+        </div>
+      </div>
+      <div class="info-fila">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        <div>
+          <div class="info-label">Fundado en</div>
+          <div class="info-val">26 de enero de 1988</div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="mapa-wrap">
+        <iframe
+          src="https://www.google.com/maps?q=Estadio+de+Atletismo+Joaquin+Villar+Alicante&output=embed"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          title="Ubicación del Club Atletismo Apolana"></iframe>
+      </div>
+      <a href="https://maps.google.com/?q=Estadio+de+Atletismo+Joaquin+Villar+Alicante" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:center;gap:6px;margin-top:0.75rem;padding:10px;background:var(--azul-bg);color:var(--azul);border-radius:9px;text-decoration:none;font-size:0.85rem;font-weight:600;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
+        Cómo llegar
+      </a>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="cta">
+  <h2>¿Prefieres probar antes de decidirte?</h2>
+  <p>Ofrecemos entrenamientos de prueba gratuitos en todas las secciones</p>
+  <div class="cta-btns">
+    <a href="inscripcion.html" class="btn-w">Inscribirme</a>
+    <a href="https://wa.me/34636061700" target="_blank" rel="noopener" class="btn-o">Escribir por WhatsApp</a>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">
+      <img src="https://icaxokjsvhlreuwpyxeb.supabase.co/storage/v1/object/public/imagenes-club/logo.png" alt="Club Apolana" onerror="this.style.display='none'">
+      <span>Club Atletismo Apolana · Alicante</span>
+    </div>
+    <div class="footer-links">
+      <a href="index.html">Inicio</a>
+      <a href="secciones.html">Secciones</a>
+      <a href="socio.html">Hazte socio</a>
+      <a href="calendario.html">Calendario</a>
+      <a href="noticias.html">Noticias</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
