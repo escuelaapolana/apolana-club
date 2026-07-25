@@ -1340,8 +1340,8 @@ function renderFilaHTML(f, bi, fi, esPista) {
     <td><input class="fila-input rec" value="${f.recuperacion||''}" placeholder="6'" oninput="updateFila(${bi},${fi},'recuperacion',this.value)"></td>
     <td>${esPista ? `
       <div class="tag-calzado">
-        <span class="tag-cal ${f.calzado==='Z'?'sel':''}" onclick="toggleCalzado(${bi},${fi},'Z')">Z</span>
-        <span class="tag-cal ${f.calzado==='C'?'sel':''}" onclick="toggleCalzado(${bi},${fi},'C')">C</span>
+        <span class="tag-cal ${f.calzado==='Z'?'sel':''}" onclick="toggleCalzado(this,'Z')" data-prev="${f.calzado==='Z'?'Z':''}">Z</span>
+        <span class="tag-cal ${f.calzado==='C'?'sel':''}" onclick="toggleCalzado(this,'C')" data-prev="${f.calzado==='C'?'C':''}">C</span>
       </div>` : `<input class="fila-input" value="${f.carga||''}" placeholder="80%" oninput="updateFila(${bi},${fi},'carga',this.value)">`}
     </td>
     <td>
@@ -1399,15 +1399,17 @@ function addFila(bi) {
   tbody.appendChild(tr);
 }
 
-function toggleCalzado(bi, fi, val) {
-  const tbody = document.getElementById('filas-' + bi);
-  const tr = tbody.querySelectorAll('tr')[fi];
-  if (!tr) return;
-  tr.querySelectorAll('.tag-cal').forEach(t => {
-    t.classList.toggle('sel', t.textContent === val && !t.classList.contains('sel') || t.classList.contains('sel') && t.textContent !== val);
-    if (t.textContent === val) t.classList.toggle('sel');
-    else t.classList.remove('sel');
-  });
+function toggleCalzado(btn, val) {
+  const row = btn.closest('tr');
+  if (!row) return;
+  row.querySelectorAll('.tag-cal').forEach(t => t.classList.remove('sel'));
+  // Si ya estaba seleccionado, lo deja desmarcado; si no, lo marca
+  if (btn.dataset.prev !== val) {
+    btn.classList.add('sel');
+    btn.dataset.prev = val;
+  } else {
+    btn.dataset.prev = '';
+  }
 }
 
 function updateFila(bi, fi, campo, valor) {} // valores leídos en getBloques()
@@ -1515,7 +1517,11 @@ Responde SOLO en JSON con este formato:
   try {
     const res = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
       body: JSON.stringify({
         model: 'claude-sonnet-4-6',
         max_tokens: 4000,
