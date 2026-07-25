@@ -356,17 +356,29 @@
 
     <div id="eg-paso1" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;">
       <button onclick="egSel('nino')" class="eg-card">
-        <span style="font-size:2rem;">👦</span>
+        <svg class="eg-icono" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="9" cy="7" r="3"/><path d="M3 21v-2a5 5 0 0 1 5-5h2a5 5 0 0 1 5 5v2"/>
+          <circle cx="17.5" cy="10.5" r="2"/><path d="M15 21v-1.5a3 3 0 0 1 3-3h.5a3 3 0 0 1 3 3V21"/>
+        </svg>
         <strong>Para mi hijo/a</strong>
         <small>De 3 a 18 años</small>
       </button>
       <button onclick="egSel('adulto')" class="eg-card">
-        <span style="font-size:2rem;">🏃</span>
+        <svg class="eg-icono" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="15.5" cy="4" r="2"/>
+          <path d="M13 21l1.5-6.5L11 12l1-5 3.5 2.5L19 10"/>
+          <path d="M11 12L8 14l-2 7"/>
+          <path d="M12 7L8.5 8"/>
+        </svg>
         <strong>Para mí</strong>
         <small>Soy adulto</small>
       </button>
       <button onclick="egSel('socio')" class="eg-card">
-        <span style="font-size:2rem;">🤝</span>
+        <svg class="eg-icono" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="8" r="3.2"/>
+          <path d="M5.5 21v-1.5a6.5 6.5 0 0 1 13 0V21"/>
+          <path d="M19 4.5l1.2 2.4 2.6.4-1.9 1.9.45 2.6L19 10.6l-2.35 1.2.45-2.6-1.9-1.9 2.6-.4z" fill="currentColor" stroke="none" opacity="0.9"/>
+        </svg>
         <strong>Quiero ser socio</strong>
         <small>Sin entrenar necesariamente</small>
       </button>
@@ -384,6 +396,8 @@
     transition: all 0.18s; font-family: inherit; backdrop-filter: blur(4px);
   }
   .eg-card:hover { background: rgba(255,255,255,0.18); border-color: rgba(255,255,255,0.4); transform: translateY(-3px); }
+  .eg-icono { width: 34px; height: 34px; color: rgba(255,255,255,0.85); margin-bottom: 0.35rem; transition: color 0.18s, transform 0.18s; }
+  .eg-card:hover .eg-icono { color: white; transform: scale(1.06); }
   .eg-card strong { color: white; font-size: 1rem; font-weight: 700; }
   .eg-card small { color: rgba(255,255,255,0.6); font-size: 0.78rem; }
   .eg-opt {
@@ -464,7 +478,8 @@ function egVolver() {
 <section id="secciones" style="background:linear-gradient(180deg,#fdfeff 0%,#f6fafd 100%);">
   <div class="sec-wrap">
     <div style="display:inline-flex;align-items:center;gap:8px;background:#e0f2fe;color:#0369a1;padding:4px 14px;border-radius:20px;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.75rem;">
-      🏫 Escuela Apolana · 3 a 18 años
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V8l7-5 7 5v13"/><path d="M9 21v-6h6v6"/></svg>
+      Escuela Apolana · 3 a 18 años
     </div>
     <h2 class="sec-title">Para los más jóvenes</h2>
     <p class="sec-sub">Iniciación y desarrollo deportivo desde los 3 años. Grupos por edades, entrenadores titulados y metodología progresiva.</p>
@@ -489,7 +504,8 @@ function egVolver() {
 <section style="background:linear-gradient(180deg,#eaf1f8 0%,#dde9f4 100%);border-top:1px solid #cfe0ee;border-bottom:1px solid #cfe0ee;">
   <div class="sec-wrap">
     <div style="display:inline-flex;align-items:center;gap:8px;background:#fef3c7;color:#92400e;padding:4px 14px;border-radius:20px;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.75rem;">
-      🏃 Club Apolana · Adultos
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="15.5" cy="4" r="1.6"/><path d="M13 21l1.5-6.5L11 12l1-5 3.5 2.5L19 10"/><path d="M11 12L8 14l-2 7"/></svg>
+      Club Apolana · Adultos
     </div>
     <h2 class="sec-title">Para los que entrenan en serio</h2>
     <p class="sec-sub">Hazte socio del club (120€/año) y entrena con nuestros grupos. El entrenamiento se paga aparte según la modalidad.</p>
