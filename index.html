@@ -541,6 +541,202 @@ function egVolver() {
   </div>
 </section>
 
+
+<!-- ACORDEÓN DE FOTOS DEL CLUB -->
+<section id="acordeon-club" style="background:white;padding:4rem 0 3.5rem;">
+  <div class="sec-wrap">
+    <div class="sec-label">El club por dentro</div>
+    <h2 class="sec-title">Así vivimos el deporte</h2>
+    <p class="sec-sub">Entrenamientos, competiciones, rutas y momentos que nos definen. Pasa el ratón sobre cada imagen.</p>
+  </div>
+
+  <div class="acordeon-wrap">
+    <div class="acordeon" id="acordeon">
+      <div class="acor-item activo" data-foto="club-1.jpg">
+        <div class="acor-bg"></div>
+        <div class="acor-overlay"></div>
+        <div class="acor-contenido">
+          <div class="acor-num">01</div>
+          <h3>Escuela</h3>
+          <p>Los más pequeños dan sus primeros pasos en el atletismo</p>
+        </div>
+        <div class="acor-titulo-vertical">Escuela</div>
+      </div>
+
+      <div class="acor-item" data-foto="club-2.jpg">
+        <div class="acor-bg"></div>
+        <div class="acor-overlay"></div>
+        <div class="acor-contenido">
+          <div class="acor-num">02</div>
+          <h3>Competición</h3>
+          <p>Representamos a Alicante en pista, cross y ruta</p>
+        </div>
+        <div class="acor-titulo-vertical">Competición</div>
+      </div>
+
+      <div class="acor-item" data-foto="club-3.jpg">
+        <div class="acor-bg"></div>
+        <div class="acor-overlay"></div>
+        <div class="acor-contenido">
+          <div class="acor-num">03</div>
+          <h3>Running</h3>
+          <p>Kilómetros compartidos por las calles de la ciudad</p>
+        </div>
+        <div class="acor-titulo-vertical">Running</div>
+      </div>
+
+      <div class="acor-item" data-foto="club-4.jpg">
+        <div class="acor-bg"></div>
+        <div class="acor-overlay"></div>
+        <div class="acor-contenido">
+          <div class="acor-num">04</div>
+          <h3>Montaña</h3>
+          <p>Rutas por las sierras que rodean Alicante</p>
+        </div>
+        <div class="acor-titulo-vertical">Montaña</div>
+      </div>
+
+      <div class="acor-item" data-foto="club-5.jpg">
+        <div class="acor-bg"></div>
+        <div class="acor-overlay"></div>
+        <div class="acor-contenido">
+          <div class="acor-num">05</div>
+          <h3>Natación</h3>
+          <p>De la piscina municipal a las competiciones federadas</p>
+        </div>
+        <div class="acor-titulo-vertical">Natación</div>
+      </div>
+
+      <div class="acor-item" data-foto="club-6.jpg">
+        <div class="acor-bg"></div>
+        <div class="acor-overlay"></div>
+        <div class="acor-contenido">
+          <div class="acor-num">06</div>
+          <h3>Familia</h3>
+          <p>Más de 420 personas que comparten una misma pasión</p>
+        </div>
+        <div class="acor-titulo-vertical">Familia</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .acordeon-wrap { max-width: 1240px; margin: 0 auto; padding: 0 2rem; }
+  .acordeon {
+    display: flex; gap: 8px; height: 420px;
+    border-radius: 16px; overflow: hidden;
+  }
+  .acor-item {
+    position: relative; flex: 1; cursor: pointer; overflow: hidden;
+    border-radius: 12px; min-width: 60px;
+    transition: flex 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+    background: var(--azul-oscuro);
+  }
+  .acor-item.activo { flex: 5; }
+  .acor-bg {
+    position: absolute; inset: 0;
+    background-size: cover; background-position: center;
+    transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .acor-item.activo .acor-bg { transform: scale(1.04); }
+  .acor-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(18,63,96,0.15) 0%, rgba(18,63,96,0.88) 100%);
+    transition: opacity 0.4s;
+  }
+  .acor-item:not(.activo) .acor-overlay {
+    background: linear-gradient(180deg, rgba(18,63,96,0.5) 0%, rgba(18,63,96,0.92) 100%);
+  }
+  .acor-contenido {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    padding: 1.75rem; color: white; z-index: 2;
+    opacity: 0; transform: translateY(12px);
+    transition: all 0.4s 0.15s;
+  }
+  .acor-item.activo .acor-contenido { opacity: 1; transform: translateY(0); }
+  .acor-num {
+    font-size: 0.68rem; font-weight: 700; letter-spacing: 0.15em;
+    color: rgba(255,255,255,0.5); margin-bottom: 0.5rem;
+  }
+  .acor-contenido h3 {
+    font-size: 1.55rem; font-weight: 800; margin-bottom: 0.35rem;
+    letter-spacing: -0.01em;
+  }
+  .acor-contenido p {
+    font-size: 0.88rem; color: rgba(255,255,255,0.78);
+    line-height: 1.5; max-width: 340px;
+  }
+  .acor-titulo-vertical {
+    position: absolute; bottom: 1.75rem; left: 50%;
+    transform: translateX(-50%) rotate(180deg);
+    writing-mode: vertical-rl;
+    font-size: 0.9rem; font-weight: 700; color: white;
+    white-space: nowrap; z-index: 2; letter-spacing: 0.04em;
+    transition: opacity 0.3s;
+  }
+  .acor-item.activo .acor-titulo-vertical { opacity: 0; }
+
+  /* Placeholder cuando no hay foto */
+  .acor-item.sin-foto .acor-bg {
+    background: linear-gradient(135deg, var(--azul-oscuro) 0%, var(--azul) 100%);
+  }
+  .acor-item.sin-foto .acor-bg::after {
+    content: ''; position: absolute; inset: 0;
+    background-image: repeating-linear-gradient(45deg, transparent, transparent 12px, rgba(255,255,255,0.025) 12px, rgba(255,255,255,0.025) 24px);
+  }
+
+  @media (max-width: 900px) {
+    .acordeon { height: 340px; gap: 6px; }
+    .acor-contenido { padding: 1.25rem; }
+    .acor-contenido h3 { font-size: 1.2rem; }
+    .acor-contenido p { font-size: 0.8rem; }
+  }
+  @media (max-width: 640px) {
+    .acordeon-wrap { padding: 0 1rem; }
+    .acordeon {
+      height: auto; flex-direction: column; gap: 8px;
+    }
+    .acor-item, .acor-item.activo { flex: none; height: 180px; min-width: 0; }
+    .acor-contenido { opacity: 1; transform: none; padding: 1.25rem; }
+    .acor-titulo-vertical { display: none; }
+    .acor-overlay { background: linear-gradient(180deg, rgba(18,63,96,0.2) 0%, rgba(18,63,96,0.85) 100%) !important; }
+  }
+</style>
+
+<script>
+(function() {
+  const acor = document.getElementById('acordeon');
+  if (!acor) return;
+  const items = acor.querySelectorAll('.acor-item');
+  const BASE_IMG = 'https://icaxokjsvhlreuwpyxeb.supabase.co/storage/v1/object/public/imagenes-club/';
+
+  // Cargar fotos desde Supabase
+  items.forEach(item => {
+    const archivo = item.dataset.foto;
+    const bg = item.querySelector('.acor-bg');
+    const img = new Image();
+    img.onload = () => {
+      bg.style.backgroundImage = 'url(' + BASE_IMG + archivo + ')';
+      item.classList.remove('sin-foto');
+    };
+    img.onerror = () => item.classList.add('sin-foto');
+    img.src = BASE_IMG + archivo;
+  });
+
+  // Interacción hover (desktop) y click (móvil)
+  const esMovil = window.matchMedia('(max-width: 640px)').matches;
+  if (!esMovil) {
+    items.forEach(item => {
+      item.addEventListener('mouseenter', () => {
+        items.forEach(i => i.classList.remove('activo'));
+        item.classList.add('activo');
+      });
+    });
+  }
+})();
+</script>
+
 <!-- NOTICIAS -->
 <section id="noticias" style="background:var(--gris);">
   <div class="sec-wrap">
