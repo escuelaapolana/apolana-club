@@ -113,25 +113,18 @@
   
     /* ═══ RITMO VISUAL: bandas alternas ═══ */
     .wrap > .sec.banda {
-      background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+      background: linear-gradient(180deg, #eaf1f8 0%, #dfeaf4 100%);
       margin-left: calc(-50vw + 50%);
       margin-right: calc(-50vw + 50%);
       padding: 3rem calc(50vw - 50% + 2rem);
       position: relative;
     }
-    .wrap > .sec.banda::before {
-      content: '';
-      position: absolute; top: 0; left: 0; right: 0; height: 1px;
-      background: linear-gradient(90deg, transparent, var(--gris-borde) 20%, var(--gris-borde) 80%, transparent);
-    }
-    .wrap > .sec.banda::after {
-      content: '';
-      position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
-      background: linear-gradient(90deg, transparent, var(--gris-borde) 20%, var(--gris-borde) 80%, transparent);
-    }
+    .wrap > .sec.banda { border-top: 1px solid #cfe0ee; border-bottom: 1px solid #cfe0ee; }
     /* Las tarjetas dentro de banda pasan a blanco para destacar */
     .sec.banda .incluye-item,
-    .sec.banda .horario-card { background: white; }
+    .sec.banda .horario-card,
+    .sec.banda .cuotas-grid,
+    .sec.banda details { background: white; box-shadow: 0 1px 3px rgba(18,63,96,0.06); }
     /* Ocultar separadores donde hay banda */
     .sec.banda + .sec-divider,
     .sec-divider + .sec.banda { display: none; }
@@ -142,14 +135,14 @@
       content: '';
       position: fixed; top: -180px; right: -180px;
       width: 520px; height: 520px; border-radius: 50%;
-      background: radial-gradient(circle, rgba(74,144,196,0.07) 0%, transparent 68%);
+      background: radial-gradient(circle, rgba(74,144,196,0.13) 0%, transparent 68%);
       pointer-events: none; z-index: 0;
     }
     body::after {
       content: '';
       position: fixed; bottom: -220px; left: -220px;
       width: 600px; height: 600px; border-radius: 50%;
-      background: radial-gradient(circle, rgba(26,95,143,0.05) 0%, transparent 68%);
+      background: radial-gradient(circle, rgba(26,95,143,0.10) 0%, transparent 68%);
       pointer-events: none; z-index: 0;
     }
     .wrap, nav, .cta, footer, .hero, .page-header { position: relative; z-index: 1; }

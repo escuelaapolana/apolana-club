@@ -22,9 +22,9 @@
       --gris: #f5f6f8; --gris-borde: #dde2e8; --texto: #1a1d23; --texto-suave: #6b7280;
     }
     html { scroll-behavior: smooth; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: white; color: var(--texto); line-height: 1.7; position: relative; }
-    body::before { content:''; position:fixed; top:10%; right:-240px; width:620px; height:620px; border-radius:50%; background:radial-gradient(circle, rgba(74,144,196,0.08) 0%, transparent 70%); pointer-events:none; z-index:0; }
-    body::after { content:''; position:fixed; bottom:5%; left:-280px; width:680px; height:680px; border-radius:50%; background:radial-gradient(circle, rgba(26,95,143,0.06) 0%, transparent 70%); pointer-events:none; z-index:0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #fcfdfe; color: var(--texto); line-height: 1.7; position: relative; }
+    body::before { content:''; position:fixed; top:10%; right:-240px; width:620px; height:620px; border-radius:50%; background:radial-gradient(circle, rgba(74,144,196,0.13) 0%, transparent 70%); pointer-events:none; z-index:0; }
+    body::after { content:''; position:fixed; bottom:5%; left:-280px; width:680px; height:680px; border-radius:50%; background:radial-gradient(circle, rgba(26,95,143,0.10) 0%, transparent 70%); pointer-events:none; z-index:0; }
     .page-header, .wrap, .cta, footer { position: relative; z-index: 1; }
 
     .page-header { position: relative; height: 340px; background: var(--azul-oscuro); display: flex; align-items: flex-end; overflow: hidden; }
@@ -53,7 +53,7 @@
     .destacado { font-size: 1.15rem !important; color: var(--texto) !important; font-weight: 500; line-height: 1.6; border-left: 4px solid var(--azul-claro); padding-left: 1.25rem; margin: 1.5rem 0 !important; }
 
     /* BANDA */
-    .banda { background: linear-gradient(180deg,#f8fafc 0%,#f1f5f9 100%); margin-left: calc(-50vw + 50%); margin-right: calc(-50vw + 50%); padding: 3rem calc(50vw - 50% + 2rem); border-top: 1px solid var(--gris-borde); border-bottom: 1px solid var(--gris-borde); }
+    .banda { background: linear-gradient(180deg,#eaf1f8 0%,#dfeaf4 100%); margin-left: calc(-50vw + 50%); margin-right: calc(-50vw + 50%); padding: 3rem calc(50vw - 50% + 2rem); border-top: 1px solid var(--gris-borde); border-bottom: 1px solid var(--gris-borde); }
 
     /* TIMELINE */
     .timeline { position: relative; padding-left: 2rem; margin: 1.5rem 0; }
