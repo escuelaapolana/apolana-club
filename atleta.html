@@ -2,163 +2,169 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Mi Panel · Club Apolana</title>
   <link rel="icon" type="image/png" href="https://icaxokjsvhlreuwpyxeb.supabase.co/storage/v1/object/public/imagenes-club/logo.png">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Atleta · Club Apolana</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --azul: #1a5f8f; --azul-claro: #4a90c4; --azul-bg: #e8f2fa; --azul-oscuro: #123f60;
-      --gris: #f5f6f8; --gris-borde: #dde2e8; --texto: #1a1d23; --texto-suave: #6b7280;
-      --error: #dc2626; --exito: #16a34a; --warn: #d97706;
-      --morado: #7c3aed; --morado-bg: #f5f3ff;
-      --sidebar: 210px;
+      --azul: #1a5f8f; --azul-dark: #123f60; --azul-light: #e8f2fa;
+      --verde: #16a34a; --verde-light: #dcfce7;
+      --naranja: #ea580c; --naranja-light: #fff7ed;
+      --gris: #f5f6f8; --borde: #e2e8f0; --texto: #1a1d23; --suave: #64748b;
+      --sidebar: 200px;
     }
-    html, body { height: 100%; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--gris); color: var(--texto); }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--gris); color: var(--texto); min-height: 100vh; }
 
-    #login-screen { display: flex; align-items: center; justify-content: center; min-height: 100vh; background: var(--gris); padding: 1rem; }
-    .login-box { background: white; border-radius: 16px; border: 1px solid var(--gris-borde); padding: 2.5rem; width: 100%; max-width: 380px; }
-    .login-logo { display: flex; align-items: center; gap: 12px; margin-bottom: 2rem; }
-    .login-logo img { width: 44px; height: 44px; border-radius: 50%; object-fit: contain; }
-    .login-logo-text span { font-weight: 600; font-size: 0.95rem; display: block; }
-    .login-logo-text small { color: var(--texto-suave); font-size: 0.75rem; }
-    .login-box h1 { font-size: 1.2rem; font-weight: 600; margin-bottom: 0.25rem; }
-    .login-box p { font-size: 0.83rem; color: var(--texto-suave); margin-bottom: 1.5rem; }
-    .lf { margin-bottom: 1rem; }
-    .lf label { display: block; font-size: 0.82rem; font-weight: 500; margin-bottom: 4px; }
-    .lf input { width: 100%; padding: 9px 11px; border: 1px solid var(--gris-borde); border-radius: 8px; font-size: 0.9rem; }
-    .lf input:focus { outline: none; border-color: var(--azul-claro); box-shadow: 0 0 0 3px rgba(74,144,196,0.12); }
-    .login-btn { width: 100%; background: var(--morado); color: white; border: none; padding: 10px; border-radius: 8px; font-size: 0.9rem; font-weight: 500; cursor: pointer; margin-top: 0.5rem; }
-    .login-btn:hover { background: #6d28d9; }
-    .login-err { font-size: 0.8rem; color: var(--error); margin-top: 0.5rem; display: none; }
-    .login-err.v { display: block; }
+    /* LOGIN */
+    .login-wrap { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: var(--azul-dark); padding: 1rem; }
+    .login-box { background: white; border-radius: 16px; padding: 2rem; width: 100%; max-width: 380px; }
+    .login-logo { display: flex; align-items: center; gap: 10px; margin-bottom: 1.5rem; justify-content: center; }
+    .login-logo img { width: 40px; height: 40px; border-radius: 50%; }
+    .login-logo span { font-weight: 700; color: var(--azul); }
+    .login-box h2 { font-size: 1.2rem; margin-bottom: 0.25rem; }
+    .login-box p { color: var(--suave); font-size: 0.82rem; margin-bottom: 1.25rem; }
+    .field { margin-bottom: 0.875rem; }
+    .field label { display: block; font-size: 0.75rem; font-weight: 600; color: var(--suave); margin-bottom: 0.3rem; text-transform: uppercase; }
+    .field input { width: 100%; padding: 10px 12px; border: 1.5px solid var(--borde); border-radius: 8px; font-size: 0.9rem; font-family: inherit; }
+    .field input:focus { outline: none; border-color: var(--azul); }
+    .btn-login { width: 100%; padding: 11px; background: var(--azul); color: white; border: none; border-radius: 8px; font-size: 0.92rem; font-weight: 600; cursor: pointer; font-family: inherit; }
+    .login-error { color: #dc2626; font-size: 0.8rem; text-align: center; margin-top: 0.5rem; display: none; }
 
+    /* APP */
     #app { display: none; min-height: 100vh; }
-    #app.visible { display: flex; }
+    .layout { display: flex; min-height: 100vh; }
 
-    .sidebar { width: var(--sidebar); background: #1e1b4b; min-height: 100vh; display: flex; flex-direction: column; flex-shrink: 0; position: sticky; top: 0; height: 100vh; overflow-y: auto; }
-    .sb-logo { padding: 1rem; border-bottom: 1px solid rgba(255,255,255,0.08); display: flex; align-items: center; gap: 10px; }
-    .sb-logo img { width: 34px; height: 34px; border-radius: 50%; object-fit: contain; background: white; padding: 2px; }
-    .sb-logo span { color: white; font-weight: 600; font-size: 0.85rem; }
-    .sb-logo small { color: rgba(255,255,255,0.4); font-size: 0.68rem; display: block; }
-    .sb-section { font-size: 0.63rem; color: rgba(255,255,255,0.3); padding: 0.875rem 1rem 0.2rem; letter-spacing: 0.1em; text-transform: uppercase; }
-    .sb-item { display: flex; align-items: center; gap: 9px; padding: 8px 1rem; font-size: 0.82rem; color: rgba(255,255,255,0.6); cursor: pointer; transition: all 0.12s; border: none; background: none; width: 100%; text-align: left; }
+    /* SIDEBAR */
+    .sidebar { width: var(--sidebar); background: var(--azul-dark); min-height: 100vh; display: flex; flex-direction: column; flex-shrink: 0; position: sticky; top: 0; height: 100vh; overflow-y: auto; }
+    .sb-logo { padding: 1rem; border-bottom: 1px solid rgba(255,255,255,0.08); display: flex; align-items: center; gap: 8px; }
+    .sb-logo img { width: 28px; height: 28px; border-radius: 50%; }
+    .sb-logo span { color: white; font-weight: 700; font-size: 0.85rem; }
+    .sb-section { font-size: 0.62rem; font-weight: 700; color: rgba(255,255,255,0.3); text-transform: uppercase; letter-spacing: 0.1em; padding: 0.875rem 1rem 0.3rem; }
+    .sb-item { display: flex; align-items: center; gap: 8px; padding: 8px 1rem; font-size: 0.8rem; color: rgba(255,255,255,0.6); cursor: pointer; border: none; background: none; width: 100%; text-align: left; transition: all 0.12s; }
     .sb-item:hover { background: rgba(255,255,255,0.07); color: white; }
-    .sb-item.activo { background: rgba(124,58,237,0.25); color: #a78bfa; }
-    .sb-item svg { flex-shrink: 0; }
-    .sb-footer { margin-top: auto; padding: 1rem; border-top: 1px solid rgba(255,255,255,0.08); }
-    .sb-user { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
-    .sb-avatar { width: 30px; height: 30px; border-radius: 50%; background: var(--morado); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; color: white; flex-shrink: 0; }
-    .sb-user-info span { font-size: 0.8rem; color: white; display: block; }
-    .sb-user-info small { font-size: 0.68rem; color: rgba(255,255,255,0.4); }
-    .sb-logout { display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.4); font-size: 0.75rem; cursor: pointer; background: none; border: none; padding: 0; }
-    .sb-logout:hover { color: white; }
+    .sb-item.activo { background: rgba(26,95,143,0.4); color: white; }
+    .sb-bottom { margin-top: auto; padding: 1rem; border-top: 1px solid rgba(255,255,255,0.08); }
+    .sb-avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--azul); display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 0.9rem; flex-shrink: 0; }
+    .sb-user { display: flex; align-items: center; gap: 8px; margin-bottom: 0.6rem; }
+    .sb-user span { font-size: 0.82rem; color: white; display: block; }
+    .sb-user small { font-size: 0.7rem; color: rgba(255,255,255,0.4); }
+    .sb-logout { font-size: 0.73rem; color: rgba(255,255,255,0.4); background: none; border: none; cursor: pointer; display: flex; align-items: center; gap: 4px; }
+    .sb-logout:hover { color: rgba(255,255,255,0.7); }
 
+    /* MAIN */
     .main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
-    .topbar { background: white; border-bottom: 1px solid var(--gris-borde); padding: 0.875rem 1.5rem; display: flex; align-items: center; justify-content: space-between; }
-    .topbar h1 { font-size: 1.05rem; font-weight: 600; }
-    .topbar-right { display: flex; gap: 0.75rem; align-items: center; }
-    .btn { padding: 7px 16px; border-radius: 8px; font-size: 0.83rem; font-weight: 500; cursor: pointer; border: none; transition: all 0.12s; display: inline-flex; align-items: center; gap: 6px; }
-    .btn-p { background: var(--morado); color: white; }
-    .btn-p:hover { background: #6d28d9; }
-    .btn-s { background: white; color: var(--texto); border: 1px solid var(--gris-borde); }
-    .btn-s:hover { background: var(--gris); }
-    .btn-azul { background: var(--azul); color: white; }
-    .btn-azul:hover { background: var(--azul-oscuro); }
-
+    .topbar { background: white; border-bottom: 1px solid var(--borde); padding: 0.875rem 1.5rem; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 10; }
+    .topbar h1 { font-size: 1rem; font-weight: 700; }
     .content { padding: 1.5rem; flex: 1; }
     .panel { display: none; }
     .panel.activo { display: block; }
 
-    /* PERFIL HEADER */
-    .perfil-header { background: linear-gradient(135deg, #1e1b4b 0%, #3730a3 100%); border-radius: 14px; padding: 1.75rem; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 1.5rem; }
-    .perfil-avatar { width: 68px; height: 68px; border-radius: 50%; background: rgba(255,255,255,0.15); display: flex; align-items: center; justify-content: center; font-size: 1.6rem; font-weight: 700; color: white; flex-shrink: 0; border: 3px solid rgba(255,255,255,0.3); }
-    .perfil-nombre { color: white; font-size: 1.3rem; font-weight: 700; }
-    .perfil-meta { color: rgba(255,255,255,0.65); font-size: 0.85rem; margin-top: 3px; }
-    .perfil-tags { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
-    .perfil-tag { background: rgba(255,255,255,0.15); color: white; font-size: 0.72rem; padding: 3px 10px; border-radius: 20px; }
+    /* HOY CARD */
+    .hoy-card { background: var(--azul-dark); border-radius: 16px; padding: 1.5rem; color: white; margin-bottom: 1.5rem; position: relative; overflow: hidden; }
+    .hoy-card::before { content: ''; position: absolute; top: -30px; right: -30px; width: 160px; height: 160px; border-radius: 50%; background: rgba(255,255,255,0.05); }
+    .hoy-label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255,255,255,0.5); margin-bottom: 0.4rem; }
+    .hoy-titulo { font-size: 1.3rem; font-weight: 800; margin-bottom: 0.25rem; }
+    .hoy-meta { font-size: 0.8rem; color: rgba(255,255,255,0.6); margin-bottom: 1rem; }
+    .hoy-badge { display: inline-flex; align-items: center; padding: 3px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem; }
+    .hoy-badge.pista { background: rgba(234,88,12,0.3); color: #fed7aa; }
+    .hoy-badge.gym { background: rgba(124,58,237,0.3); color: #ddd6fe; }
+    .hoy-badge.continuo { background: rgba(22,163,74,0.3); color: #bbf7d0; }
+    .hoy-badge.activacion { background: rgba(8,145,178,0.3); color: #a5f3fc; }
+    .hoy-badge.competicion { background: rgba(220,38,38,0.3); color: #fecaca; }
+    .hoy-badge.descanso { background: rgba(148,163,184,0.2); color: rgba(255,255,255,0.5); }
+    .hoy-nota { background: rgba(255,255,255,0.08); border-radius: 8px; padding: 0.6rem 0.875rem; font-size: 0.8rem; color: rgba(255,255,255,0.8); line-height: 1.5; margin-bottom: 1rem; border-left: 3px solid rgba(255,255,255,0.2); }
+    .btn-feedback { background: white; color: var(--azul-dark); padding: 9px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 700; border: none; cursor: pointer; font-family: inherit; display: inline-flex; align-items: center; gap: 6px; }
+    .btn-feedback:hover { background: var(--azul-light); }
+    .btn-feedback.done { background: var(--verde-light); color: var(--verde); }
 
-    /* STATS */
-    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 0.875rem; margin-bottom: 1.25rem; }
-    .stat-card { background: white; border-radius: 10px; border: 1px solid var(--gris-borde); padding: 1rem; text-align: center; }
-    .stat-val { font-size: 1.75rem; font-weight: 700; color: var(--morado); line-height: 1; }
-    .stat-label { font-size: 0.72rem; color: var(--texto-suave); margin-top: 4px; }
+    /* BLOQUES SESIÓN */
+    .sesion-bloques { background: white; border-radius: 12px; border: 1px solid var(--borde); overflow: hidden; margin-bottom: 1.5rem; }
+    .bloque-titulo { padding: 0.6rem 1.25rem; background: var(--gris); border-bottom: 1px solid var(--borde); font-size: 0.75rem; font-weight: 700; color: var(--suave); text-transform: uppercase; letter-spacing: 0.06em; }
+    .fila-ejercicio { display: grid; grid-template-columns: 1fr auto auto auto auto; gap: 0.5rem; padding: 0.6rem 1.25rem; border-bottom: 1px solid var(--borde); align-items: center; font-size: 0.83rem; }
+    .fila-ejercicio:last-child { border-bottom: none; }
+    .ej-nombre { font-weight: 600; }
+    .ej-series { color: var(--naranja); font-weight: 700; font-size: 0.78rem; white-space: nowrap; }
+    .ej-rec { color: var(--suave); font-size: 0.72rem; white-space: nowrap; }
+    .ej-calzado { font-size: 0.68rem; font-weight: 700; background: var(--gris); padding: 2px 6px; border-radius: 4px; }
+    .ej-obs { color: var(--suave); font-size: 0.75rem; grid-column: 1/-1; margin-top: -4px; padding-left: 0; }
+    .ej-override { color: var(--azul); font-size: 0.75rem; font-weight: 600; grid-column: 1/-1; margin-top: -4px; }
 
-    .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
-    .card { background: white; border-radius: 10px; border: 1px solid var(--gris-borde); padding: 1.25rem; }
-    .card-title { font-size: 0.88rem; font-weight: 600; margin-bottom: 0.875rem; display: flex; align-items: center; gap: 7px; }
+    /* SEMANA MINI */
+    .semana-mini { display: grid; grid-template-columns: repeat(7,1fr); gap: 0.4rem; margin-bottom: 1.5rem; }
+    .dia-mini { background: white; border-radius: 8px; border: 1px solid var(--borde); padding: 0.5rem 0.3rem; text-align: center; cursor: pointer; transition: all 0.12s; }
+    .dia-mini:hover { border-color: var(--azul); }
+    .dia-mini.activo { border-color: var(--azul); background: var(--azul-light); }
+    .dia-mini.hoy { box-shadow: 0 0 0 2px var(--azul); }
+    .dia-mini.tiene { border-color: var(--naranja); }
+    .dia-mini-nombre { font-size: 0.58rem; font-weight: 700; color: var(--suave); text-transform: uppercase; }
+    .dia-mini-num { font-size: 1rem; font-weight: 800; }
+    .dia-mini-punto { width: 5px; height: 5px; border-radius: 50%; background: var(--naranja); margin: 2px auto 0; }
 
-    .badge { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 0.72rem; font-weight: 600; }
-    .badge-activo { background: #dcfce7; color: #166534; }
-    .badge-prueba { background: #fef3c7; color: #92400e; }
-    .badge-apuntado { background: var(--azul-bg); color: var(--azul); }
-    .tag { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 0.72rem; font-weight: 500; background: var(--morado-bg); color: var(--morado); }
+    /* FEEDBACK FORM */
+    .feedback-card { background: white; border-radius: 12px; border: 1px solid var(--borde); padding: 1.25rem; margin-bottom: 1rem; }
+    .feedback-card h3 { font-size: 0.9rem; font-weight: 700; margin-bottom: 1rem; }
+    .rating-group { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem; }
+    .rating-btn { width: 40px; height: 40px; border-radius: 8px; border: 2px solid var(--borde); background: white; font-size: 0.88rem; font-weight: 700; cursor: pointer; font-family: inherit; transition: all 0.12s; }
+    .rating-btn:hover { border-color: var(--azul); }
+    .rating-btn.sel { border-color: var(--azul); background: var(--azul); color: white; }
+    .rating-btn.sel.alto { border-color: var(--verde); background: var(--verde); }
+    .rating-btn.sel.bajo { border-color: #dc2626; background: #dc2626; }
+    .campo-tiempo { display: grid; grid-template-columns: 1fr auto; gap: 0.5rem; align-items: center; padding: 0.4rem 0; border-bottom: 1px solid var(--borde); }
+    .campo-tiempo:last-child { border-bottom: none; }
+    .campo-tiempo label { font-size: 0.8rem; }
+    .campo-tiempo input { width: 80px; padding: 5px 8px; border: 1.5px solid var(--borde); border-radius: 6px; font-size: 0.82rem; text-align: center; font-family: inherit; }
+    .mf { margin-bottom: 0.875rem; }
+    .mf label { display: block; font-size: 0.73rem; font-weight: 600; color: var(--suave); text-transform: uppercase; margin-bottom: 0.3rem; }
+    .mf textarea { width: 100%; padding: 8px 10px; border: 1.5px solid var(--borde); border-radius: 8px; font-size: 0.85rem; font-family: inherit; resize: vertical; min-height: 70px; }
+    .mf textarea:focus { outline: none; border-color: var(--azul); }
 
-    /* ENTRENOS */
-    .entreno-item { background: white; border: 1px solid var(--gris-borde); border-radius: 10px; margin-bottom: 0.875rem; overflow: hidden; transition: border-color 0.12s; }
-    .entreno-item:hover { border-color: var(--morado); }
-    .entreno-head { padding: 1rem 1.25rem; display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; }
-    .entreno-tipo { font-size: 0.7rem; font-weight: 600; padding: 2px 8px; border-radius: 20px; display: inline-block; margin-bottom: 4px; }
-    .tipo-tecnica { background: #e0f2fe; color: #0369a1; }
-    .tipo-fuerza { background: #fce7f3; color: #9d174d; }
-    .tipo-velocidad { background: #fef3c7; color: #92400e; }
-    .tipo-resistencia { background: #dcfce7; color: #166534; }
-    .tipo-competicion { background: #fee2e2; color: #991b1b; }
-    .tipo-otro { background: var(--gris); color: var(--texto-suave); }
-    .entreno-titulo { font-size: 0.95rem; font-weight: 600; }
-    .entreno-fecha { font-size: 0.78rem; color: var(--texto-suave); margin-top: 2px; }
-    .entreno-body { padding: 0 1.25rem 1rem; font-size: 0.85rem; color: var(--texto-suave); line-height: 1.6; white-space: pre-wrap; }
-    .entreno-adjunto { display: inline-flex; align-items: center; gap: 6px; font-size: 0.78rem; color: var(--azul); text-decoration: none; margin-top: 8px; padding: 4px 10px; background: var(--azul-bg); border-radius: 6px; }
-    .fb-btn { font-size: 0.78rem; padding: 5px 12px; border-radius: 7px; background: var(--morado); color: white; border: none; cursor: pointer; flex-shrink: 0; }
-    .fb-btn.ya { background: #dcfce7; color: #166534; cursor: default; }
+    /* MARCAS */
+    .marca-row { display: flex; align-items: center; justify-content: space-between; padding: 0.6rem 0; border-bottom: 1px solid var(--borde); }
+    .marca-row:last-child { border-bottom: none; }
+    .marca-prueba { font-size: 0.8rem; font-weight: 700; }
+    .marca-tiempo { font-size: 1.1rem; font-weight: 800; color: var(--azul); }
+    .marca-fecha { font-size: 0.7rem; color: var(--suave); }
 
-    /* COMPETICIONES */
-    .comp-item { background: white; border: 1px solid var(--gris-borde); border-radius: 10px; padding: 1rem 1.25rem; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 1rem; }
-    .comp-fecha-box { min-width: 48px; text-align: center; background: var(--morado-bg); border-radius: 8px; padding: 0.5rem 0.25rem; flex-shrink: 0; }
-    .comp-dia { font-size: 1.2rem; font-weight: 700; color: var(--morado); line-height: 1; }
-    .comp-mes { font-size: 0.68rem; color: #7c3aed; text-transform: uppercase; font-weight: 600; }
-    .comp-info { flex: 1; }
-    .comp-titulo { font-size: 0.9rem; font-weight: 600; }
-    .comp-meta { font-size: 0.75rem; color: var(--texto-suave); margin-top: 2px; }
-    .apuntarse-btn { font-size: 0.78rem; padding: 6px 14px; border-radius: 7px; background: var(--morado); color: white; border: none; cursor: pointer; flex-shrink: 0; transition: all 0.12s; }
-    .apuntarse-btn:hover { background: #6d28d9; }
-    .apuntarse-btn.apuntado { background: #dcfce7; color: #166534; cursor: default; }
+    /* BOTONES */
+    .btn { padding: 8px 16px; border-radius: 8px; font-size: 0.83rem; font-weight: 600; cursor: pointer; border: none; font-family: inherit; display: inline-flex; align-items: center; gap: 6px; }
+    .btn-p { background: var(--azul); color: white; }
+    .btn-g { background: var(--gris); color: var(--texto); border: 1px solid var(--borde); }
 
-    /* STATS GRÁFICA SIMPLE */
-    .marcas-lista { display: flex; flex-direction: column; gap: 6px; }
-    .marca-item { display: flex; align-items: center; gap: 10px; font-size: 0.83rem; }
-    .marca-bar-wrap { flex: 1; background: var(--gris); border-radius: 4px; height: 8px; overflow: hidden; }
-    .marca-bar { height: 100%; background: var(--morado); border-radius: 4px; transition: width 0.5s; }
-    .marca-label { min-width: 80px; color: var(--texto-suave); font-size: 0.75rem; }
-    .marca-val { min-width: 60px; text-align: right; font-weight: 600; font-size: 0.8rem; }
+    /* HISTORIAL */
+    .historial-item { background: white; border-radius: 10px; border: 1px solid var(--borde); padding: 1rem; margin-bottom: 0.6rem; cursor: pointer; transition: all 0.12s; }
+    .historial-item:hover { border-color: var(--azul); }
+    .historial-fecha { font-size: 0.72rem; color: var(--suave); margin-bottom: 0.25rem; }
+    .historial-titulo { font-size: 0.88rem; font-weight: 700; }
+    .historial-meta { display: flex; gap: 0.5rem; margin-top: 0.3rem; }
+    .badge { display: inline-flex; padding: 2px 7px; border-radius: 10px; font-size: 0.65rem; font-weight: 700; }
+    .badge-azul { background: var(--azul-light); color: var(--azul); }
+    .badge-verde { background: var(--verde-light); color: var(--verde); }
+    .badge-gris { background: var(--gris); color: var(--suave); }
 
-    /* MODAL FEEDBACK */
-    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 200; align-items: center; justify-content: center; padding: 1rem; }
+    /* MODAL */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; align-items: flex-end; justify-content: center; }
     .modal-overlay.v { display: flex; }
-    .modal { background: white; border-radius: 14px; width: 100%; max-width: 460px; }
-    .modal-head { padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--gris-borde); display: flex; align-items: center; justify-content: space-between; }
-    .modal-head h2 { font-size: 1rem; font-weight: 600; }
-    .modal-close { background: none; border: none; cursor: pointer; color: var(--texto-suave); }
-    .modal-body { padding: 1.5rem; }
-    .modal-foot { padding: 1rem 1.5rem; border-top: 1px solid var(--gris-borde); display: flex; justify-content: flex-end; gap: 0.75rem; }
-    .mf { margin-bottom: 1rem; }
-    .mf label { display: block; font-size: 0.82rem; font-weight: 500; margin-bottom: 4px; }
-    .mf input, .mf textarea { width: 100%; padding: 8px 10px; border: 1px solid var(--gris-borde); border-radius: 7px; font-size: 0.87rem; }
-    .mf textarea { resize: vertical; min-height: 80px; }
-    .stars { display: flex; gap: 8px; margin-top: 4px; }
-    .star { width: 40px; height: 40px; border-radius: 8px; border: 1.5px solid var(--gris-borde); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1.2rem; transition: all 0.12s; }
-    .star:hover, .star.sel { border-color: var(--morado); background: var(--morado-bg); }
-    .star-label { font-size: 0.7rem; color: var(--texto-suave); margin-top: 3px; text-align: center; }
+    .modal { background: white; border-radius: 20px 20px 0 0; width: 100%; max-width: 600px; max-height: 90vh; overflow-y: auto; padding: 1.5rem; }
+    .modal-handle { width: 40px; height: 4px; border-radius: 2px; background: var(--borde); margin: 0 auto 1.25rem; }
+    .modal-titulo { font-size: 1rem; font-weight: 700; margin-bottom: 1.25rem; }
 
-    .spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.6s linear infinite; vertical-align: middle; margin-right: 4px; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    @media (max-width: 700px) {
+    /* MOBILE NAV */
+    .mobile-nav { display: none; }
+    @media (max-width: 768px) {
       .sidebar { display: none; }
-      .g2 { grid-template-columns: 1fr; }
-      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .content { padding: 1rem; }
+      .topbar { padding: 0.75rem 1rem; }
+      .fila-ejercicio { grid-template-columns: 1fr auto auto; }
+      .ej-rec, .ej-calzado { display: none; }
+      .semana-mini { gap: 0.25rem; }
+      .mobile-nav { display: flex; position: fixed; bottom: 0; left: 0; right: 0; background: white; border-top: 1px solid var(--borde); z-index: 50; }
+      .mobile-nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 8px 4px; color: var(--suave); font-size: 0.58rem; cursor: pointer; border: none; background: none; font-family: inherit; }
+      .mobile-nav-item.activo { color: var(--azul); }
+      body { padding-bottom: 64px; }
+      .hoy-titulo { font-size: 1.1rem; }
+      .modal-overlay { align-items: flex-end; }
     }
   </style>
 </head>
@@ -166,132 +172,180 @@
 
 <!-- LOGIN -->
 <div id="login-screen">
-  <div class="login-box">
-    <div class="login-logo">
-      <img src="https://icaxokjsvhlreuwpyxeb.supabase.co/storage/v1/object/public/imagenes-club/logo.png" alt="Club Apolana" onerror="this.style.display='none'">
-      <div class="login-logo-text">
+  <div class="login-wrap">
+    <div class="login-box">
+      <div class="login-logo">
+        <img src="https://icaxokjsvhlreuwpyxeb.supabase.co/storage/v1/object/public/imagenes-club/logo.png" alt="">
         <span>Club Apolana</span>
-        <small>Portal del atleta</small>
       </div>
+      <h2>Mi panel de atleta</h2>
+      <p>Accede con tu cuenta personal</p>
+      <div class="field"><label>Email</label><input type="email" id="login-email" placeholder="tu@email.com" autocomplete="email"></div>
+      <div class="field"><label>Contraseña</label><input type="password" id="login-pass" placeholder="••••••••" autocomplete="current-password"></div>
+      <div class="login-error" id="login-error">Email o contraseña incorrectos</div>
+      <button class="btn-login" onclick="doLogin()">Entrar</button>
+      <div style="text-align:center;margin-top:1rem;"><a href="index.html" style="font-size:0.78rem;color:var(--suave);text-decoration:none;">← Volver a la web</a></div>
     </div>
-    <h1>Acceso atletas</h1>
-    <p>Tu perfil, entrenamientos y competiciones</p>
-    <div class="lf"><label>Email</label><input type="email" id="l-email" placeholder="tu@email.com" autocomplete="email"></div>
-    <div class="lf"><label>Contraseña</label><input type="password" id="l-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"></div>
-    <div class="login-err" id="l-err">Email o contraseña incorrectos</div>
-    <button class="login-btn" id="l-btn" onclick="doLogin()">Entrar</button>
   </div>
 </div>
 
 <!-- APP -->
 <div id="app">
-  <aside class="sidebar">
-    <div class="sb-logo">
-      <img src="https://icaxokjsvhlreuwpyxeb.supabase.co/storage/v1/object/public/imagenes-club/logo.png" alt="Logo" onerror="this.style.display='none'">
-      <div><span>Apolana</span><small id="sb-grupo">Atleta</small></div>
-    </div>
-    <div class="sb-section">Mi panel</div>
-    <button class="sb-item activo" onclick="showPanel('perfil')">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
-      Mi perfil
-    </button>
-    <button class="sb-item" onclick="showPanel('entrenamientos')">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-      Entrenamientos
-    </button>
-    <button class="sb-item" onclick="showPanel('stats')">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-      Mis estadísticas
-    </button>
-    <button class="sb-item" onclick="showPanel('competiciones')">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-      Competiciones
-    </button>
-    <div class="sb-footer">
-      <div class="sb-user">
-        <div class="sb-avatar" id="sb-initials">A</div>
-        <div class="sb-user-info">
-          <span id="sb-nombre">Atleta</span>
-          <small>Atleta</small>
+  <div class="layout">
+
+    <!-- SIDEBAR (desktop) -->
+    <aside class="sidebar">
+      <div class="sb-logo">
+        <img src="https://icaxokjsvhlreuwpyxeb.supabase.co/storage/v1/object/public/imagenes-club/logo.png" alt="">
+        <span>Apolana</span>
+      </div>
+      <div class="sb-section">Mi entrenamiento</div>
+      <button class="sb-item activo" onclick="showPanel('hoy')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Sesión de hoy
+      </button>
+      <button class="sb-item" onclick="showPanel('semana')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Mi semana
+      </button>
+      <button class="sb-item" onclick="showPanel('historial')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="14 2 14 8 20 8"/><path d="M20 20H4V4h10l6 6z"/></svg>
+        Historial
+      </button>
+      <div class="sb-section">Mi perfil</div>
+      <button class="sb-item" onclick="showPanel('marcas')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Mis marcas
+      </button>
+      <button class="sb-item" onclick="showPanel('perfil')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        Mi perfil
+      </button>
+      <div class="sb-bottom">
+        <div class="sb-user">
+          <div class="sb-avatar" id="sb-initials">A</div>
+          <div><span id="sb-nombre">Atleta</span><small id="sb-grupo">—</small></div>
+        </div>
+        <button class="sb-logout" onclick="doLogout()">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          Cerrar sesión
+        </button>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+
+      <!-- PANEL: HOY -->
+      <div class="panel activo" id="panel-hoy">
+        <div class="topbar">
+          <h1 id="hoy-fecha-topbar">Hoy</h1>
+          <a href="index.html" style="font-size:0.78rem;color:var(--suave);text-decoration:none;">Web del club →</a>
+        </div>
+        <div class="content" id="content-hoy"></div>
+      </div>
+
+      <!-- PANEL: SEMANA -->
+      <div class="panel" id="panel-semana">
+        <div class="topbar">
+          <h1>Mi semana</h1>
+          <div style="display:flex;gap:0.5rem;">
+            <button class="btn btn-g" style="padding:5px 10px;font-size:0.78rem;" onclick="cambiarSemana(-1)">← Ant</button>
+            <button class="btn btn-g" style="padding:5px 10px;font-size:0.78rem;" onclick="cambiarSemana(1)">Sig →</button>
+          </div>
+        </div>
+        <div class="content">
+          <div class="semana-mini" id="semana-mini-grid"></div>
+          <div id="sesion-seleccionada-semana"></div>
         </div>
       </div>
-      <button class="sb-logout" onclick="doLogout()">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-        Cerrar sesión
-      </button>
-    </div>
-  </aside>
 
-  <div class="main">
-    <div class="topbar">
-      <h1 id="topbar-title">Mi perfil</h1>
-      <div class="topbar-right">
-        <a href="index.html" target="_blank" class="btn btn-s">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-          Web del club
-        </a>
-      </div>
-    </div>
-    <div class="content">
-
-      <!-- PERFIL -->
-      <div class="panel activo" id="panel-perfil">
-        <div id="perfil-contenido"><div style="color:var(--texto-suave);">Cargando...</div></div>
+      <!-- PANEL: HISTORIAL -->
+      <div class="panel" id="panel-historial">
+        <div class="topbar"><h1>Historial de sesiones</h1></div>
+        <div class="content" id="content-historial"></div>
       </div>
 
-      <!-- ENTRENAMIENTOS -->
-      <div class="panel" id="panel-entrenamientos">
-        <div id="entrenos-contenido"><div style="color:var(--texto-suave);">Cargando...</div></div>
+      <!-- PANEL: MARCAS -->
+      <div class="panel" id="panel-marcas">
+        <div class="topbar"><h1>Mis marcas</h1></div>
+        <div class="content" id="content-marcas"></div>
       </div>
 
-      <!-- ESTADÍSTICAS -->
-      <div class="panel" id="panel-stats">
-        <div id="stats-contenido"><div style="color:var(--texto-suave);">Cargando estadísticas...</div></div>
+      <!-- PANEL: PERFIL -->
+      <div class="panel" id="panel-perfil">
+        <div class="topbar"><h1>Mi perfil</h1></div>
+        <div class="content" id="content-perfil"></div>
       </div>
 
-      <!-- COMPETICIONES -->
-      <div class="panel" id="panel-competiciones">
-        <div id="comp-contenido"><div style="color:var(--texto-suave);">Cargando...</div></div>
-      </div>
-
-    </div>
+    </main>
   </div>
+
+  <!-- MOBILE NAV -->
+  <nav class="mobile-nav">
+    <button class="mobile-nav-item activo" onclick="showPanel('hoy')">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      Hoy
+    </button>
+    <button class="mobile-nav-item" onclick="showPanel('semana')">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      Semana
+    </button>
+    <button class="mobile-nav-item" onclick="showPanel('historial')">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="14 2 14 8 20 8"/><path d="M20 20H4V4h10l6 6z"/></svg>
+      Historial
+    </button>
+    <button class="mobile-nav-item" onclick="showPanel('marcas')">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      Marcas
+    </button>
+    <button class="mobile-nav-item" onclick="showPanel('perfil')">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      Perfil
+    </button>
+  </nav>
 </div>
 
 <!-- MODAL FEEDBACK -->
 <div class="modal-overlay" id="modal-feedback">
   <div class="modal">
-    <div class="modal-head">
-      <h2>Feedback del entrenamiento</h2>
-      <button class="modal-close" onclick="cerrarModal('modal-feedback')">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    <div class="modal-handle"></div>
+    <div class="modal-titulo" id="modal-feedback-titulo">Registrar feedback</div>
+
+    <div class="feedback-card" style="margin-bottom:1rem;">
+      <h3>¿Cómo ha ido la sesión? (1-10)</h3>
+      <div class="rating-group" id="rating-sensacion"></div>
+      <h3 style="margin-top:0.75rem;">Esfuerzo percibido (RPE)</h3>
+      <div class="rating-group" id="rating-rpe"></div>
+    </div>
+
+    <div class="feedback-card" style="margin-bottom:1rem;" id="tiempos-section">
+      <h3>Tiempos reales de series</h3>
+      <p style="font-size:0.78rem;color:var(--suave);margin-bottom:0.75rem;">Introduce los tiempos que has hecho en cada serie (opcional)</p>
+      <div id="tiempos-container"></div>
+    </div>
+
+    <div class="feedback-card" style="margin-bottom:1rem;">
+      <div class="mf">
+        <label>¿Cómo te has sentido físicamente?</label>
+        <textarea id="fb-fisico" placeholder="Piernas cargadas, bien de fondo, algo de tensión en el gemelo izquierdo..."></textarea>
+      </div>
+      <div class="mf">
+        <label>Molestias o dolores</label>
+        <textarea id="fb-molestias" placeholder="Sin molestias / Pequeña molestia en isquio derecho..." style="min-height:55px;"></textarea>
+      </div>
+      <div class="mf" style="margin-bottom:0;">
+        <label>Notas adicionales</label>
+        <textarea id="fb-notas" placeholder="Lo que quieras añadir para tu entrenador..." style="min-height:55px;"></textarea>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:0.75rem;">
+      <button class="btn btn-g" style="flex:1;" onclick="cerrarModal('modal-feedback')">Cancelar</button>
+      <button class="btn btn-p" style="flex:2;" onclick="guardarFeedback()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13"/><path d="M22 2L15 22l-4-9-9-4 20-7z"/></svg>
+        Enviar al entrenador
       </button>
-    </div>
-    <div class="modal-body">
-      <input type="hidden" id="fb-entreno-id">
-      <div style="font-size:0.88rem;font-weight:600;margin-bottom:1rem;" id="fb-titulo"></div>
-      <div class="mf">
-        <label>¿Cómo fue la sesión?</label>
-        <div class="stars">
-          <div style="text-align:center;"><div class="star" onclick="selStar(1)" id="star-1">😞</div><div class="star-label">Mal</div></div>
-          <div style="text-align:center;"><div class="star" onclick="selStar(2)" id="star-2">😐</div><div class="star-label">Regular</div></div>
-          <div style="text-align:center;"><div class="star" onclick="selStar(3)" id="star-3">🙂</div><div class="star-label">Bien</div></div>
-          <div style="text-align:center;"><div class="star" onclick="selStar(4)" id="star-4">😄</div><div class="star-label">Muy bien</div></div>
-          <div style="text-align:center;"><div class="star" onclick="selStar(5)" id="star-5">🔥</div><div class="star-label">Excelente</div></div>
-        </div>
-      </div>
-      <div class="mf">
-        <label>Marca o tiempo <span style="color:var(--texto-suave);font-weight:400;font-size:0.78rem;">(opcional)</span></label>
-        <input type="text" id="fb-marca" placeholder="Ej: 12.5s, 4:30 min/km, 8.45m...">
-      </div>
-      <div class="mf">
-        <label>Notas <span style="color:var(--texto-suave);font-weight:400;font-size:0.78rem;">(opcional)</span></label>
-        <textarea id="fb-notas" placeholder="¿Cómo te encontraste? ¿Alguna dificultad o logro?"></textarea>
-      </div>
-    </div>
-    <div class="modal-foot">
-      <button class="btn btn-s" onclick="cerrarModal('modal-feedback')">Cancelar</button>
-      <button class="btn btn-p" id="btn-fb" onclick="enviarFeedback()">Enviar</button>
     </div>
   </div>
 </div>
@@ -301,282 +355,446 @@ const SB_URL = 'https://icaxokjsvhlreuwpyxeb.supabase.co';
 const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImljYXhva2pzdmhscmV1d3B5eGViIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEwNzE2NTgsImV4cCI6MjA5NjY0NzY1OH0.xn1ZY-otHY0-l7g64uutSVjiU8DbkHxxZmTvu77IaHA';
 const db = supabase.createClient(SB_URL, SB_KEY);
 
-let perfilActual = null, atletaData = null, grupoData = null, starSel = 0;
+let perfilActual = null;
+let atletaActual = null;
+let grupoActual = null;
+let semanaOffset = 0;
+let sesionesGrupo = [];
+let feedbackExistente = {};
+let sesionFeedbackActual = null;
+let sensacionSel = 0;
+let rpeSel = 0;
 
-// AUTH
+// ── AUTH ──────────────────────────────────
 async function doLogin() {
-  const email = document.getElementById('l-email').value.trim();
-  const pass = document.getElementById('l-pass').value;
-  const err = document.getElementById('l-err');
-  const btn = document.getElementById('l-btn');
-  err.classList.remove('v');
-  btn.innerHTML = '<span class="spinner"></span>Entrando...'; btn.disabled = true;
-  try {
-    const { data, error } = await db.auth.signInWithPassword({ email, password: pass });
-    if (error) throw error;
-    const { data: perfil } = await db.from('perfiles').select('*').eq('id', data.user.id).single();
-    if (!perfil || !['atleta','admin'].includes(perfil.rol)) throw new Error('No atleta');
-    iniciarApp(perfil);
-  } catch(e) {
-    err.classList.add('v'); btn.innerHTML = 'Entrar'; btn.disabled = false;
+  const email = document.getElementById('login-email').value.trim();
+  const pass = document.getElementById('login-pass').value;
+  const err = document.getElementById('login-error');
+  err.style.display = 'none';
+  const { data, error } = await db.auth.signInWithPassword({ email, password: pass });
+  if (error) { err.style.display = 'block'; return; }
+  const { data: p } = await db.from('perfiles').select('*').eq('id', data.user.id).single();
+  if (!p || !['atleta','admin','coordinador'].includes(p.rol)) {
+    err.textContent = 'No tienes cuenta de atleta'; err.style.display = 'block';
+    await db.auth.signOut(); return;
   }
+  iniciarApp(p);
 }
 
 async function checkSession() {
   const { data } = await db.auth.getSession();
-  if (data.session) {
-    const { data: p } = await db.from('perfiles').select('*').eq('id', data.session.user.id).single();
-    if (p && ['atleta','admin'].includes(p.rol)) { iniciarApp(p); return; }
-  }
-  document.getElementById('login-screen').style.display = 'flex';
+  if (!data.session) return;
+  const { data: p } = await db.from('perfiles').select('*').eq('id', data.session.user.id).single();
+  if (p) iniciarApp(p);
 }
 
-async function iniciarApp(perfil) {
-  perfilActual = perfil;
+async function iniciarApp(p) {
+  perfilActual = p;
   document.getElementById('login-screen').style.display = 'none';
-  document.getElementById('app').classList.add('visible');
-  const n = perfil.nombre || 'Atleta';
+  document.getElementById('app').style.display = 'block';
+
+  const n = p.nombre || 'A';
   document.getElementById('sb-nombre').textContent = n;
   document.getElementById('sb-initials').textContent = n.charAt(0).toUpperCase();
-  // Buscar atleta vinculado al perfil
-  const { data: atleta } = await db.from('atletas').select('*').eq('perfil_padre_id', perfil.id).single();
-  if (atleta) {
-    atletaData = atleta;
-    if (atleta.grupo_id) {
-      const { data: grupo } = await db.from('grupos').select('*').eq('id', atleta.grupo_id).single();
-      grupoData = grupo;
-      if (grupo) document.getElementById('sb-grupo').textContent = grupo.nombre;
-    }
-    renderPerfil();
+
+  // Cargar datos del atleta vinculado al perfil
+  const { data: atleta } = await db.from('atletas').select('*').eq('perfil_id', p.id).maybeSingle()
+    || await db.from('atletas').select('*').eq('perfil_padre_id', p.id).maybeSingle();
+
+  // Si no hay atleta vinculado por perfil_id, intentar por nombre
+  if (!atleta) {
+    const { data: atletaPorNombre } = await db.from('atletas')
+      .select('*').ilike('nombre', p.nombre || '').maybeSingle();
+    atletaActual = atletaPorNombre;
   } else {
-    // El atleta usa su propio perfil como referencia
-    document.getElementById('perfil-contenido').innerHTML = '<div style="color:var(--texto-suave);font-size:0.88rem;padding:1rem;">Tu perfil de atleta aún no está vinculado. Contacta con el club.</div>';
+    atletaActual = atleta;
   }
+
+  if (atletaActual?.grupo_id) {
+    const { data: grupo } = await db.from('grupos').select('*').eq('id', atletaActual.grupo_id).single();
+    grupoActual = grupo;
+    document.getElementById('sb-grupo').textContent = grupo?.nombre || '—';
+  }
+
+  const hoy = new Date();
+  document.getElementById('hoy-fecha-topbar').textContent =
+    hoy.toLocaleDateString('es-ES', { weekday:'long', day:'numeric', month:'long' });
+
+  await cargarSesionesGrupo();
+  renderHoy();
+  showPanel('hoy');
 }
 
 async function doLogout() { await db.auth.signOut(); location.reload(); }
 
-// PERFIL
-function renderPerfil() {
-  const a = atletaData;
-  document.getElementById('perfil-contenido').innerHTML = `
-    <div class="perfil-header">
-      <div class="perfil-avatar">${a.nombre.charAt(0)}${a.apellidos.charAt(0)}</div>
-      <div>
-        <div class="perfil-nombre">${a.nombre} ${a.apellidos}</div>
-        <div class="perfil-meta">${calcEdad(a.fecha_nacimiento)} años · ${a.seccion}</div>
-        <div class="perfil-tags">
-          <span class="perfil-tag">${grupoData?.nombre||'Sin grupo'}</span>
-          <span class="perfil-tag">${a.estado}</span>
-          ${a.licencia_rfea ? `<span class="perfil-tag">RFEA: ${a.licencia_rfea}</span>` : ''}
-        </div>
-      </div>
-    </div>
-    <div class="g2">
-      <div class="card">
-        <div class="card-title">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
-          Mis datos
-        </div>
-        <div style="font-size:0.85rem;display:flex;flex-direction:column;gap:8px;">
-          <div style="display:flex;justify-content:space-between;padding-bottom:7px;border-bottom:1px solid var(--gris-borde);"><span style="color:var(--texto-suave);">Fecha nacimiento</span><span style="font-weight:500;">${a.fecha_nacimiento||'—'}</span></div>
-          <div style="display:flex;justify-content:space-between;padding-bottom:7px;border-bottom:1px solid var(--gris-borde);"><span style="color:var(--texto-suave);">Sección</span><span class="tag">${a.seccion}</span></div>
-          <div style="display:flex;justify-content:space-between;padding-bottom:7px;border-bottom:1px solid var(--gris-borde);"><span style="color:var(--texto-suave);">Grupo</span><span style="font-weight:500;">${grupoData?.nombre||'—'}</span></div>
-          <div style="display:flex;justify-content:space-between;"><span style="color:var(--texto-suave);">Horario</span><span style="font-weight:500;">${grupoData?.horario||'—'}</span></div>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-title">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
-          Estado
-        </div>
-        <div style="font-size:0.85rem;display:flex;flex-direction:column;gap:8px;">
-          <div style="display:flex;justify-content:space-between;padding-bottom:7px;border-bottom:1px solid var(--gris-borde);"><span style="color:var(--texto-suave);">Estado</span><span class="badge badge-${a.estado}">${a.estado}</span></div>
-          <div style="display:flex;justify-content:space-between;padding-bottom:7px;border-bottom:1px solid var(--gris-borde);"><span style="color:var(--texto-suave);">Pago</span><span class="badge badge-${a.estado_pago||'pendiente'}">${(a.estado_pago||'pendiente').replace('_',' ')}</span></div>
-          <div style="display:flex;justify-content:space-between;padding-bottom:7px;border-bottom:1px solid var(--gris-borde);"><span style="color:var(--texto-suave);">Camiseta</span><span style="font-weight:500;">${a.talla_camiseta||'—'}</span></div>
-          <div style="display:flex;justify-content:space-between;"><span style="color:var(--texto-suave);">Ropa</span><span class="badge ${a.ropa_entregada?'badge-activo':'badge-prueba'}">${a.ropa_entregada?'Entregada':'Pendiente'}</span></div>
-        </div>
-      </div>
+// ── NAVEGACIÓN ───────────────────────────
+function showPanel(id) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('activo'));
+  document.getElementById('panel-' + id)?.classList.add('activo');
+  document.querySelectorAll('.sb-item, .mobile-nav-item').forEach(b => {
+    b.classList.toggle('activo', b.getAttribute('onclick')?.includes("'" + id + "'"));
+  });
+  if (id === 'semana') renderSemana();
+  if (id === 'historial') cargarHistorial();
+  if (id === 'marcas') renderMarcas();
+  if (id === 'perfil') renderPerfil();
+}
+
+function cerrarModal(id) { document.getElementById(id).classList.remove('v'); }
+
+// ── CARGAR SESIONES DEL GRUPO ─────────────
+async function cargarSesionesGrupo() {
+  if (!grupoActual) { sesionesGrupo = []; return; }
+  const lunes = getLunes(semanaOffset);
+  const domingo = new Date(lunes); domingo.setDate(lunes.getDate() + 13); // 2 semanas
+  const inicio = lunes.toISOString().split('T')[0];
+  const fin = domingo.toISOString().split('T')[0];
+
+  const { data } = await db.from('sesiones')
+    .select('*')
+    .eq('grupo_id', grupoActual.id)
+    .eq('publicada', true)
+    .gte('fecha', inicio)
+    .lte('fecha', fin)
+    .order('fecha');
+  sesionesGrupo = data || [];
+
+  // Cargar feedback existente del atleta
+  if (atletaActual && sesionesGrupo.length) {
+    const ids = sesionesGrupo.map(s => s.id);
+    const { data: fb } = await db.from('registros_sesion')
+      .select('*')
+      .eq('atleta_id', atletaActual.id)
+      .in('sesion_id', ids);
+    feedbackExistente = {};
+    (fb||[]).forEach(f => feedbackExistente[f.sesion_id] = f);
+  }
+}
+
+function getLunes(offset = 0) {
+  const hoy = new Date();
+  const dia = hoy.getDay();
+  const diff = dia === 0 ? -6 : 1 - dia;
+  const lunes = new Date(hoy);
+  lunes.setDate(hoy.getDate() + diff + offset * 7);
+  lunes.setHours(0,0,0,0);
+  return lunes;
+}
+
+// ── HOY ──────────────────────────────────
+function renderHoy() {
+  const hoyStr = new Date().toISOString().split('T')[0];
+  const sesionHoy = sesionesGrupo.find(s => s.fecha === hoyStr);
+  const c = document.getElementById('content-hoy');
+
+  if (!grupoActual) {
+    c.innerHTML = `<div style="text-align:center;padding:3rem 1rem;">
+      <div style="font-size:2.5rem;margin-bottom:1rem;">🏃</div>
+      <h3 style="margin-bottom:0.5rem;">Aún no estás en ningún grupo</h3>
+      <p style="color:var(--suave);font-size:0.85rem;">Contacta con tu entrenador para que te asigne a un grupo de entrenamiento.</p>
     </div>`;
-}
-
-function calcEdad(f) {
-  if (!f) return '—';
-  const h = new Date(), n = new Date(f);
-  let e = h.getFullYear() - n.getFullYear();
-  if (h < new Date(h.getFullYear(), n.getMonth(), n.getDate())) e--;
-  return e;
-}
-
-// ENTRENAMIENTOS
-async function cargarEntrenamientos() {
-  if (!atletaData?.grupo_id) {
-    document.getElementById('entrenos-contenido').innerHTML = '<div style="color:var(--texto-suave);font-size:0.88rem;">Aún no tienes grupo asignado. Los entrenamientos aparecerán aquí cuando tu entrenador los publique.</div>';
     return;
   }
-  const { data: entrenos } = await db.from('entrenamientos').select('*').eq('grupo_id', atletaData.grupo_id).order('fecha', { ascending: false }).limit(25);
-  if (!entrenos?.length) { document.getElementById('entrenos-contenido').innerHTML = '<div style="color:var(--texto-suave);">Tu entrenador aún no ha publicado entrenamientos.</div>'; return; }
-  const { data: fbDados } = await db.from('feedback_entrenamientos').select('entrenamiento_id').eq('atleta_id', atletaData.id);
-  const fbIds = new Set((fbDados||[]).map(f => f.entrenamiento_id));
-  const TIPOS_CLS = { tecnica:'tipo-tecnica', fuerza:'tipo-fuerza', velocidad:'tipo-velocidad', resistencia:'tipo-resistencia', competicion:'tipo-competicion', otro:'tipo-otro' };
-  document.getElementById('entrenos-contenido').innerHTML = entrenos.map(e => `
-    <div class="entreno-item">
-      <div class="entreno-head">
-        <div style="flex:1">
-          <span class="entreno-tipo ${TIPOS_CLS[e.tipo]||'tipo-otro'}">${e.tipo}</span>
-          <div class="entreno-titulo">${e.titulo}</div>
-          <div class="entreno-fecha">${new Date(e.fecha).toLocaleDateString('es-ES',{weekday:'long',year:'numeric',month:'long',day:'numeric'})}</div>
-        </div>
-        ${fbIds.has(e.id)
-          ? '<button class="fb-btn ya">✓ Enviado</button>'
-          : `<button class="fb-btn" onclick="abrirFeedback('${e.id}','${e.titulo.replace(/'/g,"\\'")}')">Feedback</button>`}
-      </div>
-      <div class="entreno-body">${e.descripcion||''}</div>
-      ${e.archivo_url?`<div style="padding:0 1.25rem 0.875rem;"><a href="${e.archivo_url}" target="_blank" class="entreno-adjunto"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Ver plan</a></div>`:''}
-    </div>`).join('');
-}
 
-// ESTADÍSTICAS
-async function cargarStats() {
-  if (!atletaData) return;
-  const { data: fb } = await db.from('feedback_entrenamientos').select('*,entrenamientos(titulo,fecha,tipo)').eq('atleta_id', atletaData.id).order('created_at', { ascending: false });
-  const total = fb?.length || 0;
-  const conMarca = fb?.filter(f => f.tiempo_marca)?.length || 0;
-  const sensMedia = total > 0 ? (fb.reduce((s,f) => s + (f.sensaciones||0), 0) / total).toFixed(1) : '—';
-  const SENS_LABEL = { '1':'Mal', '2':'Regular', '3':'Bien', '4':'Muy bien', '5':'Excelente' };
-  document.getElementById('stats-contenido').innerHTML = `
-    <div class="stats-grid">
-      <div class="stat-card"><div class="stat-val">${total}</div><div class="stat-label">Entrenamientos con feedback</div></div>
-      <div class="stat-card"><div class="stat-val">${sensMedia}</div><div class="stat-label">Sensación media (1-5)</div></div>
-      <div class="stat-card"><div class="stat-val">${conMarca}</div><div class="stat-label">Sesiones con marca</div></div>
-      <div class="stat-card"><div class="stat-val">${atletaData.es_socio ? 'Sí' : 'No'}</div><div class="stat-label">Socio del club</div></div>
+  if (!sesionHoy) {
+    c.innerHTML = `
+      <div class="hoy-card" style="background:var(--gris);color:var(--texto);">
+        <div class="hoy-label">Hoy · ${grupoActual.nombre}</div>
+        <div class="hoy-titulo" style="color:var(--suave);">Día de descanso</div>
+        <div class="hoy-meta">No hay sesión programada para hoy</div>
+      </div>
+      <div style="text-align:center;padding:1rem;">
+        <button class="btn btn-g" onclick="showPanel('semana')">Ver semana completa →</button>
+      </div>`;
+    return;
+  }
+
+  const fb = feedbackExistente[sesionHoy.id];
+  const tieneFb = !!fb;
+
+  c.innerHTML = `
+    <div class="hoy-card">
+      <div class="hoy-label">Hoy · ${grupoActual.nombre}</div>
+      <div class="hoy-badge ${sesionHoy.tipo}">${sesionHoy.tipo}</div>
+      <div class="hoy-titulo">${sesionHoy.titulo || 'Sesión del día'}</div>
+      <div class="hoy-meta">${sesionHoy.rol?.replace(/_/g,' ') || ''}</div>
+      ${sesionHoy.nota_razonamiento ? `<div class="hoy-nota">${sesionHoy.nota_razonamiento}</div>` : ''}
+      <button class="btn-feedback ${tieneFb?'done':''}" onclick="abrirFeedback('${sesionHoy.id}')">
+        ${tieneFb ? '✓ Feedback enviado — Ver/Editar' : '📝 Registrar cómo fue'}
+      </button>
     </div>
-    ${conMarca > 0 ? `
-    <div class="card" style="margin-bottom:1rem;">
-      <div class="card-title">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-        Últimas marcas registradas
-      </div>
-      <div class="marcas-lista">
-        ${fb.filter(f=>f.tiempo_marca).slice(0,8).map(f=>`
-          <div class="marca-item">
-            <span class="marca-label">${f.entrenamientos?.fecha||'—'}</span>
-            <div class="marca-bar-wrap"><div class="marca-bar" style="width:70%"></div></div>
-            <span class="marca-val">${f.tiempo_marca}</span>
-          </div>`).join('')}
-      </div>
-    </div>` : ''}
-    <div class="card">
-      <div class="card-title">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-        Historial de feedbacks
-      </div>
-      ${fb?.length ? `<div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;font-size:0.82rem;">
-        <thead><tr>
-          <th style="padding:7px 10px;text-align:left;font-size:0.7rem;color:var(--texto-suave);background:var(--gris);border-bottom:1px solid var(--gris-borde);">Entrenamiento</th>
-          <th style="padding:7px 10px;text-align:left;font-size:0.7rem;color:var(--texto-suave);background:var(--gris);border-bottom:1px solid var(--gris-borde);">Fecha</th>
-          <th style="padding:7px 10px;text-align:left;font-size:0.7rem;color:var(--texto-suave);background:var(--gris);border-bottom:1px solid var(--gris-borde);">Sensación</th>
-          <th style="padding:7px 10px;text-align:left;font-size:0.7rem;color:var(--texto-suave);background:var(--gris);border-bottom:1px solid var(--gris-borde);">Marca</th>
-        </tr></thead>
-        <tbody>${fb.slice(0,15).map(f=>`<tr>
-          <td style="padding:8px 10px;border-bottom:1px solid var(--gris-borde);">${f.entrenamientos?.titulo||'—'}</td>
-          <td style="padding:8px 10px;border-bottom:1px solid var(--gris-borde);color:var(--texto-suave);">${f.entrenamientos?.fecha||'—'}</td>
-          <td style="padding:8px 10px;border-bottom:1px solid var(--gris-borde);">${['','😞','😐','🙂','😄','🔥'][f.sensaciones]||'—'}</td>
-          <td style="padding:8px 10px;border-bottom:1px solid var(--gris-borde);font-weight:500;">${f.tiempo_marca||'—'}</td>
-        </tr>`).join('')}</tbody>
-      </table></div>`
-      : '<div style="color:var(--texto-suave);font-size:0.85rem;">Aún no tienes feedbacks registrados</div>'}
-    </div>`;
+    ${renderSesionBloques(sesionHoy, true)}
+  `;
 }
 
-// COMPETICIONES
-async function cargarCompeticiones() {
-  const { data: eventos } = await db.from('eventos').select('*').in('tipo',['competicion','control']).gte('fecha_inicio', new Date().toISOString()).order('fecha_inicio').limit(20);
-  if (!eventos?.length) { document.getElementById('comp-contenido').innerHTML = '<div style="color:var(--texto-suave);">No hay competiciones próximas publicadas.</div>'; return; }
-  // Ver a cuáles ya está apuntado
-  const { data: inscritos } = await db.from('inscripciones_eventos').select('evento_id').eq('atleta_id', atletaData.id);
-  const inscIds = new Set((inscritos||[]).map(i => i.evento_id));
-  const TIPOS = { competicion:'Competición', control:'Control interno' };
-  document.getElementById('comp-contenido').innerHTML = eventos.map(e => {
-    const f = new Date(e.fecha_inicio);
-    const apuntado = inscIds.has(e.id);
-    return `<div class="comp-item">
-      <div class="comp-fecha-box"><div class="comp-dia">${f.getDate()}</div><div class="comp-mes">${f.toLocaleDateString('es-ES',{month:'short'}).replace('.','')}</div></div>
-      <div class="comp-info">
-        <div class="comp-titulo">${e.titulo}</div>
-        <div class="comp-meta">${f.toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'})}${e.lugar?' · '+e.lugar:''}</div>
-        ${e.descripcion?`<div style="font-size:0.78rem;color:var(--texto-suave);margin-top:3px;">${e.descripcion}</div>`:''}
+function renderSesionBloques(sesion, mostrarNombreAtleta = false) {
+  if (!sesion.bloques?.length) return '<div style="color:var(--suave);font-size:0.85rem;padding:1rem 0;">Sin ejercicios detallados</div>';
+  return `<div class="sesion-bloques">
+    ${sesion.bloques.map(b => `
+      <div class="bloque-titulo">${b.etiqueta}</div>
+      ${(b.filas||[]).map(f => {
+        // Override para este atleta
+        const override = mostrarNombreAtleta && atletaActual ?
+          (f.overrides||[]).find(o => o.atleta_id === atletaActual.id || o.atleta === (atletaActual.nombre_corto||atletaActual.nombre)) : null;
+        return `<div class="fila-ejercicio">
+          <span class="ej-nombre">${f.nombre||''}</span>
+          <span class="ej-series">${f.series||''}</span>
+          <span class="ej-rec">${f.recuperacion||''}</span>
+          ${f.calzado ? `<span class="ej-calzado">${f.calzado}</span>` : '<span></span>'}
+          ${f.observaciones ? `<span class="ej-obs">${f.observaciones}</span>` : ''}
+          ${override ? `<span class="ej-override">→ Para ti: ${override.valor}</span>` : ''}
+        </div>`;
+      }).join('')}
+    `).join('')}
+  </div>`;
+}
+
+// ── SEMANA ───────────────────────────────
+async function cambiarSemana(dir) {
+  semanaOffset += dir;
+  await cargarSesionesGrupo();
+  renderSemana();
+}
+
+function renderSemana() {
+  const lunes = getLunes(semanaOffset);
+  const hoyStr = new Date().toISOString().split('T')[0];
+  const dias = ['L','M','X','J','V','S','D'];
+  const grid = document.getElementById('semana-mini-grid');
+
+  grid.innerHTML = dias.map((d, i) => {
+    const fecha = new Date(lunes); fecha.setDate(lunes.getDate() + i);
+    const fechaStr = fecha.toISOString().split('T')[0];
+    const sesion = sesionesGrupo.find(s => s.fecha === fechaStr);
+    const esHoy = fechaStr === hoyStr;
+    const tieneFb = sesion && feedbackExistente[sesion.id];
+    return `<div class="dia-mini ${sesion?'tiene':''} ${esHoy?'hoy':''}" onclick="verSesionDia('${fechaStr}')">
+      <div class="dia-mini-nombre">${d}</div>
+      <div class="dia-mini-num" style="${esHoy?'color:var(--azul);':''}">${fecha.getDate()}</div>
+      ${sesion ? `<div class="dia-mini-punto" style="${tieneFb?'background:var(--verde)':''}"></div>` : '<div style="height:5px;"></div>'}
+    </div>`;
+  }).join('');
+
+  // Mostrar sesión de hoy por defecto
+  verSesionDia(hoyStr);
+}
+
+function verSesionDia(fechaStr) {
+  // Marcar activo
+  document.querySelectorAll('.dia-mini').forEach(d => d.classList.remove('activo'));
+  const dias = document.querySelectorAll('.dia-mini');
+  const lunes = getLunes(semanaOffset);
+  dias.forEach((d, i) => {
+    const fecha = new Date(lunes); fecha.setDate(lunes.getDate() + i);
+    if (fecha.toISOString().split('T')[0] === fechaStr) d.classList.add('activo');
+  });
+
+  const sesion = sesionesGrupo.find(s => s.fecha === fechaStr);
+  const c = document.getElementById('sesion-seleccionada-semana');
+  const fb = sesion && feedbackExistente[sesion.id];
+
+  if (!sesion) {
+    c.innerHTML = `<div style="text-align:center;padding:2rem;color:var(--suave);font-size:0.85rem;">Sin sesión este día</div>`;
+    return;
+  }
+
+  c.innerHTML = `
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
+      <div>
+        <div style="font-size:0.72rem;color:var(--suave);">${new Date(fechaStr).toLocaleDateString('es-ES',{weekday:'long',day:'numeric',month:'long'})}</div>
+        <h3 style="font-size:1rem;font-weight:700;">${sesion.titulo||'Sesión'}</h3>
       </div>
-      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;">
-        <span class="badge badge-${e.tipo==='competicion'?'impagado':'activo'}" style="${e.tipo==='competicion'?'':'background:#e0f2fe;color:#0369a1;'}">${TIPOS[e.tipo]||e.tipo}</span>
-        ${e.inscripcion_abierta
-          ? apuntado
-            ? '<button class="apuntarse-btn apuntado">✓ Apuntado</button>'
-            : `<button class="apuntarse-btn" onclick="apuntarse('${e.id}',this)">Apuntarme</button>`
-          : '<span style="font-size:0.75rem;color:var(--texto-suave);">Inscripción cerrada</span>'}
+      <button class="btn ${fb?'btn-g':'btn-p'}" onclick="abrirFeedback('${sesion.id}')" style="font-size:0.78rem;padding:7px 14px;">
+        ${fb ? '✓ Ver feedback' : '📝 Registrar'}
+      </button>
+    </div>
+    ${sesion.nota_razonamiento ? `<div style="background:#fefce8;border:1px solid #fde68a;border-radius:8px;padding:0.6rem 1rem;font-size:0.8rem;color:#92400e;margin-bottom:1rem;">${sesion.nota_razonamiento}</div>` : ''}
+    ${renderSesionBloques(sesion, true)}
+  `;
+}
+
+// ── FEEDBACK ─────────────────────────────
+function abrirFeedback(sesionId) {
+  sesionFeedbackActual = sesionesGrupo.find(s => s.id === sesionId);
+  if (!sesionFeedbackActual) return;
+  const fb = feedbackExistente[sesionId];
+
+  sensacionSel = fb?.sensacion_general || 0;
+  rpeSel = fb?.rpe || 0;
+
+  document.getElementById('modal-feedback-titulo').textContent = sesionFeedbackActual.titulo || 'Registrar feedback';
+  document.getElementById('fb-fisico').value = fb?.como_me_siento || '';
+  document.getElementById('fb-molestias').value = fb?.molestias || '';
+  document.getElementById('fb-notas').value = fb?.notas_atleta || '';
+
+  // Rating sensación
+  const rs = document.getElementById('rating-sensacion');
+  rs.innerHTML = Array.from({length:10},(_,i)=>{
+    const v = i+1;
+    const cls = v <= 3 ? 'bajo' : v >= 8 ? 'alto' : '';
+    return `<button class="rating-btn ${sensacionSel===v?'sel '+cls:''}" onclick="selRating('sensacion',${v},this,'${cls}')">${v}</button>`;
+  }).join('');
+
+  // Rating RPE
+  const rr = document.getElementById('rating-rpe');
+  rr.innerHTML = Array.from({length:10},(_,i)=>{
+    const v = i+1;
+    const cls = v >= 8 ? 'bajo' : v <= 3 ? 'alto' : '';
+    return `<button class="rating-btn ${rpeSel===v?'sel '+cls:''}" onclick="selRating('rpe',${v},this,'${cls}')">${v}</button>`;
+  }).join('');
+
+  // Tiempos por serie
+  const tiempos = fb?.tiempos_reales || {};
+  const tc = document.getElementById('tiempos-container');
+  const seriesEjs = [];
+  (sesionFeedbackActual.bloques||[]).forEach(b => {
+    (b.filas||[]).forEach(f => {
+      if (f.series && f.nombre) seriesEjs.push(f);
+    });
+  });
+
+  if (seriesEjs.length) {
+    tc.innerHTML = seriesEjs.map(f => `
+      <div class="campo-tiempo">
+        <label>${f.nombre} — ${f.series}</label>
+        <input type="text" placeholder="Ej: 52.4" data-key="${f.nombre}" value="${tiempos[f.nombre]||''}">
+      </div>`).join('');
+    document.getElementById('tiempos-section').style.display = 'block';
+  } else {
+    document.getElementById('tiempos-section').style.display = 'none';
+  }
+
+  document.getElementById('modal-feedback').classList.add('v');
+}
+
+function selRating(tipo, val, btn, cls) {
+  const containerId = 'rating-' + (tipo === 'sensacion' ? 'sensacion' : 'rpe');
+  document.querySelectorAll('#' + containerId + ' .rating-btn').forEach(b => b.classList.remove('sel','alto','bajo'));
+  btn.classList.add('sel'); if (cls) btn.classList.add(cls);
+  if (tipo === 'sensacion') sensacionSel = val;
+  else rpeSel = val;
+}
+
+async function guardarFeedback() {
+  if (!sesionFeedbackActual || !atletaActual) { alert('Error: no hay atleta vinculado'); return; }
+
+  const tiempos = {};
+  document.querySelectorAll('#tiempos-container input').forEach(inp => {
+    if (inp.value) tiempos[inp.dataset.key] = inp.value;
+  });
+
+  const datos = {
+    sesion_id: sesionFeedbackActual.id,
+    atleta_id: atletaActual.id,
+    sensacion_general: sensacionSel || null,
+    rpe: rpeSel || null,
+    tiempos_reales: tiempos,
+    como_me_siento: document.getElementById('fb-fisico').value.trim(),
+    molestias: document.getElementById('fb-molestias').value.trim(),
+    notas_atleta: document.getElementById('fb-notas').value.trim(),
+  };
+
+  const { error } = await db.from('registros_sesion').upsert(datos, { onConflict: 'sesion_id,atleta_id' });
+  if (error) { alert('Error guardando: ' + error.message); return; }
+
+  feedbackExistente[sesionFeedbackActual.id] = datos;
+  cerrarModal('modal-feedback');
+  renderHoy();
+  if (document.getElementById('panel-semana').classList.contains('activo')) renderSemana();
+}
+
+// ── HISTORIAL ────────────────────────────
+async function cargarHistorial() {
+  if (!grupoActual) { document.getElementById('content-historial').innerHTML = '<div style="color:var(--suave);padding:2rem;text-align:center;">Sin grupo asignado</div>'; return; }
+  const { data } = await db.from('sesiones')
+    .select('*')
+    .eq('grupo_id', grupoActual.id)
+    .eq('publicada', true)
+    .lte('fecha', new Date().toISOString().split('T')[0])
+    .order('fecha', { ascending: false })
+    .limit(30);
+
+  if (!data?.length) { document.getElementById('content-historial').innerHTML = '<div style="color:var(--suave);padding:2rem;text-align:center;">Sin sesiones anteriores</div>'; return; }
+
+  document.getElementById('content-historial').innerHTML = data.map(s => {
+    const fb = feedbackExistente[s.id];
+    return `<div class="historial-item" onclick="verHistorialSesion('${s.id}')">
+      <div class="historial-fecha">${new Date(s.fecha).toLocaleDateString('es-ES',{weekday:'long',day:'numeric',month:'long'})}</div>
+      <div class="historial-titulo">${s.titulo||'Sesión'}</div>
+      <div class="historial-meta">
+        <span class="badge badge-azul">${s.tipo}</span>
+        ${fb ? `<span class="badge badge-verde">✓ Feedback: ${fb.sensacion_general||'?'}/10</span>` : '<span class="badge badge-gris">Sin feedback</span>'}
       </div>
     </div>`;
   }).join('');
 }
 
-async function apuntarse(eventoId, btn) {
-  if (!atletaData) return;
-  btn.disabled = true; btn.textContent = '...';
-  const { error } = await db.from('inscripciones_eventos').insert([{ evento_id: eventoId, atleta_id: atletaData.id, estado: 'apuntado' }]);
-  if (!error) { btn.className = 'apuntarse-btn apuntado'; btn.textContent = '✓ Apuntado'; }
-  else { btn.disabled = false; btn.textContent = 'Apuntarme'; }
+function verHistorialSesion(id) {
+  const sesion = sesionesGrupo.find(s => s.id === id);
+  if (sesion) abrirFeedback(id);
 }
 
-// FEEDBACK
-function abrirFeedback(id, titulo) {
-  document.getElementById('fb-entreno-id').value = id;
-  document.getElementById('fb-titulo').textContent = titulo;
-  document.getElementById('fb-marca').value = '';
-  document.getElementById('fb-notas').value = '';
-  starSel = 0;
-  document.querySelectorAll('.star').forEach(s => s.classList.remove('sel'));
-  document.getElementById('modal-feedback').classList.add('v');
+// ── MARCAS ───────────────────────────────
+async function renderMarcas() {
+  const c = document.getElementById('content-marcas');
+  if (!atletaActual) { c.innerHTML = '<div style="color:var(--suave);padding:2rem;text-align:center;">Sin perfil de atleta vinculado</div>'; return; }
+  const { data } = await db.from('marcas_atleta').select('*').eq('atleta_id', atletaActual.id).order('prueba');
+  if (!data?.length) { c.innerHTML = '<div style="color:var(--suave);padding:2rem;text-align:center;">Sin marcas registradas</div>'; return; }
+  c.innerHTML = `<div style="background:white;border-radius:12px;border:1px solid var(--borde);overflow:hidden;">
+    ${data.map(m => `
+      <div class="marca-row" style="padding:0.75rem 1.25rem;">
+        <div>
+          <div class="marca-prueba">${m.prueba}</div>
+          <div class="marca-fecha">${m.tipo} · ${m.fecha ? new Date(m.fecha).toLocaleDateString('es-ES',{day:'numeric',month:'short',year:'numeric'}) : ''} ${m.sede||''}</div>
+        </div>
+        <div class="marca-tiempo">${m.tiempo_display||'—'}</div>
+      </div>`).join('')}
+  </div>`;
 }
 
-function selStar(n) {
-  starSel = n;
-  document.querySelectorAll('.star').forEach((s,i) => s.classList.toggle('sel', i+1 === n));
+// ── PERFIL ───────────────────────────────
+async function renderPerfil() {
+  const c = document.getElementById('content-perfil');
+  const p = perfilActual;
+  const a = atletaActual;
+  c.innerHTML = `
+    <div style="background:white;border-radius:12px;border:1px solid var(--borde);padding:1.5rem;margin-bottom:1rem;">
+      <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.25rem;">
+        <div style="width:56px;height:56px;border-radius:50%;background:var(--azul-light);display:flex;align-items:center;justify-content:center;font-size:1.4rem;font-weight:800;color:var(--azul);">${(p.nombre||'A').charAt(0)}</div>
+        <div>
+          <div style="font-size:1.1rem;font-weight:800;">${p.nombre||''} ${p.apellidos||''}</div>
+          <div style="font-size:0.78rem;color:var(--suave);">${grupoActual?.nombre||'Sin grupo'} · ${a?.categoria||'—'}</div>
+        </div>
+      </div>
+      ${a ? `
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;font-size:0.82rem;">
+          <div><span style="color:var(--suave);">Pruebas: </span>${a.pruebas_principales?.join(', ')||'—'}</div>
+          <div><span style="color:var(--suave);">Estado: </span>${a.estado||'activo'}</div>
+          ${a.licencia ? `<div><span style="color:var(--suave);">Licencia: </span>${a.licencia}</div>` : ''}
+        </div>` : ''}
+    </div>
+    <div style="background:white;border-radius:12px;border:1px solid var(--borde);padding:1.25rem;">
+      <h3 style="font-size:0.88rem;font-weight:700;margin-bottom:0.875rem;">Mi contexto (visible para el entrenador y la IA)</h3>
+      <div class="mf">
+        <label>Cuéntanos sobre ti como atleta</label>
+        <textarea id="ctx-atleta" style="min-height:120px;" placeholder="Cómo te sientes entrenando, qué te gusta y qué te cuesta, tus objetivos personales, cómo duermes y te recuperas, qué te motiva...">${a?.contexto_atleta||''}</textarea>
+      </div>
+      <button class="btn btn-p" onclick="guardarContexto()">Guardar</button>
+    </div>`;
 }
 
-async function enviarFeedback() {
-  if (!starSel) { alert('Indica cómo fue la sesión'); return; }
-  const btn = document.getElementById('btn-fb');
-  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Enviando...';
-  const { error } = await db.from('feedback_entrenamientos').insert([{
-    entrenamiento_id: document.getElementById('fb-entreno-id').value,
-    atleta_id: atletaData.id,
-    sensaciones: starSel,
-    tiempo_marca: document.getElementById('fb-marca').value.trim() || null,
-    notas: document.getElementById('fb-notas').value.trim() || null,
-  }]);
-  if (error) { alert('Error al enviar'); btn.disabled = false; btn.innerHTML = 'Enviar'; return; }
-  cerrarModal('modal-feedback');
-  btn.disabled = false; btn.innerHTML = 'Enviar';
-  cargarEntrenamientos();
+async function guardarContexto() {
+  if (!atletaActual) return;
+  const ctx = document.getElementById('ctx-atleta').value.trim();
+  const { error } = await db.from('atletas').update({ contexto_atleta: ctx }).eq('id', atletaActual.id);
+  if (!error) alert('✅ Guardado. Tu entrenador lo verá al planificar.');
 }
 
-// NAVEGACIÓN
-const TITLES = { perfil:'Mi perfil', entrenamientos:'Entrenamientos', stats:'Mis estadísticas', competiciones:'Competiciones' };
-function showPanel(id) {
-  document.querySelectorAll('.panel').forEach(p => p.classList.remove('activo'));
-  document.querySelectorAll('.sb-item').forEach(b => b.classList.remove('activo'));
-  document.getElementById('panel-' + id).classList.add('activo');
-  document.querySelectorAll('.sb-item').forEach(b => { if (b.getAttribute('onclick')?.includes("'"+id+"'")) b.classList.add('activo'); });
-  document.getElementById('topbar-title').textContent = TITLES[id] || id;
-  if (id === 'entrenamientos') cargarEntrenamientos();
-  if (id === 'stats') cargarStats();
-  if (id === 'competiciones') cargarCompeticiones();
-}
-
-function cerrarModal(id) { document.getElementById(id).classList.remove('v'); }
-document.querySelectorAll('.modal-overlay').forEach(el => {
-  el.addEventListener('click', function(e) { if (e.target === this) this.classList.remove('v'); });
+// ── MODAL ────────────────────────────────
+document.querySelectorAll('.modal-overlay').forEach(m => {
+  m.addEventListener('click', e => { if (e.target === m) m.classList.remove('v'); });
 });
+document.addEventListener('keydown', e => { if (e.key === 'Enter' && document.activeElement.id === 'login-pass') doLogin(); });
 
 checkSession();
 </script>
