@@ -45,6 +45,9 @@
     .hero h1 { color: white; font-size: 2.6rem; font-weight: 700; margin-bottom: 0.75rem; }
     .hero p { color: rgba(255,255,255,0.75); font-size: 1rem; max-width: 560px; margin: 0 auto 2rem; line-height: 1.7; }
     .hero-btns { display: flex; gap: 0.875rem; justify-content: center; flex-wrap: wrap; }
+    .btn-form { display:inline-flex; align-items:center; gap:8px; background:var(--azul); color:white; padding:11px 22px; border-radius:9px; text-decoration:none; font-weight:700; font-size:0.88rem; transition:opacity 0.15s; margin-top:0.875rem; }
+    .btn-form:hover { opacity:0.88; }
+    .btn-form-w { display:inline-flex; align-items:center; gap:8px; background:white; color:var(--azul); padding:11px 28px; border-radius:8px; text-decoration:none; font-weight:700; font-size:0.92rem; }
     .btn-w { background: white; color: var(--azul); padding: 11px 28px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.92rem; }
     .btn-o { background: transparent; color: white; padding: 11px 28px; border-radius: 8px; text-decoration: none; font-weight: 500; font-size: 0.92rem; border: 1.5px solid rgba(255,255,255,0.4); }
     @media (max-width: 600px) { .hero h1 { font-size: 1.9rem; } .hero { padding: 3rem 1rem 2.5rem; } }
@@ -123,8 +126,11 @@
   <h1>Hazte socio del Club Apolana</h1>
   <p>¿Te gusta el deporte y quieres pertenecer a nuestro club? Compartir aficiones, hacer nuevas amistades y disfrutar de todos los beneficios de ser parte de la familia Apolana. ¡Te esperamos!</p>
   <div class="hero-btns">
-    <a href="#proceso" class="btn-w">Cómo hacerse socio</a>
-    <a href="#beneficios" class="btn-o">Ver beneficios</a>
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLSe7XdQBPqeAO6Thf3E8Zqjd4_0tNMT67SofGmtpd9qCm7VxVQ/viewform" target="_blank" rel="noopener" class="btn-form-w">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+      Rellenar formulario de alta
+    </a>
+    <a href="#proceso" class="btn-o">Ver el proceso</a>
   </div>
 </div>
 
@@ -197,14 +203,22 @@
         <div class="paso-num">1</div>
         <div>
           <div class="paso-titulo">Rellena el formulario de alta online</div>
-          <div class="paso-desc">Completa el formulario de alta de socio/a y la hoja de protección de datos. Puedes hacerlo desde el enlace de inscripción o pidiendo la documentación por email.</div>
+          <div class="paso-desc">Completa el formulario de alta de socio/a y la hoja de protección de datos. Tarda un par de minutos.</div>
+          <a href="https://docs.google.com/forms/d/e/1FAIpQLSe7XdQBPqeAO6Thf3E8Zqjd4_0tNMT67SofGmtpd9qCm7VxVQ/viewform" target="_blank" rel="noopener" class="btn-form">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+            Abrir formulario de alta
+          </a>
         </div>
       </div>
       <div class="paso">
         <div class="paso-num">2</div>
         <div>
-          <div class="paso-titulo">Rellena el formulario SEPA de domiciliación bancaria</div>
-          <div class="paso-desc">Necesitamos tu autorización de domiciliación bancaria para cobrar la cuota anual de forma automática.</div>
+          <div class="paso-titulo">Rellena la orden de domiciliación SEPA</div>
+          <div class="paso-desc">Necesitamos tu autorización para cobrar la cuota anual de forma automática. Ten a mano tu IBAN.</div>
+          <a href="https://docs.google.com/forms/d/e/1FAIpQLSc1hOt0tbMB1c0KDnP7A2WtQyNQtgsR1wpgqMtIzVF4byvKMg/viewform" target="_blank" rel="noopener" class="btn-form">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+            Abrir orden de domiciliación SEPA
+          </a>
         </div>
       </div>
       <div class="paso">
@@ -275,6 +289,23 @@
     </div>
   </div>
 
+</div>
+
+
+<div class="cta-final-socio" style="background:var(--azul-oscuro);padding:3rem 2rem;text-align:center;">
+  <h2 style="color:white;font-size:1.55rem;font-weight:800;margin-bottom:0.5rem;">¿Listo para formar parte?</h2>
+  <p style="color:rgba(255,255,255,0.7);font-size:0.92rem;margin-bottom:1.5rem;max-width:520px;margin-left:auto;margin-right:auto;">Rellena el formulario de alta y en menos de una semana serás socio del club</p>
+  <a href="https://docs.google.com/forms/d/e/1FAIpQLSe7XdQBPqeAO6Thf3E8Zqjd4_0tNMT67SofGmtpd9qCm7VxVQ/viewform" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:9px;background:white;color:var(--azul);padding:13px 32px;border-radius:10px;text-decoration:none;font-weight:800;font-size:0.95rem;box-shadow:0 4px 16px rgba(0,0,0,0.2);">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+    Rellenar formulario de alta
+  </a>
+  <div style="margin-top:1rem;">
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLSc1hOt0tbMB1c0KDnP7A2WtQyNQtgsR1wpgqMtIzVF4byvKMg/viewform" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,0.12);border:1.5px solid rgba(255,255,255,0.28);color:white;padding:11px 26px;border-radius:10px;text-decoration:none;font-weight:600;font-size:0.88rem;">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+      Orden de domiciliación SEPA
+    </a>
+  </div>
+  <p style="color:rgba(255,255,255,0.45);font-size:0.78rem;margin-top:1.1rem;">Ambos formularios son necesarios para completar el alta</p>
 </div>
 
 <div class="contacto-sec">
