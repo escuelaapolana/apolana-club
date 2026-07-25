@@ -2,391 +2,786 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <link rel="icon" type="image/png" href="https://icaxokjsvhlreuwpyxeb.supabase.co/storage/v1/object/public/imagenes-club/logo.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Entrenador · Club Apolana</title>
+  <title>Panel Entrenador · Club Apolana</title>
+  <link rel="icon" type="image/png" href="https://icaxokjsvhlreuwpyxeb.supabase.co/storage/v1/object/public/imagenes-club/logo.png">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --azul: #1a5f8f; --azul-claro: #4a90c4; --azul-bg: #e8f2fa; --azul-oscuro: #123f60;
-      --gris: #f5f6f8; --gris-borde: #dde2e8; --texto: #1a1d23; --texto-suave: #6b7280;
-      --error: #dc2626; --exito: #16a34a; --warn: #d97706;
-      --naranja: #ea580c; --naranja-bg: #fff7ed;
-      --sidebar: 210px;
+      --azul: #1a5f8f; --azul-dark: #123f60; --azul-light: #e8f2fa;
+      --naranja: #ea580c; --naranja-bg: rgba(234,88,12,0.12);
+      --gris: #f5f6f8; --borde: #e2e8f0; --texto: #1a1d23; --suave: #64748b;
+      --sidebar: 220px; --success: #16a34a;
     }
-    html, body { height: 100%; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--gris); color: var(--texto); }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--gris); color: var(--texto); min-height: 100vh; }
 
-    /* LOGIN */
-    #login-screen { display: flex; align-items: center; justify-content: center; min-height: 100vh; background: var(--gris); padding: 1rem; }
-    .login-box { background: white; border-radius: 16px; border: 1px solid var(--gris-borde); padding: 2.5rem; width: 100%; max-width: 380px; }
-    .login-logo { display: flex; align-items: center; gap: 10px; margin-bottom: 2rem; }
-    .login-logo-circle { width: 40px; height: 40px; border-radius: 50%; background: var(--naranja-bg); display: flex; align-items: center; justify-content: center; }
-    .login-box h1 { font-size: 1.2rem; font-weight: 600; margin-bottom: 0.25rem; }
-    .login-box p { font-size: 0.83rem; color: var(--texto-suave); margin-bottom: 1.5rem; }
-    .lf { margin-bottom: 1rem; }
-    .lf label { display: block; font-size: 0.82rem; font-weight: 500; margin-bottom: 4px; }
-    .lf input { width: 100%; padding: 9px 11px; border: 1px solid var(--gris-borde); border-radius: 8px; font-size: 0.9rem; }
-    .lf input:focus { outline: none; border-color: var(--azul-claro); box-shadow: 0 0 0 3px rgba(74,144,196,0.12); }
-    .login-btn { width: 100%; background: var(--naranja); color: white; border: none; padding: 10px; border-radius: 8px; font-size: 0.9rem; font-weight: 500; cursor: pointer; margin-top: 0.5rem; }
-    .login-btn:hover { background: #c2410c; }
-    .login-err { font-size: 0.8rem; color: var(--error); margin-top: 0.5rem; display: none; }
-    .login-err.v { display: block; }
+    /* ── LOGIN ── */
+    .login-wrap { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: var(--azul-dark); }
+    .login-box { background: white; border-radius: 16px; padding: 2.5rem; width: 100%; max-width: 400px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+    .login-logo { display: flex; align-items: center; gap: 10px; margin-bottom: 2rem; justify-content: center; }
+    .login-logo img { width: 40px; height: 40px; border-radius: 50%; }
+    .login-logo span { font-weight: 700; color: var(--azul); font-size: 1.1rem; }
+    .login-box h2 { font-size: 1.3rem; margin-bottom: 0.3rem; }
+    .login-box p { color: var(--suave); font-size: 0.85rem; margin-bottom: 1.5rem; }
+    .field { margin-bottom: 1rem; }
+    .field label { display: block; font-size: 0.78rem; font-weight: 600; color: var(--suave); margin-bottom: 0.35rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    .field input { width: 100%; padding: 10px 12px; border: 1.5px solid var(--borde); border-radius: 8px; font-size: 0.9rem; font-family: inherit; }
+    .field input:focus { outline: none; border-color: var(--azul); }
+    .btn-login { width: 100%; padding: 12px; background: var(--naranja); color: white; border: none; border-radius: 8px; font-size: 0.95rem; font-weight: 600; cursor: pointer; font-family: inherit; margin-top: 0.5rem; }
+    .btn-login:hover { opacity: 0.9; }
+    .login-error { color: #dc2626; font-size: 0.82rem; margin-top: 0.5rem; display: none; text-align: center; }
 
-    /* APP */
+    /* ── APP LAYOUT ── */
     #app { display: none; min-height: 100vh; }
-    #app.visible { display: flex; }
+    .app-layout { display: flex; min-height: 100vh; }
 
-    /* SIDEBAR */
-    .sidebar { width: var(--sidebar); background: #1a1a2e; min-height: 100vh; display: flex; flex-direction: column; flex-shrink: 0; position: sticky; top: 0; height: 100vh; overflow-y: auto; }
-    .sb-logo { padding: 1.1rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.08); display: flex; align-items: center; gap: 8px; }
-    .sb-logo-c { width: 32px; height: 32px; border-radius: 50%; background: var(--naranja-bg); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .sb-logo span { color: white; font-weight: 600; font-size: 0.85rem; }
-    .sb-logo small { color: rgba(255,255,255,0.4); font-size: 0.68rem; display: block; }
-    .sb-section { font-size: 0.63rem; color: rgba(255,255,255,0.3); padding: 0.875rem 1rem 0.2rem; letter-spacing: 0.1em; text-transform: uppercase; }
-    .sb-item { display: flex; align-items: center; gap: 9px; padding: 8px 1rem; font-size: 0.82rem; color: rgba(255,255,255,0.6); cursor: pointer; transition: all 0.12s; border: none; background: none; width: 100%; text-align: left; }
-    .sb-item:hover { background: rgba(255,255,255,0.07); color: white; }
-    .sb-item.activo { background: rgba(234,88,12,0.2); color: #fb923c; }
+    /* ── SIDEBAR ── */
+    .sidebar { width: var(--sidebar); background: #0f172a; min-height: 100vh; display: flex; flex-direction: column; flex-shrink: 0; position: sticky; top: 0; height: 100vh; overflow-y: auto; }
+    .sb-logo { padding: 1.25rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.08); display: flex; align-items: center; gap: 10px; }
+    .sb-logo img { width: 32px; height: 32px; border-radius: 50%; }
+    .sb-logo span { color: white; font-weight: 700; font-size: 0.9rem; line-height: 1.2; }
+    .sb-logo small { color: rgba(255,255,255,0.4); font-size: 0.7rem; display: block; }
+    .sb-section { font-size: 0.65rem; font-weight: 700; color: rgba(255,255,255,0.3); text-transform: uppercase; letter-spacing: 0.1em; padding: 1rem 1rem 0.4rem; }
+    .sb-item { display: flex; align-items: center; gap: 9px; padding: 8px 1rem; font-size: 0.82rem; color: rgba(255,255,255,0.55); cursor: pointer; transition: all 0.12s; border: none; background: none; width: 100%; text-align: left; border-radius: 0; }
+    .sb-item:hover { background: rgba(255,255,255,0.06); color: white; }
+    .sb-item.activo { background: var(--naranja-bg); color: #fb923c; }
     .sb-item svg { flex-shrink: 0; }
-    .sb-footer { margin-top: auto; padding: 1rem; border-top: 1px solid rgba(255,255,255,0.08); }
-    .sb-user { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
-    .sb-avatar { width: 30px; height: 30px; border-radius: 50%; background: var(--naranja); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; color: white; flex-shrink: 0; }
-    .sb-user-info span { font-size: 0.8rem; color: white; display: block; }
-    .sb-user-info small { font-size: 0.68rem; color: rgba(255,255,255,0.4); }
-    .sb-logout { display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.4); font-size: 0.75rem; cursor: pointer; background: none; border: none; padding: 0; }
-    .sb-logout:hover { color: white; }
+    .sb-bottom { margin-top: auto; padding: 1rem; border-top: 1px solid rgba(255,255,255,0.08); }
+    .sb-user { display: flex; align-items: center; gap: 8px; margin-bottom: 0.75rem; }
+    .sb-avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--naranja); display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 0.85rem; flex-shrink: 0; }
+    .sb-user-info { flex: 1; min-width: 0; }
+    .sb-user-info span { font-size: 0.82rem; color: white; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .sb-user-info small { font-size: 0.7rem; color: rgba(255,255,255,0.4); }
+    .sb-logout { font-size: 0.75rem; color: rgba(255,255,255,0.4); background: none; border: none; cursor: pointer; padding: 0; display: flex; align-items: center; gap: 5px; }
+    .sb-logout:hover { color: rgba(255,255,255,0.7); }
 
-    /* MAIN */
+    /* ── MAIN ── */
     .main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
-    .topbar { background: white; border-bottom: 1px solid var(--gris-borde); padding: 0.875rem 1.5rem; display: flex; align-items: center; justify-content: space-between; }
-    .topbar h1 { font-size: 1.05rem; font-weight: 600; }
-    .topbar-right { display: flex; gap: 0.75rem; align-items: center; }
-
-    .btn { padding: 7px 16px; border-radius: 8px; font-size: 0.83rem; font-weight: 500; cursor: pointer; border: none; transition: all 0.12s; display: inline-flex; align-items: center; gap: 6px; }
-    .btn-p { background: var(--naranja); color: white; }
-    .btn-p:hover { background: #c2410c; }
-    .btn-s { background: white; color: var(--texto); border: 1px solid var(--gris-borde); }
-    .btn-s:hover { background: var(--gris); }
-    .btn-azul { background: var(--azul); color: white; }
-    .btn-azul:hover { background: var(--azul-oscuro); }
-
+    .topbar { background: white; border-bottom: 1px solid var(--borde); padding: 0.875rem 1.5rem; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 10; }
+    .topbar h1 { font-size: 1.1rem; font-weight: 700; }
+    .topbar-actions { display: flex; gap: 0.5rem; align-items: center; }
     .content { padding: 1.5rem; flex: 1; }
+
+    /* ── PANELS ── */
     .panel { display: none; }
     .panel.activo { display: block; }
 
-    /* CARDS */
-    .card { background: white; border-radius: 10px; border: 1px solid var(--gris-borde); padding: 1.25rem; margin-bottom: 1rem; }
-    .card-title { font-size: 0.9rem; font-weight: 600; margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; color: var(--texto); }
+    /* ── CARDS ── */
+    .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+    .stat-card { background: white; border-radius: 12px; padding: 1.25rem; border: 1px solid var(--borde); }
+    .stat-card .num { font-size: 2rem; font-weight: 800; color: var(--naranja); line-height: 1; }
+    .stat-card .label { font-size: 0.75rem; color: var(--suave); margin-top: 0.25rem; text-transform: uppercase; letter-spacing: 0.05em; }
 
-    /* METRICS */
-    .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 0.875rem; margin-bottom: 1.5rem; }
-    .metric { background: white; border-radius: 10px; border: 1px solid var(--gris-borde); padding: 1rem 1.1rem; }
-    .metric-label { font-size: 0.75rem; color: var(--texto-suave); margin-bottom: 4px; }
-    .metric-val { font-size: 1.8rem; font-weight: 700; color: var(--naranja); line-height: 1; }
-    .metric-sub { font-size: 0.72rem; color: var(--texto-suave); margin-top: 4px; }
+    /* ── BOTONES ── */
+    .btn { padding: 8px 16px; border-radius: 8px; font-size: 0.83rem; font-weight: 600; cursor: pointer; border: none; font-family: inherit; transition: all 0.12s; display: inline-flex; align-items: center; gap: 6px; }
+    .btn-p { background: var(--naranja); color: white; }
+    .btn-p:hover { opacity: 0.88; }
+    .btn-s { background: var(--azul-light); color: var(--azul); }
+    .btn-s:hover { background: #d0e8f5; }
+    .btn-g { background: var(--gris); color: var(--texto); border: 1px solid var(--borde); }
+    .btn-ia { background: linear-gradient(135deg, #7c3aed, #4f46e5); color: white; }
+    .btn-ia:hover { opacity: 0.9; }
+    .btn-sm { padding: 5px 10px; font-size: 0.75rem; }
+    .btn-icon { width: 32px; height: 32px; padding: 0; justify-content: center; }
 
-    /* ATLETAS GRID */
-    .atletas-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.875rem; }
-    .atleta-card { background: white; border: 1px solid var(--gris-borde); border-radius: 10px; padding: 1rem; transition: all 0.12s; }
-    .atleta-card:hover { border-color: var(--naranja); }
-    .atleta-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--naranja-bg); display: flex; align-items: center; justify-content: center; font-size: 0.9rem; font-weight: 600; color: var(--naranja); margin-bottom: 0.75rem; }
-    .atleta-nombre { font-size: 0.88rem; font-weight: 600; margin-bottom: 2px; }
-    .atleta-meta { font-size: 0.75rem; color: var(--texto-suave); }
-    .badge { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 0.7rem; font-weight: 600; margin-top: 6px; }
-    .badge-prueba { background: #fef3c7; color: #92400e; }
-    .badge-activo { background: #dcfce7; color: #166534; }
-    .tag { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 0.72rem; font-weight: 500; background: var(--azul-bg); color: var(--azul); }
-
-    /* ENTRENAMIENTOS */
-    .entreno-lista { display: flex; flex-direction: column; gap: 0.875rem; }
-    .entreno-card { background: white; border: 1px solid var(--gris-borde); border-radius: 10px; overflow: hidden; transition: border-color 0.12s; }
-    .entreno-card:hover { border-color: var(--naranja); }
-    .entreno-head { padding: 1rem 1.25rem; display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; }
-    .entreno-tipo { font-size: 0.7rem; font-weight: 600; padding: 2px 8px; border-radius: 20px; margin-bottom: 4px; display: inline-block; }
-    .tipo-tecnica { background: #e0f2fe; color: #0369a1; }
-    .tipo-fuerza { background: #fce7f3; color: #9d174d; }
-    .tipo-velocidad { background: #fef3c7; color: #92400e; }
-    .tipo-resistencia { background: #dcfce7; color: #166534; }
-    .tipo-competicion { background: #fee2e2; color: #991b1b; }
-    .tipo-otro { background: var(--gris); color: var(--texto-suave); }
-    .entreno-titulo { font-size: 0.95rem; font-weight: 600; margin-bottom: 2px; }
-    .entreno-fecha { font-size: 0.78rem; color: var(--texto-suave); }
-    .entreno-body { padding: 0 1.25rem 1rem; }
-    .entreno-desc { font-size: 0.85rem; color: var(--texto-suave); line-height: 1.6; white-space: pre-wrap; }
-    .entreno-adjunto { display: inline-flex; align-items: center; gap: 6px; font-size: 0.78rem; color: var(--azul); text-decoration: none; margin-top: 8px; padding: 4px 10px; background: var(--azul-bg); border-radius: 6px; }
-    .entreno-footer { padding: 0.75rem 1.25rem; border-top: 1px solid var(--gris-borde); background: var(--gris); display: flex; align-items: center; justify-content: space-between; font-size: 0.78rem; color: var(--texto-suave); }
-    .feedback-mini { display: flex; gap: 4px; }
-    .feedback-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--gris-borde); }
-    .feedback-dot.activo { background: var(--naranja); }
-
-    /* TABLA */
-    .table-wrap { background: white; border-radius: 10px; border: 1px solid var(--gris-borde); overflow: hidden; }
-    .table-header { padding: 0.875rem 1.1rem; border-bottom: 1px solid var(--gris-borde); display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; flex-wrap: wrap; }
-    .table-title { font-size: 0.9rem; font-weight: 600; }
-    table { width: 100%; border-collapse: collapse; font-size: 0.83rem; }
-    th { padding: 8px 12px; text-align: left; font-size: 0.72rem; font-weight: 600; color: var(--texto-suave); background: var(--gris); border-bottom: 1px solid var(--gris-borde); text-transform: uppercase; letter-spacing: 0.04em; }
-    td { padding: 9px 12px; border-bottom: 1px solid var(--gris-borde); vertical-align: middle; }
+    /* ── TABLA ── */
+    .tabla-wrap { background: white; border-radius: 12px; border: 1px solid var(--borde); overflow: hidden; }
+    .tabla-header { padding: 1rem 1.25rem; border-bottom: 1px solid var(--borde); display: flex; align-items: center; justify-content: space-between; }
+    .tabla-header h3 { font-size: 0.92rem; font-weight: 700; }
+    table { width: 100%; border-collapse: collapse; }
+    th { font-size: 0.7rem; font-weight: 700; color: var(--suave); text-transform: uppercase; letter-spacing: 0.06em; padding: 0.6rem 1rem; text-align: left; border-bottom: 1px solid var(--borde); }
+    td { padding: 0.75rem 1rem; font-size: 0.83rem; border-bottom: 1px solid var(--borde); vertical-align: middle; }
     tr:last-child td { border-bottom: none; }
-    tr:hover td { background: #fafbfc; }
-    .table-empty { text-align: center; padding: 2rem; color: var(--texto-suave); font-size: 0.85rem; }
+    tr:hover td { background: var(--gris); }
+    .empty { text-align: center; color: var(--suave); padding: 2.5rem; font-size: 0.85rem; }
 
-    /* MODAL */
-    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 200; align-items: flex-start; justify-content: center; padding: 2rem 1rem; overflow-y: auto; }
+    /* ── BADGES ── */
+    .badge { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 20px; font-size: 0.7rem; font-weight: 600; }
+    .badge-verde { background: #dcfce7; color: #16a34a; }
+    .badge-rojo { background: #fee2e2; color: #dc2626; }
+    .badge-naranja { background: #ffedd5; color: #ea580c; }
+    .badge-azul { background: var(--azul-light); color: var(--azul); }
+    .badge-gris { background: #f1f5f9; color: var(--suave); }
+
+    /* ── MODAL ── */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; align-items: center; justify-content: center; padding: 1rem; }
     .modal-overlay.v { display: flex; }
-    .modal { background: white; border-radius: 14px; width: 100%; max-width: 580px; }
-    .modal-head { padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--gris-borde); display: flex; align-items: center; justify-content: space-between; }
-    .modal-head h2 { font-size: 1rem; font-weight: 600; }
-    .modal-close { background: none; border: none; cursor: pointer; color: var(--texto-suave); padding: 4px; border-radius: 6px; }
-    .modal-close:hover { background: var(--gris); }
+    .modal { background: white; border-radius: 16px; width: 100%; max-width: 700px; max-height: 90vh; overflow-y: auto; }
+    .modal-header { padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--borde); display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; background: white; z-index: 1; }
+    .modal-header h3 { font-size: 1rem; font-weight: 700; }
     .modal-body { padding: 1.5rem; }
-    .modal-foot { padding: 1rem 1.5rem; border-top: 1px solid var(--gris-borde); display: flex; justify-content: flex-end; gap: 0.75rem; }
+    .modal-footer { padding: 1rem 1.5rem; border-top: 1px solid var(--borde); display: flex; gap: 0.75rem; justify-content: flex-end; }
+    .modal-close { background: none; border: none; cursor: pointer; color: var(--suave); font-size: 1.2rem; line-height: 1; padding: 2px; }
+
+    /* ── FORMULARIOS ── */
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .form-grid.cols3 { grid-template-columns: 1fr 1fr 1fr; }
+    .form-full { grid-column: 1 / -1; }
     .mf { margin-bottom: 1rem; }
-    .mf:last-child { margin-bottom: 0; }
-    .mf label { display: block; font-size: 0.82rem; font-weight: 500; margin-bottom: 4px; }
-    .mf input, .mf select, .mf textarea { width: 100%; padding: 8px 10px; border: 1px solid var(--gris-borde); border-radius: 7px; font-size: 0.87rem; color: var(--texto); background: white; }
-    .mf input:focus, .mf select:focus, .mf textarea:focus { outline: none; border-color: var(--azul-claro); }
-    .mf textarea { resize: vertical; min-height: 100px; }
-    .mf2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
-    .req { color: var(--error); }
+    .mf label { display: block; font-size: 0.75rem; font-weight: 600; color: var(--suave); margin-bottom: 0.35rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .mf input, .mf select, .mf textarea { width: 100%; padding: 8px 10px; border: 1.5px solid var(--borde); border-radius: 8px; font-size: 0.88rem; font-family: inherit; color: var(--texto); background: white; }
+    .mf input:focus, .mf select:focus, .mf textarea:focus { outline: none; border-color: var(--azul); }
+    .mf textarea { resize: vertical; min-height: 80px; }
 
-    /* FILE UPLOAD */
-    .file-upload { border: 2px dashed var(--gris-borde); border-radius: 8px; padding: 1.25rem; text-align: center; cursor: pointer; transition: all 0.15s; }
-    .file-upload:hover { border-color: var(--naranja); background: var(--naranja-bg); }
-    .file-upload input { display: none; }
-    .file-upload p { font-size: 0.8rem; color: var(--texto-suave); margin-top: 6px; }
-    .file-name { font-size: 0.8rem; color: var(--exito); margin-top: 6px; font-weight: 500; }
+    /* ── SEMANA VISTA ── */
+    .semana-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.75rem; margin-bottom: 1.5rem; }
+    .dia-card { background: white; border-radius: 10px; border: 1px solid var(--borde); overflow: hidden; cursor: pointer; transition: all 0.15s; min-height: 120px; }
+    .dia-card:hover { border-color: var(--naranja); box-shadow: 0 2px 12px rgba(234,88,12,0.1); }
+    .dia-card.tiene-sesion { border-color: var(--naranja); }
+    .dia-card.hoy { box-shadow: 0 0 0 2px var(--naranja); }
+    .dia-header { padding: 0.5rem 0.6rem; border-bottom: 1px solid var(--borde); }
+    .dia-nombre { font-size: 0.65rem; font-weight: 700; color: var(--suave); text-transform: uppercase; }
+    .dia-num { font-size: 1.1rem; font-weight: 800; color: var(--texto); }
+    .dia-body { padding: 0.5rem 0.6rem; }
+    .dia-tipo { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem; }
+    .dia-titulo { font-size: 0.72rem; color: var(--suave); line-height: 1.3; }
+    .dia-vacio { font-size: 0.72rem; color: #cbd5e1; font-style: italic; }
+    .tipo-pista { color: var(--naranja); }
+    .tipo-gym { color: #7c3aed; }
+    .tipo-continuo { color: var(--success); }
+    .tipo-activacion { color: #0891b2; }
+    .tipo-descanso { color: #94a3b8; }
+    .tipo-competicion { color: #dc2626; }
 
-    /* STATS */
-    .stats-atleta { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-top: 1rem; }
-    .stat-mini { background: var(--gris); border-radius: 8px; padding: 0.75rem; text-align: center; }
-    .stat-mini-val { font-size: 1.4rem; font-weight: 700; color: var(--naranja); }
-    .stat-mini-label { font-size: 0.72rem; color: var(--texto-suave); }
+    /* ── EDITOR DE SESIÓN ── */
+    .sesion-editor { background: white; border-radius: 12px; border: 1px solid var(--borde); }
+    .sesion-header { padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--borde); display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; }
+    .sesion-meta { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; padding: 1rem 1.5rem; border-bottom: 1px solid var(--borde); background: var(--gris); }
+    .meta-item label { font-size: 0.68rem; font-weight: 700; color: var(--suave); text-transform: uppercase; display: block; margin-bottom: 0.25rem; }
+    .meta-item select, .meta-item input { width: 100%; padding: 6px 8px; border: 1.5px solid var(--borde); border-radius: 6px; font-size: 0.82rem; font-family: inherit; background: white; }
+    .bloques-area { padding: 1.25rem 1.5rem; }
+    .bloque { border: 1px solid var(--borde); border-radius: 10px; margin-bottom: 1rem; overflow: hidden; }
+    .bloque-header { padding: 0.6rem 1rem; background: var(--gris); display: flex; align-items: center; gap: 0.5rem; border-bottom: 1px solid var(--borde); }
+    .bloque-nombre { font-size: 0.82rem; font-weight: 700; flex: 1; border: none; background: transparent; font-family: inherit; }
+    .bloque-nombre:focus { outline: none; }
+    .filas-tabla { width: 100%; border-collapse: collapse; }
+    .filas-tabla th { font-size: 0.65rem; font-weight: 700; color: var(--suave); text-transform: uppercase; padding: 0.4rem 0.6rem; text-align: left; border-bottom: 1px solid var(--borde); background: #f8fafc; }
+    .filas-tabla td { padding: 0.35rem 0.5rem; border-bottom: 1px solid var(--borde); vertical-align: middle; }
+    .filas-tabla tr:last-child td { border-bottom: none; }
+    .fila-input { width: 100%; border: none; background: transparent; font-size: 0.82rem; font-family: inherit; padding: 4px 6px; border-radius: 4px; }
+    .fila-input:focus { outline: none; background: var(--azul-light); }
+    .fila-input.ejercicio { min-width: 160px; }
+    .fila-input.series { max-width: 90px; }
+    .fila-input.rec { max-width: 70px; }
+    .fila-input.calzado { max-width: 60px; }
+    .tag-calzado { display: inline-flex; gap: 4px; }
+    .tag-cal { padding: 2px 6px; border-radius: 4px; font-size: 0.68rem; font-weight: 700; cursor: pointer; border: 1.5px solid var(--borde); }
+    .tag-cal.sel { border-color: var(--naranja); background: var(--naranja); color: white; }
+    .override-btn { padding: 2px 6px; border: 1px solid var(--borde); border-radius: 4px; font-size: 0.65rem; color: var(--suave); background: none; cursor: pointer; white-space: nowrap; }
+    .override-btn:hover { border-color: var(--azul); color: var(--azul); }
+    .add-fila-btn { padding: 0.5rem 1rem; font-size: 0.75rem; color: var(--suave); background: none; border: none; cursor: pointer; display: flex; align-items: center; gap: 5px; width: 100%; }
+    .add-fila-btn:hover { color: var(--naranja); }
+    .add-bloque-btn { width: 100%; padding: 0.75rem; border: 2px dashed var(--borde); border-radius: 10px; font-size: 0.82rem; color: var(--suave); background: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; }
+    .add-bloque-btn:hover { border-color: var(--naranja); color: var(--naranja); }
 
-    .spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.6s linear infinite; vertical-align: middle; margin-right: 4px; }
+    /* ── PANEL IA ── */
+    .ia-panel { background: linear-gradient(135deg, #1e1b4b, #312e81); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; color: white; }
+    .ia-panel h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 8px; }
+    .ia-panel p { font-size: 0.82rem; color: rgba(255,255,255,0.7); margin-bottom: 1rem; line-height: 1.5; }
+    .ia-textarea { width: 100%; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; padding: 0.75rem; color: white; font-family: inherit; font-size: 0.85rem; resize: vertical; min-height: 80px; }
+    .ia-textarea::placeholder { color: rgba(255,255,255,0.4); }
+    .ia-textarea:focus { outline: none; border-color: rgba(255,255,255,0.5); }
+    .ia-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 0.75rem; gap: 1rem; }
+    .ia-hint { font-size: 0.72rem; color: rgba(255,255,255,0.5); flex: 1; }
+    .ia-loading { display: none; align-items: center; gap: 8px; font-size: 0.82rem; color: rgba(255,255,255,0.7); }
+    .ia-loading.v { display: flex; }
+    .dot-pulse { display: flex; gap: 4px; }
+    .dot-pulse span { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.6); animation: pulse 1.2s infinite; }
+    .dot-pulse span:nth-child(2) { animation-delay: 0.2s; }
+    .dot-pulse span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes pulse { 0%,80%,100%{opacity:0.3} 40%{opacity:1} }
+
+    /* ── FICHA ATLETA ── */
+    .atleta-card { background: white; border-radius: 12px; border: 1px solid var(--borde); padding: 1.25rem; display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 0.75rem; cursor: pointer; transition: all 0.12s; }
+    .atleta-card:hover { border-color: var(--naranja); }
+    .atleta-avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--naranja-bg); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1rem; color: var(--naranja); flex-shrink: 0; }
+    .atleta-info h4 { font-size: 0.9rem; font-weight: 700; margin-bottom: 0.25rem; }
+    .atleta-info p { font-size: 0.75rem; color: var(--suave); }
+    .atleta-badges { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 0.4rem; }
+
+    /* ── RESPONSIVE MÓVIL ── */
+    @media (max-width: 768px) {
+      .sidebar { display: none; }
+      .semana-grid { grid-template-columns: repeat(2, 1fr); }
+      .form-grid { grid-template-columns: 1fr; }
+      .sesion-meta { grid-template-columns: 1fr 1fr; }
+      .cards-grid { grid-template-columns: repeat(2, 1fr); }
+      .topbar h1 { font-size: 0.95rem; }
+      .content { padding: 1rem; }
+
+      /* Barra inferior móvil */
+      .mobile-nav { display: flex; position: fixed; bottom: 0; left: 0; right: 0; background: #0f172a; border-top: 1px solid rgba(255,255,255,0.1); z-index: 50; }
+      .mobile-nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 8px 4px; color: rgba(255,255,255,0.5); font-size: 0.6rem; cursor: pointer; border: none; background: none; font-family: inherit; }
+      .mobile-nav-item.activo { color: #fb923c; }
+      body { padding-bottom: 60px; }
+    }
+    @media (min-width: 769px) { .mobile-nav { display: none; } }
+
+    /* ── TABS ── */
+    .tabs { display: flex; gap: 0; border-bottom: 2px solid var(--borde); margin-bottom: 1.5rem; }
+    .tab { padding: 0.6rem 1.25rem; font-size: 0.83rem; font-weight: 600; color: var(--suave); cursor: pointer; border: none; background: none; border-bottom: 2px solid transparent; margin-bottom: -2px; font-family: inherit; }
+    .tab.activo { color: var(--naranja); border-bottom-color: var(--naranja); }
+
+    /* ── NOTA/RAZÓN ── */
+    .nota-razon { background: #fefce8; border: 1px solid #fde68a; border-radius: 8px; padding: 0.75rem 1rem; font-size: 0.82rem; color: #92400e; line-height: 1.5; margin-bottom: 1rem; display: flex; gap: 8px; }
+
+    /* ── OVERRIDE CHIPS ── */
+    .override-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+    .override-chip { display: flex; align-items: center; gap: 4px; background: var(--azul-light); border-radius: 6px; padding: 3px 8px; font-size: 0.72rem; }
+    .override-chip strong { color: var(--azul); }
+    .override-chip button { background: none; border: none; cursor: pointer; color: var(--suave); padding: 0; line-height: 1; }
+
+    .spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.6s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    .info-box { background: var(--azul-bg); border: 1px solid #b8d9f0; border-radius: 8px; padding: 0.8rem 1rem; font-size: 0.83rem; color: var(--azul); margin-bottom: 1rem; display: flex; gap: 8px; }
-
-    @media (max-width: 700px) {
-      .sidebar { display: none; }
-      .atletas-grid { grid-template-columns: 1fr 1fr; }
-    }
+    .alerta { padding: 0.75rem 1rem; border-radius: 8px; font-size: 0.82rem; margin-bottom: 1rem; }
+    .alerta-warn { background: #fff7ed; border: 1px solid #fed7aa; color: #9a3412; }
+    .alerta-info { background: var(--azul-light); border: 1px solid #bae6fd; color: var(--azul-dark); }
   </style>
 </head>
 <body>
 
 <!-- LOGIN -->
 <div id="login-screen">
-  <div class="login-box">
-    <div class="login-logo">
-      <div class="login-logo-circle">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ea580c" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+  <div class="login-wrap">
+    <div class="login-box">
+      <div class="login-logo">
+        <img src="https://icaxokjsvhlreuwpyxeb.supabase.co/storage/v1/object/public/imagenes-club/logo.png" alt="Apolana">
+        <span>Club Apolana</span>
       </div>
-      <div>
-        <span style="font-weight:600;font-size:0.9rem;">Club Apolana</span>
-        <small style="color:var(--texto-suave);font-size:0.75rem;">Panel de entrenador</small>
-      </div>
+      <h2>Panel Entrenador</h2>
+      <p>Accede con tu cuenta de entrenador o coordinador</p>
+      <div class="field"><label>Email</label><input type="email" id="login-email" placeholder="tu@email.com"></div>
+      <div class="field"><label>Contraseña</label><input type="password" id="login-pass" placeholder="••••••••"></div>
+      <div class="login-error" id="login-error">Email o contraseña incorrectos</div>
+      <button class="btn-login" onclick="doLogin()">Entrar</button>
+      <div style="text-align:center;margin-top:1rem;"><a href="index.html" style="font-size:0.8rem;color:var(--suave);text-decoration:none;">← Volver a la web</a></div>
     </div>
-    <h1>Acceso entrenadores</h1>
-    <p>Introduce tus credenciales para acceder</p>
-    <div class="lf"><label>Email</label><input type="email" id="l-email" placeholder="entrenador@apolana.es" autocomplete="email"></div>
-    <div class="lf"><label>Contraseña</label><input type="password" id="l-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"></div>
-    <div class="login-err" id="l-err">Credenciales incorrectas</div>
-    <button class="login-btn" id="l-btn" onclick="doLogin()">Entrar</button>
   </div>
 </div>
 
 <!-- APP -->
 <div id="app">
-  <aside class="sidebar">
-    <div class="sb-logo">
-      <div class="sb-logo-c">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ea580c" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-      </div>
-      <div><span>Entrenador</span><small id="sb-seccion">Club Apolana</small></div>
-    </div>
+  <div class="app-layout">
 
-    <div class="sb-section">Mi panel</div>
-    <button class="sb-item activo" onclick="showPanel('inicio')">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
-      Inicio
-    </button>
-    <button class="sb-item" onclick="showPanel('grupo')">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-      Mi grupo
-    </button>
-    <button class="sb-item" onclick="showPanel('entrenamientos')">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-      Entrenamientos
-    </button>
-    <button class="sb-item" onclick="showPanel('feedback')">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-      Feedback atletas
-    </button>
-    <button class="sb-item" onclick="showPanel('calendario')">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-      Calendario
-    </button>
-
-    <div class="sb-footer">
-      <div class="sb-user">
-        <div class="sb-avatar" id="sb-initials">E</div>
-        <div class="sb-user-info">
-          <span id="sb-nombre">Entrenador</span>
-          <small>Entrenador</small>
-        </div>
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sb-logo">
+        <img src="https://icaxokjsvhlreuwpyxeb.supabase.co/storage/v1/object/public/imagenes-club/logo.png" alt="">
+        <div><span>Apolana</span><small id="sb-rol">Entrenador</small></div>
       </div>
-      <button class="sb-logout" onclick="doLogout()">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-        Cerrar sesión
+
+      <div class="sb-section">Planificación</div>
+      <button class="sb-item activo" onclick="showPanel('semana')">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Vista semanal
       </button>
-    </div>
-  </aside>
+      <button class="sb-item" onclick="showPanel('generar')">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        Generar con IA
+      </button>
+      <button class="sb-item" onclick="showPanel('plantillas')">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        Plantillas
+      </button>
 
-  <div class="main">
-    <div class="topbar">
-      <h1 id="topbar-title">Inicio</h1>
-      <div class="topbar-right">
-        <a href="index.html" target="_blank" class="btn btn-s">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-          Web del club
-        </a>
-        <button class="btn btn-p" onclick="showPanel('entrenamientos'); abrirModalEntreno()">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-          Nuevo entreno
+      <div class="sb-section">Atletas</div>
+      <button class="sb-item" onclick="showPanel('atletas')">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        Mis atletas
+      </button>
+      <button class="sb-item" onclick="showPanel('grupos')">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Grupos
+      </button>
+      <button class="sb-item" onclick="showPanel('competiciones')">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        Competiciones
+      </button>
+
+      <div class="sb-section">Seguimiento</div>
+      <button class="sb-item" onclick="showPanel('feedback')">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Feedback atletas
+      </button>
+
+      <div class="sb-section">Sistema</div>
+      <button class="sb-item" onclick="showPanel('ejercicios')">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6.5 6.5h11M6.5 12h11M6.5 17.5h11"/></svg>
+        Catálogo ejercicios
+      </button>
+      <a class="sb-item" href="admin.html" style="text-decoration:none;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93A10 10 0 1 0 4.93 19.07"/></svg>
+        Panel admin
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-left:auto;opacity:0.4"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      </a>
+
+      <div class="sb-bottom">
+        <div class="sb-user">
+          <div class="sb-avatar" id="sb-initials">E</div>
+          <div class="sb-user-info">
+            <span id="sb-nombre">Entrenador</span>
+            <small id="sb-grupo-nombre">—</small>
+          </div>
+        </div>
+        <button class="sb-logout" onclick="doLogout()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          Cerrar sesión
         </button>
       </div>
-    </div>
+    </aside>
 
-    <div class="content">
+    <!-- MAIN -->
+    <main class="main">
 
-      <!-- INICIO -->
-      <div class="panel activo" id="panel-inicio">
-        <div class="metrics" id="metrics-entreno">
-          <div class="metric"><div class="metric-label">Atletas en mi grupo</div><div class="metric-val" id="m-atletas">—</div><div class="metric-sub">activos</div></div>
-          <div class="metric"><div class="metric-label">Entrenamientos</div><div class="metric-val" id="m-entrenos">—</div><div class="metric-sub">este mes</div></div>
-          <div class="metric"><div class="metric-label">Próximo evento</div><div class="metric-val" style="font-size:1rem;padding-top:4px;" id="m-evento">—</div><div class="metric-sub" id="m-evento-fecha"></div></div>
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
-          <div>
-            <div style="font-size:0.85rem;font-weight:600;margin-bottom:0.75rem;">Últimos entrenamientos</div>
-            <div id="ultimos-entrenos"><div style="color:var(--texto-suave);font-size:0.83rem;">Cargando...</div></div>
+      <!-- ── PANEL: VISTA SEMANAL ── -->
+      <div class="panel activo" id="panel-semana">
+        <div class="topbar">
+          <div style="display:flex;align-items:center;gap:1rem;">
+            <button class="btn btn-g btn-sm" onclick="cambiarSemana(-1)">← Ant</button>
+            <h1 id="semana-titulo">Semana 30 · 21–27 Jul 2025</h1>
+            <button class="btn btn-g btn-sm" onclick="cambiarSemana(1)">Sig →</button>
           </div>
-          <div>
-            <div style="font-size:0.85rem;font-weight:600;margin-bottom:0.75rem;">Atletas en prueba</div>
-            <div id="atletas-prueba-lista"><div style="color:var(--texto-suave);font-size:0.83rem;">Cargando...</div></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- MI GRUPO -->
-      <div class="panel" id="panel-grupo">
-        <div class="info-box">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-          <span>Grupo asignado: <strong id="grupo-nombre-info">—</strong> · <span id="grupo-horario-info">—</span></span>
-        </div>
-        <div class="atletas-grid" id="atletas-grid">
-          <div style="color:var(--texto-suave);font-size:0.85rem;grid-column:1/-1;">Cargando atletas...</div>
-        </div>
-      </div>
-
-      <!-- ENTRENAMIENTOS -->
-      <div class="panel" id="panel-entrenamientos">
-        <div class="entreno-lista" id="entreno-lista">
-          <div style="color:var(--texto-suave);font-size:0.85rem;">Cargando entrenamientos...</div>
-        </div>
-      </div>
-
-      <!-- FEEDBACK -->
-      <div class="panel" id="panel-feedback">
-        <div class="table-wrap">
-          <div class="table-header">
-            <span class="table-title">Feedback de atletas</span>
-            <select class="filter-select" onchange="filtrarFeedback()" id="filter-entreno-fb" style="padding:6px 10px;border:1px solid var(--gris-borde);border-radius:7px;font-size:0.82rem;background:white;">
-              <option value="">Todos los entrenamientos</option>
+          <div class="topbar-actions">
+            <select id="filtro-grupo" onchange="cargarSemana()" style="padding:6px 10px;border:1.5px solid var(--borde);border-radius:8px;font-size:0.82rem;font-family:inherit;">
+              <option value="">Todos los grupos</option>
             </select>
+            <button class="btn btn-p" onclick="nuevaSesion()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Nueva sesión
+            </button>
           </div>
-          <div style="overflow-x:auto;">
-            <table>
-              <thead><tr><th>Atleta</th><th>Entrenamiento</th><th>Fecha</th><th>Sensaciones</th><th>Marca/Tiempo</th><th>Notas</th></tr></thead>
-              <tbody id="tbody-feedback"><tr><td colspan="6" class="table-empty">Cargando...</td></tr></tbody>
-            </table>
+        </div>
+        <div class="content">
+          <div class="semana-grid" id="semana-grid"></div>
+          <div id="sesion-detail-area"></div>
+        </div>
+      </div>
+
+      <!-- ── PANEL: GENERAR CON IA ── -->
+      <div class="panel" id="panel-generar">
+        <div class="topbar"><h1>✨ Generar planificación con IA</h1></div>
+        <div class="content">
+          <div class="ia-panel">
+            <h3>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+              Asistente de planificación
+            </h3>
+            <p>Describe la semana, el estado de los atletas y los objetivos. La IA generará la planificación completa basándose en tu metodología.</p>
+            <textarea class="ia-textarea" id="ia-prompt" placeholder="Ej: Semana 30, fase específica. Velocistas Sub20 (Rafa, Adri, Juan). Competición el sábado en Valencia, 400mv para Rafa y 400m para los demás. Rafa lleva bien la carga, Adri comentó algo de gemelo izquierdo. Quiero calidad fuerte el lunes, gym martes, toque corto el jueves 48h antes..."></textarea>
+            <div class="ia-footer">
+              <span class="ia-hint">Cuanta más información des, mejor será el resultado. Menciona fase, competiciones, estado de cada atleta y lo que quieras priorizar.</span>
+              <div class="ia-loading" id="ia-loading">
+                <div class="dot-pulse"><span></span><span></span><span></span></div>
+                Generando...
+              </div>
+              <button class="btn btn-ia" id="ia-btn" onclick="generarConIA()">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/></svg>
+                Generar semana
+              </button>
+            </div>
+          </div>
+
+          <div id="ia-resultado" style="display:none;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
+              <h3 style="font-size:0.95rem;font-weight:700;">Planificación generada</h3>
+              <div style="display:flex;gap:0.5rem;">
+                <button class="btn btn-g btn-sm" onclick="document.getElementById('ia-resultado').style.display='none'">Descartar</button>
+                <button class="btn btn-p btn-sm" onclick="guardarPlanificacionIA()">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>
+                  Guardar todo
+                </button>
+              </div>
+            </div>
+            <div id="ia-sesiones-preview"></div>
           </div>
         </div>
       </div>
 
-      <!-- CALENDARIO -->
-      <div class="panel" id="panel-calendario">
-        <div class="table-wrap">
-          <div class="table-header"><span class="table-title">Próximos eventos del club</span></div>
-          <div style="overflow-x:auto;">
-            <table>
-              <thead><tr><th>Fecha</th><th>Evento</th><th>Tipo</th><th>Lugar</th></tr></thead>
-              <tbody id="tbody-calendario"><tr><td colspan="4" class="table-empty">Cargando...</td></tr></tbody>
-            </table>
+      <!-- ── PANEL: ATLETAS ── -->
+      <div class="panel" id="panel-atletas">
+        <div class="topbar">
+          <h1>Mis atletas</h1>
+          <div class="topbar-actions">
+            <input type="search" placeholder="Buscar atleta..." id="buscar-atleta" oninput="filtrarAtletas()" style="padding:7px 12px;border:1.5px solid var(--borde);border-radius:8px;font-size:0.83rem;font-family:inherit;width:220px;">
+            <button class="btn btn-p" onclick="abrirModalAtleta()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Nuevo atleta
+            </button>
           </div>
+        </div>
+        <div class="content">
+          <div id="atletas-lista"></div>
         </div>
       </div>
 
+      <!-- ── PANEL: GRUPOS ── -->
+      <div class="panel" id="panel-grupos">
+        <div class="topbar">
+          <h1>Grupos de entrenamiento</h1>
+          <button class="btn btn-p" onclick="abrirModalGrupo()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Nuevo grupo
+          </button>
+        </div>
+        <div class="content">
+          <div id="grupos-lista"></div>
+        </div>
+      </div>
+
+      <!-- ── PANEL: COMPETICIONES ── -->
+      <div class="panel" id="panel-competiciones">
+        <div class="topbar">
+          <h1>Competiciones</h1>
+          <button class="btn btn-p" onclick="abrirModalCompeticion()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Nueva competición
+          </button>
+        </div>
+        <div class="content">
+          <div id="competiciones-lista"></div>
+        </div>
+      </div>
+
+      <!-- ── PANEL: FEEDBACK ── -->
+      <div class="panel" id="panel-feedback">
+        <div class="topbar"><h1>Feedback de atletas</h1></div>
+        <div class="content">
+          <div id="feedback-lista"></div>
+        </div>
+      </div>
+
+      <!-- ── PANEL: EJERCICIOS ── -->
+      <div class="panel" id="panel-ejercicios">
+        <div class="topbar">
+          <h1>Catálogo de ejercicios</h1>
+          <button class="btn btn-p" onclick="abrirModalEjercicio()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Añadir ejercicio
+          </button>
+        </div>
+        <div class="content">
+          <div class="tabs" id="ejercicios-tabs"></div>
+          <div id="ejercicios-lista"></div>
+        </div>
+      </div>
+
+      <!-- ── PANEL: PLANTILLAS ── -->
+      <div class="panel" id="panel-plantillas">
+        <div class="topbar"><h1>Plantillas de bloque</h1>
+          <button class="btn btn-p" onclick="abrirModalPlantilla()">+ Nueva plantilla</button>
+        </div>
+        <div class="content">
+          <div id="plantillas-lista"></div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- MOBILE NAV -->
+  <nav class="mobile-nav">
+    <button class="mobile-nav-item activo" onclick="showPanel('semana')">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      Semana
+    </button>
+    <button class="mobile-nav-item" onclick="showPanel('generar')">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+      IA
+    </button>
+    <button class="mobile-nav-item" onclick="showPanel('atletas')">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      Atletas
+    </button>
+    <button class="mobile-nav-item" onclick="showPanel('feedback')">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      Feedback
+    </button>
+  </nav>
+</div>
+
+<!-- MODAL SESIÓN EDITOR -->
+<div class="modal-overlay" id="modal-sesion">
+  <div class="modal" style="max-width:900px;">
+    <div class="modal-header">
+      <h3 id="modal-sesion-titulo">Nueva sesión</h3>
+      <div style="display:flex;gap:0.5rem;align-items:center;">
+        <button class="btn btn-ia btn-sm" onclick="generarSesionIA()">✨ Generar con IA</button>
+        <button class="modal-close" onclick="cerrarModal('modal-sesion')">✕</button>
+      </div>
+    </div>
+    <div class="modal-body">
+      <!-- Meta -->
+      <div class="form-grid" style="margin-bottom:1rem;">
+        <div class="mf">
+          <label>Fecha</label>
+          <input type="date" id="ses-fecha">
+        </div>
+        <div class="mf">
+          <label>Grupo</label>
+          <select id="ses-grupo"></select>
+        </div>
+        <div class="mf">
+          <label>Tipo</label>
+          <select id="ses-tipo">
+            <option value="pista">Pista</option>
+            <option value="gym">Gimnasio</option>
+            <option value="continuo">Continuo</option>
+            <option value="activacion">Activación</option>
+            <option value="competicion">Competición</option>
+            <option value="descanso">Descanso</option>
+          </select>
+        </div>
+        <div class="mf">
+          <label>Rol en la semana</label>
+          <select id="ses-rol">
+            <option value="calidad_fuerte">Calidad fuerte</option>
+            <option value="secundaria">Secundaria</option>
+            <option value="activacion">Activación</option>
+            <option value="ultimo_toque_48h">Último toque 48h</option>
+            <option value="descarga">Descarga</option>
+            <option value="competicion">Competición</option>
+          </select>
+        </div>
+        <div class="mf form-full">
+          <label>Título de la sesión</label>
+          <input type="text" id="ses-titulo" placeholder="Ej: Calidad fuerte — Series largas a ritmo de 400m">
+        </div>
+        <div class="mf form-full">
+          <label>Razonamiento / nota para el atleta</label>
+          <textarea id="ses-razon" placeholder="Ej: Llegas fresco al inicio de semana, así que la calidad va primero. El objetivo es consolidar el ritmo de competición..." style="min-height:60px;"></textarea>
+        </div>
+      </div>
+
+      <!-- Bloques editor -->
+      <div id="bloques-container"></div>
+      <button class="add-bloque-btn" onclick="addBloque()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Añadir bloque
+      </button>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-g" onclick="cerrarModal('modal-sesion')">Cancelar</button>
+      <button class="btn btn-s" onclick="guardarSesion(false)">Guardar borrador</button>
+      <button class="btn btn-p" onclick="guardarSesion(true)">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13"/><path d="M22 2L15 22l-4-9-9-4 20-7z"/></svg>
+        Publicar a atletas
+      </button>
     </div>
   </div>
 </div>
 
-<!-- MODAL NUEVO ENTRENAMIENTO -->
-<div class="modal-overlay" id="modal-entreno">
+<!-- MODAL ATLETA -->
+<div class="modal-overlay" id="modal-atleta">
   <div class="modal">
-    <div class="modal-head">
-      <h2>Nuevo entrenamiento</h2>
-      <button class="modal-close" onclick="cerrarModal('modal-entreno')">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </button>
+    <div class="modal-header">
+      <h3 id="modal-atleta-titulo">Nuevo atleta</h3>
+      <button class="modal-close" onclick="cerrarModal('modal-atleta')">✕</button>
     </div>
     <div class="modal-body">
-      <div class="mf"><label>Título <span class="req">*</span></label><input type="text" id="e-titulo" placeholder="Sesión de velocidad..."></div>
-      <div class="mf2">
-        <div class="mf"><label>Fecha <span class="req">*</span></label><input type="date" id="e-fecha"></div>
+      <div class="tabs" style="margin-bottom:1rem;">
+        <button class="tab activo" onclick="switchTab(this,'tab-atleta-basico')">Básico</button>
+        <button class="tab" onclick="switchTab(this,'tab-atleta-deportivo')">Perfil deportivo</button>
+        <button class="tab" onclick="switchTab(this,'tab-atleta-estado')">Estado</button>
+        <button class="tab" onclick="switchTab(this,'tab-atleta-ia')">Contexto IA</button>
+      </div>
+
+      <div id="tab-atleta-basico">
+        <div class="form-grid">
+          <div class="mf"><label>Nombre *</label><input type="text" id="at-nombre" placeholder="Juan"></div>
+          <div class="mf"><label>Apellidos</label><input type="text" id="at-apellidos" placeholder="García López"></div>
+          <div class="mf"><label>Nombre corto (tablas)</label><input type="text" id="at-corto" placeholder="Juan"></div>
+          <div class="mf"><label>Fecha nacimiento</label><input type="date" id="at-nacimiento"></div>
+          <div class="mf"><label>Licencia</label><input type="text" id="at-licencia"></div>
+          <div class="mf"><label>Grupo</label><select id="at-grupo"></select></div>
+        </div>
+      </div>
+
+      <div id="tab-atleta-deportivo" style="display:none;">
+        <div class="form-grid">
+          <div class="mf"><label>Perfil</label>
+            <select id="at-perfil">
+              <option value="">Seleccionar...</option>
+              <option value="velocista_puro">Velocista puro (100/200m)</option>
+              <option value="velocista_largo">Velocista largo (400m)</option>
+              <option value="vallista">Vallista</option>
+              <option value="mixto">Mixto</option>
+            </select>
+          </div>
+          <div class="mf"><label>Pruebas principales</label><input type="text" id="at-pruebas-p" placeholder="400m, 400mv"></div>
+          <div class="mf"><label>Pruebas secundarias</label><input type="text" id="at-pruebas-s" placeholder="200m"></div>
+          <div class="mf" id="campo-pierna" style="display:none;"><label>Pierna de ataque</label>
+            <select id="at-pierna"><option value="derecha">Derecha</option><option value="izquierda">Izquierda</option></select>
+          </div>
+          <div class="mf" id="campo-pasos" style="display:none;"><label>Pasos entre vallas</label><input type="number" id="at-pasos" placeholder="13"></div>
+          <div class="mf"><label>Hace gimnasio</label>
+            <select id="at-gym"><option value="true">Sí</option><option value="false">No</option></select>
+          </div>
+          <div class="mf"><label>Tiene fisio</label>
+            <select id="at-fisio"><option value="false">No</option><option value="true">Sí</option></select>
+          </div>
+          <div class="mf"><label>Día de fisio</label><input type="text" id="at-dia-fisio" placeholder="Miércoles"></div>
+        </div>
+        <h4 style="font-size:0.82rem;font-weight:700;margin:1rem 0 0.5rem;">Marcas de referencia</h4>
+        <div id="marcas-container"></div>
+        <button class="btn btn-g btn-sm" onclick="addMarca()" style="margin-top:0.5rem;">+ Añadir marca</button>
+      </div>
+
+      <div id="tab-atleta-estado" style="display:none;">
+        <div class="form-grid">
+          <div class="mf"><label>Estado</label>
+            <select id="at-estado">
+              <option value="activo">Activo</option>
+              <option value="lesionado">Lesionado</option>
+              <option value="prueba">En prueba</option>
+              <option value="baja">Baja</option>
+            </select>
+          </div>
+          <div class="mf"><label>Fin período prueba</label><input type="date" id="at-prueba-fin"></div>
+          <div class="mf form-full"><label>Observaciones</label><textarea id="at-obs"></textarea></div>
+        </div>
+        <h4 style="font-size:0.82rem;font-weight:700;margin:0.5rem 0;">Molestias / lesiones</h4>
+        <div id="lesiones-container"></div>
+        <button class="btn btn-g btn-sm" onclick="addLesion()">+ Añadir molestia</button>
+      </div>
+
+      <div id="tab-atleta-ia" style="display:none;">
+        <div class="alerta-info alerta" style="margin-bottom:1rem;">
+          Este contexto alimenta directamente la IA al generar entrenamientos para este atleta. Sé específico.
+        </div>
+        <div class="mf">
+          <label>Contexto del entrenador</label>
+          <textarea id="at-ctx-entrenador" style="min-height:120px;" placeholder="Ej: Velocista de 400m, base aeróbica alta. Tendencia a sobrecargas en isquios izquierdo. Responde muy bien a series cortas con recuperación larga. El año pasado llegó a 52.3 en autonómico. Mentalmente sólido en competición pero le cuesta arrancar en calidad los lunes..."></textarea>
+        </div>
+        <div class="mf">
+          <label>Contexto del propio atleta</label>
+          <textarea id="at-ctx-atleta" style="min-height:120px;" placeholder="El atleta escribirá aquí cómo se siente, qué le gusta, qué le cuesta, sus propios objetivos..."></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <input type="hidden" id="at-edit-id">
+      <button class="btn btn-g" onclick="cerrarModal('modal-atleta')">Cancelar</button>
+      <button class="btn btn-p" onclick="guardarAtleta()">Guardar atleta</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL GRUPO -->
+<div class="modal-overlay" id="modal-grupo">
+  <div class="modal" style="max-width:500px;">
+    <div class="modal-header">
+      <h3 id="modal-grupo-titulo">Nuevo grupo</h3>
+      <button class="modal-close" onclick="cerrarModal('modal-grupo')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="mf"><label>Nombre del grupo *</label><input type="text" id="gr-nombre" placeholder="Velocistas Sub20"></div>
+      <div class="mf"><label>Sección</label>
+        <select id="gr-seccion">
+          <option value="atletismo">Atletismo</option>
+          <option value="running">Running</option>
+          <option value="triatlon">Triatlón</option>
+        </select>
+      </div>
+      <div class="mf"><label>Horario</label><input type="text" id="gr-horario" placeholder="Lun/Mié/Vie 17:00-19:00h"></div>
+      <div class="mf"><label>Descripción</label><textarea id="gr-desc"></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <input type="hidden" id="gr-edit-id">
+      <button class="btn btn-g" onclick="cerrarModal('modal-grupo')">Cancelar</button>
+      <button class="btn btn-p" onclick="guardarGrupo()">Guardar grupo</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL EJERCICIO -->
+<div class="modal-overlay" id="modal-ejercicio">
+  <div class="modal" style="max-width:480px;">
+    <div class="modal-header">
+      <h3>Nuevo ejercicio</h3>
+      <button class="modal-close" onclick="cerrarModal('modal-ejercicio')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="mf"><label>Nombre *</label><input type="text" id="ej-nombre"></div>
+      <div class="mf"><label>Nombre corto (tablas)</label><input type="text" id="ej-corto"></div>
+      <div class="form-grid">
         <div class="mf"><label>Tipo</label>
-          <select id="e-tipo">
+          <select id="ej-tipo">
+            <option value="pista">Pista</option>
+            <option value="gym">Gimnasio</option>
+            <option value="continuo">Continuo</option>
             <option value="tecnica">Técnica</option>
-            <option value="fuerza">Fuerza</option>
-            <option value="velocidad">Velocidad</option>
-            <option value="resistencia">Resistencia</option>
-            <option value="competicion">Competición</option>
             <option value="otro">Otro</option>
           </select>
         </div>
-      </div>
-      <div class="mf"><label>Descripción / plan de entreno <span class="req">*</span></label>
-        <textarea id="e-desc" placeholder="Detalla el calentamiento, series, vuelta a la calma..."></textarea>
-      </div>
-      <div class="mf">
-        <label>Adjuntar archivo <span style="color:var(--texto-suave);font-weight:400;font-size:0.78rem;">(PDF o imagen, opcional)</span></label>
-        <label class="file-upload" id="file-upload-label">
-          <input type="file" id="e-archivo" accept=".pdf,image/*" onchange="onFileChange(this)">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-          <p>Haz clic para subir PDF o imagen</p>
-          <div class="file-name" id="file-name-label" style="display:none;"></div>
-        </label>
+        <div class="mf"><label>Categoría</label>
+          <select id="ej-cat">
+            <option value="calentamiento">Calentamiento</option>
+            <option value="velocidad">Velocidad</option>
+            <option value="resistencia">Resistencia</option>
+            <option value="fuerza">Fuerza</option>
+            <option value="potenciacion">Potenciación</option>
+            <option value="tecnica">Técnica</option>
+            <option value="activacion">Activación</option>
+            <option value="core">Core</option>
+            <option value="preventivo">Preventivo</option>
+            <option value="transferencia">Transferencia</option>
+            <option value="recuperacion">Recuperación</option>
+          </select>
+        </div>
       </div>
     </div>
-    <div class="modal-foot">
-      <button class="btn btn-s" onclick="cerrarModal('modal-entreno')">Cancelar</button>
-      <button class="btn btn-p" id="btn-guardar-entreno" onclick="guardarEntreno()">Publicar entreno</button>
+    <div class="modal-footer">
+      <button class="btn btn-g" onclick="cerrarModal('modal-ejercicio')">Cancelar</button>
+      <button class="btn btn-p" onclick="guardarEjercicio()">Guardar</button>
     </div>
   </div>
 </div>
 
-<!-- MODAL VER ATLETA -->
-<div class="modal-overlay" id="modal-atleta">
-  <div class="modal">
-    <div class="modal-head">
-      <h2 id="atleta-modal-nombre">Atleta</h2>
-      <button class="modal-close" onclick="cerrarModal('modal-atleta')">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </button>
+<!-- MODAL COMPETICIÓN -->
+<div class="modal-overlay" id="modal-competicion">
+  <div class="modal" style="max-width:500px;">
+    <div class="modal-header">
+      <h3>Nueva competición</h3>
+      <button class="modal-close" onclick="cerrarModal('modal-competicion')">✕</button>
     </div>
-    <div class="modal-body" id="atleta-modal-body">
+    <div class="modal-body">
+      <div class="mf"><label>Nombre *</label><input type="text" id="comp-nombre" placeholder="Campeonato Provincial de Atletismo"></div>
+      <div class="mf"><label>Sede</label><input type="text" id="comp-sede" placeholder="Estadio José Rico Pérez, Alicante"></div>
+      <div class="form-grid">
+        <div class="mf"><label>Fecha inicio *</label><input type="date" id="comp-inicio"></div>
+        <div class="mf"><label>Fecha fin</label><input type="date" id="comp-fin"></div>
+        <div class="mf"><label>Nivel de prioridad</label>
+          <select id="comp-nivel">
+            <option value="A">A — Prioritaria</option>
+            <option value="B">B — Importante</option>
+            <option value="C">C — Secundaria</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-g" onclick="cerrarModal('modal-competicion')">Cancelar</button>
+      <button class="btn btn-p" onclick="guardarCompeticion()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL OVERRIDE POR ATLETA -->
+<div class="modal-overlay" id="modal-override">
+  <div class="modal" style="max-width:500px;">
+    <div class="modal-header">
+      <h3>Personalizar por atleta</h3>
+      <button class="modal-close" onclick="cerrarModal('modal-override')">✕</button>
+    </div>
+    <div class="modal-body">
+      <p style="font-size:0.82rem;color:var(--suave);margin-bottom:1rem;">Añade variaciones específicas por atleta para este ejercicio. Ej: "Rafa: 20-21''" o "Ander: reducir si gemelo cargado".</p>
+      <div id="override-atletas-lista"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-g" onclick="cerrarModal('modal-override')">Cerrar</button>
+      <button class="btn btn-p" onclick="guardarOverrides()">Aplicar</button>
     </div>
   </div>
 </div>
@@ -396,345 +791,969 @@ const SB_URL = 'https://icaxokjsvhlreuwpyxeb.supabase.co';
 const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImljYXhva2pzdmhscmV1d3B5eGViIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEwNzE2NTgsImV4cCI6MjA5NjY0NzY1OH0.xn1ZY-otHY0-l7g64uutSVjiU8DbkHxxZmTvu77IaHA';
 const db = supabase.createClient(SB_URL, SB_KEY);
 
-let perfilActual = null, grupoActual = null, atletasGrupo = [], entrenamientosData = [];
+let perfilActual = null;
+let gruposData = [];
+let atletasData = [];
+let ejerciciosData = [];
+let sesionesData = [];
+let semanaOffset = 0;
+let sesionEditando = null;
+let bloqueEditIdx = null;
+let filaEditIdx = null;
+let overrideFilaRef = null;
 
-// =====================
+// ═══════════════════════════════════════════
 // AUTH
-// =====================
+// ═══════════════════════════════════════════
 async function doLogin() {
-  const email = document.getElementById('l-email').value.trim();
-  const pass = document.getElementById('l-pass').value;
-  const err = document.getElementById('l-err');
-  const btn = document.getElementById('l-btn');
-  err.classList.remove('v');
-  btn.innerHTML = '<span class="spinner"></span>Entrando...'; btn.disabled = true;
-  try {
-    const { data, error } = await db.auth.signInWithPassword({ email, password: pass });
-    if (error) throw error;
-    const { data: perfil } = await db.from('perfiles').select('*').eq('id', data.user.id).single();
-    if (!perfil || !['entrenador','coordinador','admin'].includes(perfil.rol)) throw new Error('No entrenador');
-    iniciarApp(perfil);
-  } catch(e) {
-    err.classList.add('v'); btn.innerHTML = 'Entrar'; btn.disabled = false;
+  const email = document.getElementById('login-email').value.trim();
+  const pass = document.getElementById('login-pass').value;
+  const err = document.getElementById('login-error');
+  err.style.display = 'none';
+  const { data, error } = await db.auth.signInWithPassword({ email, password: pass });
+  if (error) { err.style.display = 'block'; return; }
+  const { data: p } = await db.from('perfiles').select('*').eq('id', data.user.id).single();
+  if (!p || !['entrenador','coordinador','admin'].includes(p.rol)) {
+    err.textContent = 'No tienes permisos de entrenador'; err.style.display = 'block';
+    await db.auth.signOut(); return;
   }
+  iniciarApp(p);
 }
 
 async function checkSession() {
   const { data } = await db.auth.getSession();
-  if (data.session) {
-    const { data: p } = await db.from('perfiles').select('*').eq('id', data.session.user.id).single();
-    if (p && ['entrenador','coordinador','admin'].includes(p.rol)) { iniciarApp(p); return; }
-  }
-  document.getElementById('login-screen').style.display = 'flex';
+  if (!data.session) return;
+  const { data: p } = await db.from('perfiles').select('*').eq('id', data.session.user.id).single();
+  if (p && ['entrenador','coordinador','admin'].includes(p.rol)) iniciarApp(p);
 }
 
-async function iniciarApp(perfil) {
-  perfilActual = perfil;
+async function iniciarApp(p) {
+  perfilActual = p;
   document.getElementById('login-screen').style.display = 'none';
-  document.getElementById('app').classList.add('visible');
-  const n = perfil.nombre || 'Entrenador';
+  document.getElementById('app').style.display = 'block';
+  const n = p.nombre || 'E';
   document.getElementById('sb-nombre').textContent = n;
   document.getElementById('sb-initials').textContent = n.charAt(0).toUpperCase();
-  // Buscar grupo asignado
-  const { data: grupo } = await db.from('grupos').select('*').eq('entrenador_id', perfil.id).single();
-  if (grupo) {
-    grupoActual = grupo;
-    document.getElementById('sb-seccion').textContent = grupo.nombre;
-    document.getElementById('grupo-nombre-info').textContent = grupo.nombre;
-    document.getElementById('grupo-horario-info').textContent = grupo.horario || 'Horario no definido';
-    cargarAtletas();
-  }
-  cargarDashboard();
+  document.getElementById('sb-rol').textContent = p.rol.charAt(0).toUpperCase() + p.rol.slice(1);
+  await Promise.all([cargarGrupos(), cargarAtletas(), cargarEjercicios()]);
+  cargarSemana();
 }
 
 async function doLogout() { await db.auth.signOut(); location.reload(); }
 
-// =====================
+// ═══════════════════════════════════════════
 // NAVEGACIÓN
-// =====================
-const TITLES = { inicio:'Inicio', grupo:'Mi grupo', entrenamientos:'Entrenamientos', feedback:'Feedback atletas', calendario:'Calendario' };
-
+// ═══════════════════════════════════════════
 function showPanel(id) {
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('activo'));
+  document.getElementById('panel-' + id)?.classList.add('activo');
   document.querySelectorAll('.sb-item').forEach(b => b.classList.remove('activo'));
-  document.getElementById('panel-' + id).classList.add('activo');
-  document.querySelectorAll('.sb-item').forEach(b => { if (b.getAttribute('onclick')?.includes("'"+id+"'")) b.classList.add('activo'); });
-  document.getElementById('topbar-title').textContent = TITLES[id] || id;
-  if (id === 'entrenamientos') cargarEntrenamientos();
+  document.querySelectorAll('.sb-item').forEach(b => {
+    if (b.getAttribute('onclick')?.includes("'" + id + "'")) b.classList.add('activo');
+  });
+  document.querySelectorAll('.mobile-nav-item').forEach(b => {
+    b.classList.toggle('activo', b.getAttribute('onclick')?.includes("'" + id + "'"));
+  });
+  if (id === 'atletas') renderAtletas();
+  if (id === 'grupos') renderGrupos();
+  if (id === 'ejercicios') renderEjercicios();
+  if (id === 'competiciones') cargarCompeticiones();
   if (id === 'feedback') cargarFeedback();
-  if (id === 'calendario') cargarCalendario();
+  if (id === 'plantillas') cargarPlantillas();
 }
 
-// =====================
-// DASHBOARD
-// =====================
-async function cargarDashboard() {
-  // Métricas
-  if (grupoActual) {
-    const { count } = await db.from('atletas').select('*', { count:'exact', head:true }).eq('grupo_id', grupoActual.id).neq('estado','baja');
-    document.getElementById('m-atletas').textContent = count ?? '—';
-  }
-  // Entrenamientos este mes
-  const inicioMes = new Date(); inicioMes.setDate(1); inicioMes.setHours(0,0,0,0);
-  const { count: ce } = await db.from('entrenamientos').select('*', { count:'exact', head:true })
-    .eq('entrenador_id', perfilActual.id).gte('fecha', inicioMes.toISOString().split('T')[0]);
-  document.getElementById('m-entrenos').textContent = ce ?? 0;
-
-  // Próximo evento
-  const { data: eventos } = await db.from('eventos').select('titulo,fecha_inicio').gte('fecha_inicio', new Date().toISOString()).order('fecha_inicio').limit(1);
-  if (eventos?.[0]) {
-    document.getElementById('m-evento').textContent = eventos[0].titulo;
-    document.getElementById('m-evento-fecha').textContent = new Date(eventos[0].fecha_inicio).toLocaleDateString('es-ES');
-  }
-
-  // Últimos entrenamientos
-  const { data: ults } = await db.from('entrenamientos').select('id,titulo,fecha,tipo').eq('entrenador_id', perfilActual.id).order('fecha', { ascending: false }).limit(4);
-  const TIPOS_CLS = { tecnica:'tipo-tecnica', fuerza:'tipo-fuerza', velocidad:'tipo-velocidad', resistencia:'tipo-resistencia', competicion:'tipo-competicion', otro:'tipo-otro' };
-  document.getElementById('ultimos-entrenos').innerHTML = ults?.length
-    ? ults.map(e => `<div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:white;border:1px solid var(--gris-borde);border-radius:8px;margin-bottom:6px;font-size:0.83rem;">
-        <span class="badge ${TIPOS_CLS[e.tipo]||'tipo-otro'}" style="flex-shrink:0">${e.tipo}</span>
-        <span style="font-weight:500;flex:1">${e.titulo}</span>
-        <span style="color:var(--texto-suave)">${e.fecha}</span>
-      </div>`).join('')
-    : '<div style="color:var(--texto-suave);font-size:0.83rem;">Sin entrenamientos aún</div>';
-
-  // Atletas en prueba del grupo
-  if (grupoActual) {
-    const { data: prueba } = await db.from('atletas').select('nombre,apellidos,fecha_prueba_fin').eq('grupo_id', grupoActual.id).eq('estado','prueba').order('fecha_prueba_fin');
-    document.getElementById('atletas-prueba-lista').innerHTML = prueba?.length
-      ? prueba.map(a => {
-          const dias = Math.ceil((new Date(a.fecha_prueba_fin) - new Date()) / 86400000);
-          return `<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px;background:white;border:1px solid var(--gris-borde);border-radius:8px;margin-bottom:6px;font-size:0.83rem;">
-            <span><strong>${a.nombre} ${a.apellidos}</strong></span>
-            <span class="badge badge-${dias<=3?'impagado':'prueba'}">${dias}d</span>
-          </div>`;
-        }).join('')
-      : '<div style="color:var(--texto-suave);font-size:0.83rem;">Sin atletas en prueba</div>';
+function switchTab(btn, targetId) {
+  const parent = btn.closest('.modal-body, .content');
+  parent.querySelectorAll('.tab').forEach(t => t.classList.remove('activo'));
+  btn.classList.add('activo');
+  const modal = btn.closest('.modal-body');
+  if (modal) {
+    modal.querySelectorAll('[id^="tab-"]').forEach(t => t.style.display = 'none');
+    const target = modal.querySelector('#' + targetId);
+    if (target) target.style.display = 'block';
   }
 }
 
-// =====================
-// ATLETAS
-// =====================
-async function cargarAtletas() {
-  if (!grupoActual) return;
-  const { data } = await db.from('atletas').select('*').eq('grupo_id', grupoActual.id).neq('estado','baja').order('apellidos');
-  atletasGrupo = data || [];
-  const grid = document.getElementById('atletas-grid');
-  if (!atletasGrupo.length) { grid.innerHTML = '<div style="color:var(--texto-suave);font-size:0.85rem;grid-column:1/-1;">No hay atletas en este grupo aún</div>'; return; }
-  grid.innerHTML = atletasGrupo.map(a => `
-    <div class="atleta-card" onclick="verAtleta('${a.id}')">
-      <div class="atleta-avatar">${a.nombre.charAt(0)}${a.apellidos.charAt(0)}</div>
-      <div class="atleta-nombre">${a.nombre} ${a.apellidos}</div>
-      <div class="atleta-meta">${calcularEdad(a.fecha_nacimiento)} años</div>
-      <span class="badge badge-${a.estado}">${a.estado}</span>
-    </div>`).join('');
+function cerrarModal(id) { document.getElementById(id).classList.remove('v'); }
+
+// ═══════════════════════════════════════════
+// GRUPOS
+// ═══════════════════════════════════════════
+async function cargarGrupos() {
+  const { data } = await db.from('grupos').select('*').eq('activo', true).order('nombre');
+  gruposData = data || [];
+  const filtro = document.getElementById('filtro-grupo');
+  filtro.innerHTML = '<option value="">Todos los grupos</option>';
+  gruposData.forEach(g => {
+    const o = document.createElement('option');
+    o.value = g.id; o.textContent = g.nombre;
+    filtro.appendChild(o);
+  });
+  // Actualizar selects de grupo en modales
+  ['ses-grupo','at-grupo'].forEach(selId => {
+    const sel = document.getElementById(selId);
+    if (!sel) return;
+    sel.innerHTML = '<option value="">Sin grupo</option>';
+    gruposData.forEach(g => {
+      const o = document.createElement('option');
+      o.value = g.id; o.textContent = g.nombre;
+      sel.appendChild(o);
+    });
+  });
 }
 
-function calcularEdad(fecha) {
-  if (!fecha) return '—';
-  const hoy = new Date(); const nac = new Date(fecha);
-  let edad = hoy.getFullYear() - nac.getFullYear();
-  if (hoy < new Date(hoy.getFullYear(), nac.getMonth(), nac.getDate())) edad--;
-  return edad;
-}
-
-async function verAtleta(id) {
-  const a = atletasGrupo.find(x => x.id === id); if (!a) return;
-  document.getElementById('atleta-modal-nombre').textContent = a.nombre + ' ' + a.apellidos;
-  // Cargar feedback del atleta
-  const { data: fb } = await db.from('feedback_entrenamientos').select('*,entrenamientos(titulo,fecha)').eq('atleta_id', id).order('created_at', { ascending: false }).limit(10);
-  const SENS = ['', '😞', '😐', '🙂', '😄', '🔥'];
-  document.getElementById('atleta-modal-body').innerHTML = `
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:1rem;">
-      <div style="background:var(--gris);border-radius:8px;padding:0.75rem;">
-        <div style="font-size:0.72rem;color:var(--texto-suave);">Sección</div>
-        <div style="font-weight:600;font-size:0.9rem;">${a.seccion}</div>
-      </div>
-      <div style="background:var(--gris);border-radius:8px;padding:0.75rem;">
-        <div style="font-size:0.72rem;color:var(--texto-suave);">Estado</div>
-        <div><span class="badge badge-${a.estado}">${a.estado}</span></div>
-      </div>
-      <div style="background:var(--gris);border-radius:8px;padding:0.75rem;">
-        <div style="font-size:0.72rem;color:var(--texto-suave);">Edad</div>
-        <div style="font-weight:600;">${calcularEdad(a.fecha_nacimiento)} años</div>
-      </div>
-      <div style="background:var(--gris);border-radius:8px;padding:0.75rem;">
-        <div style="font-size:0.72rem;color:var(--texto-suave);">Contacto</div>
-        <div style="font-size:0.8rem;">${a.telefono_contacto}</div>
-      </div>
-    </div>
-    <div style="font-size:0.85rem;font-weight:600;margin-bottom:0.75rem;">Últimos feedbacks</div>
-    ${fb?.length ? fb.map(f => `
-      <div style="padding:8px 10px;border:1px solid var(--gris-borde);border-radius:8px;margin-bottom:6px;font-size:0.82rem;">
-        <div style="display:flex;justify-content:space-between;margin-bottom:3px;">
-          <strong>${f.entrenamientos?.titulo||'—'}</strong>
-          <span style="font-size:1rem;">${SENS[f.sensaciones]||''}</span>
+function renderGrupos() {
+  const c = document.getElementById('grupos-lista');
+  if (!gruposData.length) { c.innerHTML = '<div class="tabla-wrap"><div class="empty">No hay grupos creados. Crea el primero.</div></div>'; return; }
+  c.innerHTML = gruposData.map(g => {
+    const atletasGrupo = atletasData.filter(a => a.grupo_id === g.id);
+    return `<div class="tabla-wrap" style="margin-bottom:1rem;">
+      <div class="tabla-header">
+        <div>
+          <h3>${g.nombre}</h3>
+          <div style="font-size:0.75rem;color:var(--suave);margin-top:2px;">${g.horario || 'Sin horario'} · ${atletasGrupo.length} atletas</div>
         </div>
-        ${f.tiempo_marca ? `<div style="color:var(--azul);">Marca: ${f.tiempo_marca}</div>` : ''}
-        ${f.notas ? `<div style="color:var(--texto-suave);">${f.notas}</div>` : ''}
-        <div style="color:var(--texto-suave);font-size:0.72rem;margin-top:3px;">${f.entrenamientos?.fecha||''}</div>
-      </div>`).join('')
-    : '<div style="color:var(--texto-suave);font-size:0.83rem;">Sin feedbacks aún</div>'}`;
+        <div style="display:flex;gap:0.5rem;">
+          <button class="btn btn-g btn-sm" onclick="editarGrupo('${g.id}')">Editar</button>
+          <button class="btn btn-p btn-sm" onclick="nuevaSesionGrupo('${g.id}')">Nueva sesión</button>
+        </div>
+      </div>
+      <div style="padding:0.75rem 1rem;">
+        ${atletasGrupo.length ? atletasGrupo.map(a => `
+          <span style="display:inline-flex;align-items:center;gap:5px;margin:3px;background:var(--gris);padding:3px 10px;border-radius:20px;font-size:0.78rem;">
+            <span style="width:8px;height:8px;border-radius:50%;background:${a.estado==='activo'?'var(--success)':a.estado==='lesionado'?'#dc2626':'#94a3b8'};"></span>
+            ${a.nombre_corto || a.nombre}
+          </span>`).join('') : '<span style="font-size:0.82rem;color:var(--suave);">Sin atletas asignados</span>'}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function abrirModalGrupo() {
+  document.getElementById('gr-nombre').value = '';
+  document.getElementById('gr-horario').value = '';
+  document.getElementById('gr-desc').value = '';
+  document.getElementById('gr-edit-id').value = '';
+  document.getElementById('modal-grupo-titulo').textContent = 'Nuevo grupo';
+  document.getElementById('modal-grupo').classList.add('v');
+}
+
+function editarGrupo(id) {
+  const g = gruposData.find(x => x.id === id);
+  if (!g) return;
+  document.getElementById('gr-nombre').value = g.nombre || '';
+  document.getElementById('gr-seccion').value = g.seccion || 'atletismo';
+  document.getElementById('gr-horario').value = g.horario || '';
+  document.getElementById('gr-desc').value = g.descripcion || '';
+  document.getElementById('gr-edit-id').value = id;
+  document.getElementById('modal-grupo-titulo').textContent = 'Editar grupo';
+  document.getElementById('modal-grupo').classList.add('v');
+}
+
+async function guardarGrupo() {
+  const nombre = document.getElementById('gr-nombre').value.trim();
+  if (!nombre) { alert('El nombre es obligatorio'); return; }
+  const datos = {
+    nombre,
+    seccion: document.getElementById('gr-seccion').value,
+    horario: document.getElementById('gr-horario').value.trim(),
+    descripcion: document.getElementById('gr-desc').value.trim(),
+    entrenador_id: perfilActual.id
+  };
+  const editId = document.getElementById('gr-edit-id').value;
+  if (editId) {
+    await db.from('grupos').update(datos).eq('id', editId);
+  } else {
+    await db.from('grupos').insert([datos]);
+  }
+  cerrarModal('modal-grupo');
+  await cargarGrupos();
+  renderGrupos();
+}
+
+// ═══════════════════════════════════════════
+// ATLETAS
+// ═══════════════════════════════════════════
+async function cargarAtletas() {
+  const { data } = await db.from('atletas').select('*').order('apellidos');
+  atletasData = data || [];
+}
+
+function renderAtletas() {
+  const q = document.getElementById('buscar-atleta')?.value.toLowerCase() || '';
+  const filtrados = atletasData.filter(a =>
+    (a.nombre + ' ' + (a.apellidos||'')).toLowerCase().includes(q)
+  );
+  const c = document.getElementById('atletas-lista');
+  if (!filtrados.length) { c.innerHTML = '<div class="tabla-wrap"><div class="empty">No hay atletas. Añade el primero.</div></div>'; return; }
+  c.innerHTML = filtrados.map(a => {
+    const grupo = gruposData.find(g => g.id === a.grupo_id);
+    const iniciales = ((a.nombre||'')[0]||'') + ((a.apellidos||'')[0]||'');
+    return `<div class="atleta-card" onclick="verAtleta('${a.id}')">
+      <div class="atleta-avatar">${iniciales.toUpperCase()}</div>
+      <div class="atleta-info" style="flex:1;">
+        <h4>${a.nombre} ${a.apellidos||''}</h4>
+        <p>${a.pruebas_principales?.join(' · ')||'—'} · ${a.categoria||'—'}</p>
+        <div class="atleta-badges">
+          <span class="badge ${a.estado==='activo'?'badge-verde':a.estado==='lesionado'?'badge-rojo':'badge-gris'}">${a.estado||'activo'}</span>
+          ${grupo ? `<span class="badge badge-azul">${grupo.nombre}</span>` : ''}
+          ${a.perfil_velocista ? `<span class="badge badge-gris">${a.perfil_velocista.replace('_',' ')}</span>` : ''}
+        </div>
+      </div>
+      <button class="btn btn-g btn-sm" onclick="event.stopPropagation();editarAtleta('${a.id}')">Editar</button>
+    </div>`;
+  }).join('');
+}
+
+function filtrarAtletas() { renderAtletas(); }
+
+function abrirModalAtleta() {
+  ['at-nombre','at-apellidos','at-corto','at-licencia','at-dia-fisio','at-pruebas-p','at-pruebas-s','at-ctx-entrenador','at-ctx-atleta','at-obs'].forEach(id => {
+    const el = document.getElementById(id); if (el) el.value = '';
+  });
+  document.getElementById('at-nacimiento').value = '';
+  document.getElementById('at-prueba-fin').value = '';
+  document.getElementById('at-edit-id').value = '';
+  document.getElementById('at-estado').value = 'activo';
+  document.getElementById('at-perfil').value = '';
+  document.getElementById('at-gym').value = 'true';
+  document.getElementById('at-fisio').value = 'false';
+  document.getElementById('marcas-container').innerHTML = '';
+  document.getElementById('lesiones-container').innerHTML = '';
+  document.getElementById('modal-atleta-titulo').textContent = 'Nuevo atleta';
   document.getElementById('modal-atleta').classList.add('v');
 }
 
-// =====================
-// ENTRENAMIENTOS
-// =====================
-async function cargarEntrenamientos() {
-  const { data } = await db.from('entrenamientos').select('*').eq('entrenador_id', perfilActual.id).order('fecha', { ascending: false });
-  entrenamientosData = data || [];
-  const lista = document.getElementById('entreno-lista');
-  const TIPOS_CLS = { tecnica:'tipo-tecnica', fuerza:'tipo-fuerza', velocidad:'tipo-velocidad', resistencia:'tipo-resistencia', competicion:'tipo-competicion', otro:'tipo-otro' };
-  if (!entrenamientosData.length) { lista.innerHTML = '<div style="color:var(--texto-suave);font-size:0.85rem;">Aún no has publicado ningún entrenamiento. Pulsa "Nuevo entreno" para empezar.</div>'; return; }
-  lista.innerHTML = entrenamientosData.map(e => `
-    <div class="entreno-card">
-      <div class="entreno-head">
-        <div>
-          <span class="entreno-tipo ${TIPOS_CLS[e.tipo]||'tipo-otro'}">${e.tipo}</span>
-          <div class="entreno-titulo">${e.titulo}</div>
-          <div class="entreno-fecha">${new Date(e.fecha).toLocaleDateString('es-ES', { weekday:'long', year:'numeric', month:'long', day:'numeric' })}</div>
+function editarAtleta(id) {
+  const a = atletasData.find(x => x.id === id);
+  if (!a) return;
+  document.getElementById('at-nombre').value = a.nombre || '';
+  document.getElementById('at-apellidos').value = a.apellidos || '';
+  document.getElementById('at-corto').value = a.nombre_corto || '';
+  document.getElementById('at-nacimiento').value = a.fecha_nacimiento || '';
+  document.getElementById('at-licencia').value = a.licencia || '';
+  document.getElementById('at-grupo').value = a.grupo_id || '';
+  document.getElementById('at-perfil').value = a.perfil_velocista || '';
+  document.getElementById('at-pruebas-p').value = (a.pruebas_principales||[]).join(', ');
+  document.getElementById('at-pruebas-s').value = (a.pruebas_secundarias||[]).join(', ');
+  document.getElementById('at-gym').value = a.hace_gym ? 'true' : 'false';
+  document.getElementById('at-fisio').value = a.tiene_fisio ? 'true' : 'false';
+  document.getElementById('at-dia-fisio').value = a.dia_fisio || '';
+  document.getElementById('at-estado').value = a.estado || 'activo';
+  document.getElementById('at-prueba-fin').value = a.fecha_prueba_fin || '';
+  document.getElementById('at-obs').value = a.observaciones || '';
+  document.getElementById('at-ctx-entrenador').value = a.contexto_entrenador || '';
+  document.getElementById('at-ctx-atleta').value = a.contexto_atleta || '';
+  document.getElementById('at-edit-id').value = id;
+  document.getElementById('modal-atleta-titulo').textContent = 'Editar atleta';
+  document.getElementById('modal-atleta').classList.add('v');
+}
+
+function addMarca() {
+  const c = document.getElementById('marcas-container');
+  const div = document.createElement('div');
+  div.className = 'form-grid cols3';
+  div.style.marginBottom = '0.5rem';
+  div.innerHTML = `
+    <div class="mf"><label>Prueba</label><input type="text" class="marca-prueba" placeholder="400m"></div>
+    <div class="mf"><label>Marca</label><input type="text" class="marca-tiempo" placeholder="52.30"></div>
+    <div class="mf"><label>Tipo</label>
+      <select class="marca-tipo">
+        <option value="mmp">MMP (personal)</option>
+        <option value="temporada">Temporada</option>
+        <option value="objetivo">Objetivo</option>
+      </select>
+    </div>`;
+  c.appendChild(div);
+}
+
+function addLesion() {
+  const c = document.getElementById('lesiones-container');
+  const div = document.createElement('div');
+  div.className = 'form-grid';
+  div.style.marginBottom = '0.5rem';
+  div.innerHTML = `
+    <div class="mf"><label>Zona</label><input type="text" class="lesion-zona" placeholder="Isquiotibial izquierdo"></div>
+    <div class="mf"><label>Severidad</label>
+      <select class="lesion-sev"><option value="leve">Leve</option><option value="moderada">Moderada</option><option value="grave">Grave</option></select>
+    </div>
+    <div class="mf form-full"><label>Restricción</label><input type="text" class="lesion-rest" placeholder="Sin máximo impacto"></div>`;
+  c.appendChild(div);
+}
+
+async function guardarAtleta() {
+  const nombre = document.getElementById('at-nombre').value.trim();
+  if (!nombre) { alert('El nombre es obligatorio'); return; }
+  const datos = {
+    nombre,
+    apellidos: document.getElementById('at-apellidos').value.trim(),
+    nombre_corto: document.getElementById('at-corto').value.trim() || nombre,
+    fecha_nacimiento: document.getElementById('at-nacimiento').value || null,
+    licencia: document.getElementById('at-licencia').value.trim(),
+    grupo_id: document.getElementById('at-grupo').value || null,
+    entrenador_id: perfilActual.id,
+    perfil_velocista: document.getElementById('at-perfil').value || null,
+    pruebas_principales: document.getElementById('at-pruebas-p').value.split(',').map(s=>s.trim()).filter(Boolean),
+    pruebas_secundarias: document.getElementById('at-pruebas-s').value.split(',').map(s=>s.trim()).filter(Boolean),
+    hace_gym: document.getElementById('at-gym').value === 'true',
+    tiene_fisio: document.getElementById('at-fisio').value === 'true',
+    dia_fisio: document.getElementById('at-dia-fisio').value.trim(),
+    estado: document.getElementById('at-estado').value,
+    fecha_prueba_fin: document.getElementById('at-prueba-fin').value || null,
+    observaciones: document.getElementById('at-obs').value.trim(),
+    contexto_entrenador: document.getElementById('at-ctx-entrenador').value.trim(),
+    contexto_atleta: document.getElementById('at-ctx-atleta').value.trim(),
+  };
+  // Calcular categoría
+  if (datos.fecha_nacimiento) {
+    const age = new Date().getFullYear() - new Date(datos.fecha_nacimiento).getFullYear();
+    datos.categoria = age <= 15 ? 'Sub16' : age <= 17 ? 'Sub18' : age <= 19 ? 'Sub20' : age <= 22 ? 'Sub23' : 'Absoluto';
+  }
+  const editId = document.getElementById('at-edit-id').value;
+  let atletaId = editId;
+  if (editId) {
+    await db.from('atletas').update(datos).eq('id', editId);
+  } else {
+    const { data } = await db.from('atletas').insert([datos]).select().single();
+    atletaId = data?.id;
+  }
+  cerrarModal('modal-atleta');
+  await cargarAtletas();
+  renderAtletas();
+}
+
+async function verAtleta(id) {
+  const a = atletasData.find(x => x.id === id);
+  if (!a) return;
+  editarAtleta(id);
+}
+
+// ═══════════════════════════════════════════
+// EJERCICIOS
+// ═══════════════════════════════════════════
+async function cargarEjercicios() {
+  const { data } = await db.from('ejercicios').select('*').eq('activo', true).order('nombre');
+  ejerciciosData = data || [];
+}
+
+function renderEjercicios() {
+  const tipos = [...new Set(ejerciciosData.map(e => e.tipo))];
+  const tabs = document.getElementById('ejercicios-tabs');
+  tabs.innerHTML = tipos.map((t,i) => `<button class="tab ${i===0?'activo':''}" onclick="filtrarEjerciciosTipo('${t}',this)">${t.charAt(0).toUpperCase()+t.slice(1)}</button>`).join('');
+  filtrarEjerciciosTipo(tipos[0]);
+}
+
+function filtrarEjerciciosTipo(tipo, btn) {
+  if (btn) {
+    document.querySelectorAll('#ejercicios-tabs .tab').forEach(t => t.classList.remove('activo'));
+    btn.classList.add('activo');
+  }
+  const filtrados = ejerciciosData.filter(e => e.tipo === tipo);
+  const cats = [...new Set(filtrados.map(e => e.categoria))];
+  document.getElementById('ejercicios-lista').innerHTML = cats.map(cat => `
+    <div style="margin-bottom:1.25rem;">
+      <div style="font-size:0.7rem;font-weight:700;color:var(--suave);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.5rem;">${cat||'General'}</div>
+      <div style="display:flex;flex-wrap:wrap;gap:0.5rem;">
+        ${filtrados.filter(e=>e.categoria===cat).map(e=>`
+          <span style="background:white;border:1px solid var(--borde);border-radius:6px;padding:5px 10px;font-size:0.78rem;">${e.nombre}</span>
+        `).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+function abrirModalEjercicio() { document.getElementById('modal-ejercicio').classList.add('v'); }
+
+async function guardarEjercicio() {
+  const nombre = document.getElementById('ej-nombre').value.trim();
+  if (!nombre) { alert('El nombre es obligatorio'); return; }
+  await db.from('ejercicios').insert([{
+    nombre,
+    nombre_corto: document.getElementById('ej-corto').value.trim() || nombre,
+    tipo: document.getElementById('ej-tipo').value,
+    categoria: document.getElementById('ej-cat').value,
+  }]);
+  cerrarModal('modal-ejercicio');
+  await cargarEjercicios();
+  renderEjercicios();
+}
+
+// ═══════════════════════════════════════════
+// VISTA SEMANAL
+// ═══════════════════════════════════════════
+function getLunesDeSemana(offset = 0) {
+  const hoy = new Date();
+  const dia = hoy.getDay();
+  const diff = (dia === 0 ? -6 : 1 - dia);
+  const lunes = new Date(hoy);
+  lunes.setDate(hoy.getDate() + diff + (offset * 7));
+  lunes.setHours(0,0,0,0);
+  return lunes;
+}
+
+async function cargarSemana() {
+  const lunes = getLunesDeSemana(semanaOffset);
+  const domingo = new Date(lunes); domingo.setDate(lunes.getDate() + 6);
+  const fmt = d => d.toLocaleDateString('es-ES', {day:'numeric',month:'short'});
+  const sem = getNumeroSemana(lunes);
+  document.getElementById('semana-titulo').textContent = `Semana ${sem} · ${fmt(lunes)} – ${fmt(domingo)} ${lunes.getFullYear()}`;
+
+  const grupoFiltro = document.getElementById('filtro-grupo').value;
+  const fechaInicio = lunes.toISOString().split('T')[0];
+  const fechaFin = domingo.toISOString().split('T')[0];
+
+  let query = db.from('sesiones').select('*').gte('fecha', fechaInicio).lte('fecha', fechaFin);
+  if (grupoFiltro) query = query.eq('grupo_id', grupoFiltro);
+  const { data } = await query;
+  sesionesData = data || [];
+  renderSemanaGrid(lunes, sesionesData);
+}
+
+function getNumeroSemana(d) {
+  const date = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+  const dayNum = date.getUTCDay() || 7;
+  date.setUTCDate(date.getUTCDate() + 4 - dayNum);
+  const yearStart = new Date(Date.UTC(date.getUTCFullYear(), 0, 1));
+  return Math.ceil((((date - yearStart) / 86400000) + 1) / 7);
+}
+
+function renderSemanaGrid(lunes, sesiones) {
+  const dias = ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];
+  const hoy = new Date(); hoy.setHours(0,0,0,0);
+  const grid = document.getElementById('semana-grid');
+  grid.innerHTML = dias.map((nombre, i) => {
+    const fecha = new Date(lunes); fecha.setDate(lunes.getDate() + i);
+    const fechaStr = fecha.toISOString().split('T')[0];
+    const sesion = sesiones.find(s => s.fecha === fechaStr);
+    const esHoy = fecha.getTime() === hoy.getTime();
+    return `<div class="dia-card ${sesion?'tiene-sesion':''} ${esHoy?'hoy':''}" onclick="${sesion?`abrirSesion('${sesion.id}')`:`nuevaSesionFecha('${fechaStr}')`}">
+      <div class="dia-header">
+        <div class="dia-nombre">${nombre}</div>
+        <div class="dia-num" style="${esHoy?'color:var(--naranja);':''}">${fecha.getDate()}</div>
+      </div>
+      <div class="dia-body">
+        ${sesion ? `
+          <div class="dia-tipo tipo-${sesion.tipo}">${sesion.tipo}</div>
+          <div class="dia-titulo">${sesion.titulo||'Sin título'}</div>
+          ${sesion.publicada ? '<div style="font-size:0.6rem;color:var(--success);margin-top:3px;">✓ Publicada</div>' : '<div style="font-size:0.6rem;color:var(--suave);margin-top:3px;">Borrador</div>'}
+        ` : `<div class="dia-vacio">+ Añadir sesión</div>`}
+      </div>
+    </div>`;
+  }).join('');
+  document.getElementById('sesion-detail-area').innerHTML = '';
+}
+
+function cambiarSemana(dir) { semanaOffset += dir; cargarSemana(); }
+
+// ═══════════════════════════════════════════
+// EDITOR DE SESIÓN
+// ═══════════════════════════════════════════
+function nuevaSesion() { nuevaSesionFecha(new Date().toISOString().split('T')[0]); }
+function nuevaSesionGrupo(grupoId) {
+  nuevaSesion();
+  document.getElementById('ses-grupo').value = grupoId;
+}
+
+function nuevaSesionFecha(fecha) {
+  sesionEditando = null;
+  document.getElementById('ses-fecha').value = fecha;
+  document.getElementById('ses-titulo').value = '';
+  document.getElementById('ses-razon').value = '';
+  document.getElementById('ses-tipo').value = 'pista';
+  document.getElementById('ses-rol').value = 'calidad_fuerte';
+  document.getElementById('ses-grupo').value = '';
+  document.getElementById('bloques-container').innerHTML = '';
+  document.getElementById('modal-sesion-titulo').textContent = 'Nueva sesión';
+  // Añadir bloques por defecto
+  addBloqueNombre('Calentamiento');
+  addBloqueNombre('Parte principal');
+  addBloqueNombre('Vuelta a la calma');
+  document.getElementById('modal-sesion').classList.add('v');
+}
+
+async function abrirSesion(id) {
+  const sesion = sesionesData.find(s => s.id === id);
+  if (!sesion) return;
+  sesionEditando = sesion;
+  document.getElementById('ses-fecha').value = sesion.fecha;
+  document.getElementById('ses-titulo').value = sesion.titulo || '';
+  document.getElementById('ses-razon').value = sesion.nota_razonamiento || '';
+  document.getElementById('ses-tipo').value = sesion.tipo || 'pista';
+  document.getElementById('ses-rol').value = sesion.rol || 'calidad_fuerte';
+  document.getElementById('ses-grupo').value = sesion.grupo_id || '';
+  document.getElementById('modal-sesion-titulo').textContent = 'Editar sesión · ' + (sesion.titulo || sesion.fecha);
+  renderBloques(sesion.bloques || []);
+  document.getElementById('modal-sesion').classList.add('v');
+}
+
+function renderBloques(bloques) {
+  const c = document.getElementById('bloques-container');
+  c.innerHTML = '';
+  bloques.forEach((b, bi) => {
+    c.appendChild(crearBloqueEl(b, bi));
+  });
+}
+
+function crearBloqueEl(bloque, bi) {
+  const div = document.createElement('div');
+  div.className = 'bloque';
+  div.dataset.bi = bi;
+  const esPista = ['pista','activacion','continuo'].includes(document.getElementById('ses-tipo')?.value || 'pista');
+  div.innerHTML = `
+    <div class="bloque-header">
+      <input class="bloque-nombre" value="${bloque.etiqueta||''}" placeholder="Nombre del bloque" onchange="updateBloqueNombre(${bi},this.value)">
+      <button class="btn btn-g btn-sm" onclick="addFila(${bi})">+ Fila</button>
+      <button class="btn btn-g btn-sm" onclick="addFilaPlantilla(${bi})">+ Plantilla</button>
+      <button class="btn btn-icon btn-g" onclick="eliminarBloque(${bi})" title="Eliminar bloque">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <table class="filas-tabla">
+      <thead>
+        <tr>
+          <th>Ejercicio</th>
+          <th>Series/Reps</th>
+          <th>Rec</th>
+          <th>${esPista?'Calzado':'Carga'}</th>
+          <th>Intensidad/Obs</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="filas-${bi}">
+        ${(bloque.filas||[]).map((f,fi) => renderFilaHTML(f, bi, fi, esPista)).join('')}
+      </tbody>
+    </table>
+    <button class="add-fila-btn" onclick="addFila(${bi})">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Añadir ejercicio
+    </button>`;
+  return div;
+}
+
+function renderFilaHTML(f, bi, fi, esPista) {
+  const overrides = (f.overrides||[]).map(o =>
+    `<span class="override-chip"><strong>${o.atleta||o.atleta_id}</strong>: ${o.valor} <button onclick="quitarOverride(${bi},${fi},'${o.atleta_id}')">×</button></span>`
+  ).join('');
+  return `<tr data-fi="${fi}">
+    <td><input class="fila-input ejercicio" value="${f.nombre||''}" placeholder="Ejercicio..." oninput="updateFila(${bi},${fi},'nombre',this.value)" list="ejercicios-list"></td>
+    <td><input class="fila-input series" value="${f.series||''}" placeholder="3x400m" oninput="updateFila(${bi},${fi},'series',this.value)"></td>
+    <td><input class="fila-input rec" value="${f.recuperacion||''}" placeholder="6'" oninput="updateFila(${bi},${fi},'recuperacion',this.value)"></td>
+    <td>${esPista ? `
+      <div class="tag-calzado">
+        <span class="tag-cal ${f.calzado==='Z'?'sel':''}" onclick="toggleCalzado(${bi},${fi},'Z')">Z</span>
+        <span class="tag-cal ${f.calzado==='C'?'sel':''}" onclick="toggleCalzado(${bi},${fi},'C')">C</span>
+      </div>` : `<input class="fila-input" value="${f.carga||''}" placeholder="80%" oninput="updateFila(${bi},${fi},'carga',this.value)">`}
+    </td>
+    <td>
+      <input class="fila-input" value="${f.observaciones||''}" placeholder="Observaciones / intensidad" oninput="updateFila(${bi},${fi},'observaciones',this.value)">
+      ${overrides ? `<div class="override-chips">${overrides}</div>` : ''}
+    </td>
+    <td>
+      <button class="override-btn" onclick="abrirOverride(${bi},${fi})">± Atleta</button>
+      <button class="btn btn-icon btn-g" style="width:24px;height:24px;margin-left:3px;" onclick="eliminarFila(${bi},${fi})">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </td>
+  </tr>`;
+}
+
+// Estado de bloques en memoria
+let bloquesMem = [];
+
+function getBloques() {
+  const container = document.getElementById('bloques-container');
+  return Array.from(container.querySelectorAll('.bloque')).map((blq, bi) => {
+    const nombre = blq.querySelector('.bloque-nombre').value;
+    const filas = Array.from(blq.querySelectorAll('tbody tr')).map(tr => {
+      const inputs = tr.querySelectorAll('input.fila-input');
+      const calSel = tr.querySelector('.tag-cal.sel');
+      return {
+        nombre: inputs[0]?.value || '',
+        series: inputs[1]?.value || '',
+        recuperacion: inputs[2]?.value || '',
+        calzado: calSel?.textContent || '',
+        observaciones: tr.querySelectorAll('input.fila-input')[3]?.value || '',
+        overrides: []
+      };
+    });
+    return { etiqueta: nombre, filas };
+  });
+}
+
+function addBloque() { addBloqueNombre('Bloque ' + (document.querySelectorAll('.bloque').length + 1)); }
+
+function addBloqueNombre(nombre) {
+  const c = document.getElementById('bloques-container');
+  const bi = c.querySelectorAll('.bloque').length;
+  const bloque = { etiqueta: nombre, filas: [] };
+  c.appendChild(crearBloqueEl(bloque, bi));
+}
+
+function addFila(bi) {
+  const tbody = document.getElementById('filas-' + bi);
+  const fi = tbody.querySelectorAll('tr').length;
+  const esPista = ['pista','activacion','continuo'].includes(document.getElementById('ses-tipo')?.value || 'pista');
+  const tr = document.createElement('tr');
+  tr.dataset.fi = fi;
+  tr.innerHTML = renderFilaHTML({}, bi, fi, esPista);
+  tbody.appendChild(tr);
+}
+
+function toggleCalzado(bi, fi, val) {
+  const tbody = document.getElementById('filas-' + bi);
+  const tr = tbody.querySelectorAll('tr')[fi];
+  if (!tr) return;
+  tr.querySelectorAll('.tag-cal').forEach(t => {
+    t.classList.toggle('sel', t.textContent === val && !t.classList.contains('sel') || t.classList.contains('sel') && t.textContent !== val);
+    if (t.textContent === val) t.classList.toggle('sel');
+    else t.classList.remove('sel');
+  });
+}
+
+function updateFila(bi, fi, campo, valor) {} // valores leídos en getBloques()
+function updateBloqueNombre(bi, valor) {}
+function eliminarBloque(bi) {
+  const blqs = document.querySelectorAll('.bloque');
+  if (blqs[bi]) blqs[bi].remove();
+}
+function eliminarFila(bi, fi) {
+  const tbody = document.getElementById('filas-' + bi);
+  const rows = tbody.querySelectorAll('tr');
+  if (rows[fi]) rows[fi].remove();
+}
+
+function abrirOverride(bi, fi) {
+  overrideFilaRef = { bi, fi };
+  const grupoId = document.getElementById('ses-grupo').value;
+  const atletasGrupo = grupoId ? atletasData.filter(a => a.grupo_id === grupoId) : atletasData;
+  document.getElementById('override-atletas-lista').innerHTML = atletasGrupo.map(a => `
+    <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.6rem;">
+      <span style="font-size:0.85rem;font-weight:600;min-width:100px;">${a.nombre_corto||a.nombre}</span>
+      <input type="text" placeholder="Ej: 20-21''" style="flex:1;padding:6px 10px;border:1.5px solid var(--borde);border-radius:6px;font-size:0.83rem;"
+        id="override-${a.id}">
+    </div>
+  `).join('');
+  document.getElementById('modal-override').classList.add('v');
+}
+
+function guardarOverrides() { cerrarModal('modal-override'); }
+function quitarOverride(bi, fi, atletaId) {}
+function addFilaPlantilla(bi) { addFila(bi); }
+
+async function guardarSesion(publicar) {
+  const bloques = getBloques();
+  const datos = {
+    fecha: document.getElementById('ses-fecha').value,
+    grupo_id: document.getElementById('ses-grupo').value || null,
+    tipo: document.getElementById('ses-tipo').value,
+    rol: document.getElementById('ses-rol').value,
+    titulo: document.getElementById('ses-titulo').value.trim(),
+    nota_razonamiento: document.getElementById('ses-razon').value.trim(),
+    bloques,
+    publicada: publicar,
+    creado_por: perfilActual.id,
+  };
+  if (!datos.fecha) { alert('La fecha es obligatoria'); return; }
+  if (sesionEditando) {
+    await db.from('sesiones').update(datos).eq('id', sesionEditando.id);
+  } else {
+    await db.from('sesiones').insert([datos]);
+  }
+  cerrarModal('modal-sesion');
+  cargarSemana();
+}
+
+// ═══════════════════════════════════════════
+// GENERADOR IA
+// ═══════════════════════════════════════════
+async function generarConIA() {
+  const prompt = document.getElementById('ia-prompt').value.trim();
+  if (!prompt) { alert('Describe la semana primero'); return; }
+
+  document.getElementById('ia-btn').disabled = true;
+  document.getElementById('ia-loading').classList.add('v');
+  document.getElementById('ia-resultado').style.display = 'none';
+
+  // Contexto de atletas y grupos
+  const contextoAtletas = atletasData.slice(0,10).map(a =>
+    `- ${a.nombre_corto||a.nombre}: ${a.pruebas_principales?.join('/')||'—'}, ${a.categoria||'—'}. ${a.contexto_entrenador||''}`
+  ).join('\n');
+
+  const sistemPrompt = `Eres un asistente de planificación de atletismo de alto rendimiento. Generas planificaciones semanales para entrenadores siguiendo estos principios:
+- Lunes: calidad fuerte (series largas a ritmo)
+- Martes: gimnasio (potenciación neural + transferencia)
+- Miércoles: día secundario más corto
+- Jueves: gimnasio mínimo + último toque 48h antes de competición
+- Viernes: activación o continuo
+- Finde: competición o descanso
+En tápering: mismo esqueleto, menos volumen/intensidad.
+Usa terminología técnica de atletismo. Especifica series, distancias, recuperaciones, calzado (Z=zapatilla, C=clavos).
+Responde SOLO en JSON con este formato:
+{
+  "objetivo_semana": "texto",
+  "sesiones": [
+    {
+      "dia": "lunes",
+      "fecha_offset": 0,
+      "tipo": "pista|gym|continuo|activacion|descanso",
+      "rol": "calidad_fuerte|secundaria|activacion|ultimo_toque_48h|descarga",
+      "titulo": "texto",
+      "razonamiento": "texto breve",
+      "bloques": [
+        {
+          "etiqueta": "Calentamiento",
+          "filas": [
+            {"nombre": "Trote suave", "series": "15min", "recuperacion": "", "calzado": "Z", "observaciones": ""},
+            {"nombre": "Técnica de carrera", "series": "4x60m", "recuperacion": "1'", "calzado": "Z", "observaciones": "skipping, talones, zancadas"}
+          ]
+        }
+      ]
+    }
+  ]
+}`;
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 4000,
+        system: sistemPrompt,
+        messages: [{
+          role: 'user',
+          content: `Atletas disponibles:\n${contextoAtletas}\n\nDescripción de la semana:\n${prompt}`
+        }]
+      })
+    });
+    const data = await res.json();
+    const texto = data.content?.[0]?.text || '';
+    const json = JSON.parse(texto.replace(/```json|```/g, '').trim());
+    mostrarResultadoIA(json, prompt);
+  } catch(e) {
+    alert('Error generando la planificación. Inténtalo de nuevo.');
+    console.error(e);
+  }
+
+  document.getElementById('ia-btn').disabled = false;
+  document.getElementById('ia-loading').classList.remove('v');
+}
+
+function mostrarResultadoIA(plan, promptOriginal) {
+  const lunes = getLunesDeSemana(semanaOffset);
+  document.getElementById('ia-resultado').style.display = 'block';
+  document.getElementById('ia-prompt').dataset.plan = JSON.stringify({plan, promptOriginal});
+
+  const coloresTipo = {pista:'var(--naranja)',gym:'#7c3aed',continuo:'var(--success)',activacion:'#0891b2',descanso:'#94a3b8'};
+
+  document.getElementById('ia-sesiones-preview').innerHTML = `
+    <div class="alerta-info alerta">${plan.objetivo_semana}</div>
+    ${plan.sesiones.map(s => {
+      const fecha = new Date(lunes);
+      fecha.setDate(lunes.getDate() + (s.fecha_offset||0));
+      const fechaStr = fecha.toLocaleDateString('es-ES',{weekday:'long',day:'numeric',month:'short'});
+      return `<div class="tabla-wrap" style="margin-bottom:1rem;">
+        <div class="tabla-header">
+          <div>
+            <div style="font-size:0.7rem;font-weight:700;color:${coloresTipo[s.tipo]||'var(--naranja)'};text-transform:uppercase;">${s.tipo} · ${s.rol?.replace(/_/g,' ')}</div>
+            <h3>${fechaStr} — ${s.titulo}</h3>
+          </div>
         </div>
-        <button class="btn btn-s" style="font-size:0.78rem;padding:4px 10px;flex-shrink:0;" onclick="eliminarEntreno('${e.id}')">Eliminar</button>
-      </div>
-      <div class="entreno-body">
-        <div class="entreno-desc">${e.descripcion || ''}</div>
-        ${e.archivo_url ? `<a href="${e.archivo_url}" target="_blank" class="entreno-adjunto">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-          Ver adjunto
-        </a>` : ''}
-      </div>
-      <div class="entreno-footer">
-        <span>Grupo: ${grupoActual?.nombre || '—'}</span>
-        <button class="btn btn-s" style="font-size:0.75rem;padding:3px 8px;" onclick="showPanel('feedback')">Ver feedbacks</button>
+        ${s.razonamiento ? `<div class="nota-razon" style="margin:0.75rem 1rem 0;">${s.razonamiento}</div>` : ''}
+        <div style="padding:0.75rem 1rem;">
+          ${(s.bloques||[]).map(b => `
+            <div style="margin-bottom:0.75rem;">
+              <div style="font-size:0.72rem;font-weight:700;color:var(--suave);text-transform:uppercase;margin-bottom:4px;">${b.etiqueta}</div>
+              <table style="width:100%;border-collapse:collapse;font-size:0.78rem;">
+                ${(b.filas||[]).map(f => `<tr>
+                  <td style="padding:3px 6px;border-bottom:1px solid var(--borde);width:35%;">${f.nombre}</td>
+                  <td style="padding:3px 6px;border-bottom:1px solid var(--borde);width:15%;">${f.series||''}</td>
+                  <td style="padding:3px 6px;border-bottom:1px solid var(--borde);width:10%;color:var(--suave);">${f.recuperacion||''}</td>
+                  <td style="padding:3px 6px;border-bottom:1px solid var(--borde);width:8%;font-weight:700;color:var(--naranja);">${f.calzado||''}</td>
+                  <td style="padding:3px 6px;border-bottom:1px solid var(--borde);color:var(--suave);">${f.observaciones||''}</td>
+                </tr>`).join('')}
+              </table>
+            </div>
+          `).join('')}
+        </div>
+      </div>`;
+    }).join('')}
+  `;
+}
+
+async function guardarPlanificacionIA() {
+  const rawData = document.getElementById('ia-prompt').dataset.plan;
+  if (!rawData) return;
+  const { plan } = JSON.parse(rawData);
+  const lunes = getLunesDeSemana(semanaOffset);
+  const grupoId = document.getElementById('filtro-grupo').value || null;
+
+  const insertions = plan.sesiones
+    .filter(s => s.tipo !== 'descanso')
+    .map(s => {
+      const fecha = new Date(lunes);
+      fecha.setDate(lunes.getDate() + (s.fecha_offset||0));
+      return {
+        fecha: fecha.toISOString().split('T')[0],
+        dia_semana: s.dia,
+        tipo: s.tipo,
+        rol: s.rol,
+        titulo: s.titulo,
+        nota_razonamiento: s.razonamiento,
+        bloques: s.bloques || [],
+        publicada: false,
+        generado_por_ia: true,
+        grupo_id: grupoId,
+        creado_por: perfilActual.id,
+      };
+    });
+
+  await db.from('sesiones').insert(insertions);
+  alert(`✅ ${insertions.length} sesiones guardadas como borrador. Puedes editarlas antes de publicar.`);
+  document.getElementById('ia-resultado').style.display = 'none';
+  showPanel('semana');
+  cargarSemana();
+}
+
+async function generarSesionIA() {
+  const prompt = `Genera UNA sesión de ${document.getElementById('ses-tipo').value} de tipo ${document.getElementById('ses-rol').value} para la fecha ${document.getElementById('ses-fecha').value}. Grupo: ${document.getElementById('ses-grupo').options[document.getElementById('ses-grupo').selectedIndex]?.text||'sin especificar'}.`;
+  document.getElementById('ia-prompt').value = prompt;
+  cerrarModal('modal-sesion');
+  showPanel('generar');
+}
+
+// ═══════════════════════════════════════════
+// COMPETICIONES
+// ═══════════════════════════════════════════
+async function cargarCompeticiones() {
+  const { data } = await db.from('competiciones').select('*').order('fecha_inicio');
+  const hoy = new Date().toISOString().split('T')[0];
+  const proximas = (data||[]).filter(c => c.fecha_inicio >= hoy);
+  const pasadas = (data||[]).filter(c => c.fecha_inicio < hoy);
+  const nivelColor = {A:'badge-rojo',B:'badge-naranja',C:'badge-azul'};
+  document.getElementById('competiciones-lista').innerHTML = `
+    ${proximas.length ? `<h3 style="font-size:0.82rem;font-weight:700;margin-bottom:0.75rem;">Próximas</h3>` : ''}
+    ${proximas.map(c => `
+      <div class="tabla-wrap" style="margin-bottom:0.75rem;">
+        <div style="padding:1rem 1.25rem;display:flex;align-items:center;justify-content:space-between;">
+          <div>
+            <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.25rem;">
+              <span class="badge ${nivelColor[c.nivel]||'badge-gris'}">${c.nivel}</span>
+              <span style="font-size:0.92rem;font-weight:700;">${c.nombre}</span>
+            </div>
+            <div style="font-size:0.75rem;color:var(--suave);">${c.sede||''} · ${new Date(c.fecha_inicio).toLocaleDateString('es-ES',{day:'numeric',month:'long',year:'numeric'})}</div>
+          </div>
+        </div>
+      </div>`).join('')}
+    ${pasadas.length ? `<h3 style="font-size:0.82rem;font-weight:700;margin:1rem 0 0.75rem;color:var(--suave);">Pasadas</h3>
+    ${pasadas.reverse().slice(0,5).map(c => `
+      <div style="padding:0.6rem 0;border-bottom:1px solid var(--borde);display:flex;align-items:center;gap:0.75rem;">
+        <span class="badge badge-gris">${c.nivel}</span>
+        <span style="font-size:0.82rem;">${c.nombre}</span>
+        <span style="font-size:0.75rem;color:var(--suave);margin-left:auto;">${new Date(c.fecha_inicio).toLocaleDateString('es-ES',{day:'numeric',month:'short'})}</span>
+      </div>`).join('')}` : ''}
+  `;
+}
+
+function abrirModalCompeticion() { document.getElementById('modal-competicion').classList.add('v'); }
+
+async function guardarCompeticion() {
+  const nombre = document.getElementById('comp-nombre').value.trim();
+  const inicio = document.getElementById('comp-inicio').value;
+  if (!nombre || !inicio) { alert('Nombre y fecha de inicio son obligatorios'); return; }
+  await db.from('competiciones').insert([{
+    nombre,
+    sede: document.getElementById('comp-sede').value.trim(),
+    fecha_inicio: inicio,
+    fecha_fin: document.getElementById('comp-fin').value || inicio,
+    nivel: document.getElementById('comp-nivel').value,
+  }]);
+  cerrarModal('modal-competicion');
+  cargarCompeticiones();
+}
+
+// ═══════════════════════════════════════════
+// FEEDBACK
+// ═══════════════════════════════════════════
+async function cargarFeedback() {
+  const { data } = await db.from('registros_sesion')
+    .select('*, sesiones(titulo, fecha), atletas(nombre, nombre_corto)')
+    .order('created_at', { ascending: false })
+    .limit(30);
+
+  const c = document.getElementById('feedback-lista');
+  if (!data?.length) { c.innerHTML = '<div class="tabla-wrap"><div class="empty">No hay registros de feedback todavía.</div></div>'; return; }
+
+  c.innerHTML = `<div class="tabla-wrap"><table>
+    <thead><tr><th>Atleta</th><th>Sesión</th><th>Fecha</th><th>Sensación</th><th>RPE</th><th>Molestias</th><th></th></tr></thead>
+    <tbody>
+      ${data.map(r => `<tr>
+        <td style="font-weight:600;">${r.atletas?.nombre_corto||r.atletas?.nombre||'—'}</td>
+        <td style="font-size:0.78rem;">${r.sesiones?.titulo||'—'}</td>
+        <td style="font-size:0.75rem;color:var(--suave);">${r.sesiones?.fecha||''}</td>
+        <td><span style="font-size:0.9rem;font-weight:700;color:${r.sensacion_general>=7?'var(--success)':r.sensacion_general>=5?'var(--naranja)':'#dc2626'}">${r.sensacion_general||'—'}/10</span></td>
+        <td>${r.rpe||'—'}</td>
+        <td style="font-size:0.75rem;color:${r.molestias?'#dc2626':'var(--suave)'};">${r.molestias||'Sin molestias'}</td>
+        <td><button class="btn btn-g btn-sm" onclick="verFeedback('${r.id}')">Ver</button></td>
+      </tr>`).join('')}
+    </tbody>
+  </table></div>`;
+}
+
+function verFeedback(id) { alert('Detalle de feedback próximamente'); }
+
+// ═══════════════════════════════════════════
+// PLANTILLAS
+// ═══════════════════════════════════════════
+async function cargarPlantillas() {
+  const { data } = await db.from('plantillas_bloque').select('*').order('nombre');
+  const c = document.getElementById('plantillas-lista');
+  if (!data?.length) {
+    c.innerHTML = `<div class="tabla-wrap"><div class="empty">No hay plantillas todavía. Las plantillas son bloques reutilizables que puedes insertar en cualquier sesión.</div></div>`;
+    return;
+  }
+  c.innerHTML = data.map(p => `
+    <div class="tabla-wrap" style="margin-bottom:0.75rem;">
+      <div class="tabla-header">
+        <div>
+          <h3>${p.nombre}</h3>
+          <div style="font-size:0.75rem;color:var(--suave);">${p.tipo||''} · ${p.fase||''}</div>
+        </div>
+        <button class="btn btn-g btn-sm">Usar en sesión</button>
       </div>
     </div>`).join('');
 }
 
-function abrirModalEntreno() {
-  // Fecha por defecto: hoy
-  document.getElementById('e-fecha').value = new Date().toISOString().split('T')[0];
-  document.getElementById('e-titulo').value = '';
-  document.getElementById('e-desc').value = '';
-  document.getElementById('e-archivo').value = '';
-  document.getElementById('file-name-label').style.display = 'none';
-  document.getElementById('modal-entreno').classList.add('v');
+function abrirModalPlantilla() { alert('Editor de plantillas próximamente'); }
+
+// ═══════════════════════════════════════════
+// DATALIST EJERCICIOS
+// ═══════════════════════════════════════════
+function crearDatalistEjercicios() {
+  let dl = document.getElementById('ejercicios-list');
+  if (!dl) { dl = document.createElement('datalist'); dl.id = 'ejercicios-list'; document.body.appendChild(dl); }
+  dl.innerHTML = ejerciciosData.map(e => `<option value="${e.nombre}">`).join('');
 }
 
-function onFileChange(input) {
-  const label = document.getElementById('file-name-label');
-  if (input.files[0]) { label.textContent = input.files[0].name; label.style.display = 'block'; }
-  else { label.style.display = 'none'; }
-}
-
-async function guardarEntreno() {
-  const titulo = document.getElementById('e-titulo').value.trim();
-  const fecha = document.getElementById('e-fecha').value;
-  const desc = document.getElementById('e-desc').value.trim();
-  const tipo = document.getElementById('e-tipo').value;
-  if (!titulo || !fecha || !desc) { alert('Rellena título, fecha y descripción'); return; }
-
-  const btn = document.getElementById('btn-guardar-entreno');
-  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Publicando...';
-
-  let archivo_url = null;
-  const fileInput = document.getElementById('e-archivo');
-  if (fileInput.files[0]) {
-    const file = fileInput.files[0];
-    const fname = `entreno-${Date.now()}-${file.name.replace(/\s/g,'_')}`;
-    const { data: up, error: upErr } = await db.storage.from('imagenes-club').upload(fname, file);
-    if (!upErr) {
-      const { data: urlData } = db.storage.from('imagenes-club').getPublicUrl(fname);
-      archivo_url = urlData.publicUrl;
-    }
-  }
-
-  const datos = {
-    titulo, fecha, descripcion: desc, tipo,
-    entrenador_id: perfilActual.id,
-    grupo_id: grupoActual?.id || null,
-    archivo_url,
-  };
-
-  const { error } = await db.from('entrenamientos').insert([datos]);
-  if (error) { alert('Error al guardar. Inténtalo de nuevo.'); btn.disabled = false; btn.innerHTML = 'Publicar entreno'; return; }
-  cerrarModal('modal-entreno');
-  btn.disabled = false; btn.innerHTML = 'Publicar entreno';
-  cargarEntrenamientos(); cargarDashboard();
-}
-
-async function eliminarEntreno(id) {
-  if (!confirm('¿Eliminar este entrenamiento? Los atletas ya no podrán verlo.')) return;
-  await db.from('entrenamientos').delete().eq('id', id);
-  cargarEntrenamientos(); cargarDashboard();
-}
-
-// =====================
-// FEEDBACK
-// =====================
-async function cargarFeedback() {
-  // Cargar entrenamientos para el filtro
-  const { data: entrenos } = await db.from('entrenamientos').select('id,titulo').eq('entrenador_id', perfilActual.id).order('fecha', { ascending: false });
-  const sel = document.getElementById('filter-entreno-fb');
-  sel.innerHTML = '<option value="">Todos los entrenamientos</option>' + (entrenos||[]).map(e => `<option value="${e.id}">${e.titulo}</option>`).join('');
-  filtrarFeedback();
-}
-
-async function filtrarFeedback() {
-  const filtro = document.getElementById('filter-entreno-fb').value;
-  let q = db.from('feedback_entrenamientos').select('*,atletas(nombre,apellidos),entrenamientos(titulo,fecha)');
-  if (filtro) q = q.eq('entrenamiento_id', filtro);
-  else if (grupoActual) {
-    // Solo feedback de atletas de mi grupo
-    const ids = atletasGrupo.map(a => a.id);
-    if (ids.length) q = q.in('atleta_id', ids);
-  }
-  const { data } = await q.order('created_at', { ascending: false });
-  const SENS_LABEL = ['', 'Muy malo', 'Malo', 'Normal', 'Bueno', 'Excelente'];
-  const SENS_COLOR = ['', '#dc2626', '#ea580c', '#d97706', '#16a34a', '#059669'];
-  const tbody = document.getElementById('tbody-feedback');
-  tbody.innerHTML = data?.length ? data.map(f => `
-    <tr>
-      <td><strong>${f.atletas?.nombre||'—'} ${f.atletas?.apellidos||''}</strong></td>
-      <td>${f.entrenamientos?.titulo||'—'}</td>
-      <td>${f.entrenamientos?.fecha||'—'}</td>
-      <td><span style="color:${SENS_COLOR[f.sensaciones]||'inherit'};font-weight:600;">${SENS_LABEL[f.sensaciones]||'—'}</span></td>
-      <td>${f.tiempo_marca||'—'}</td>
-      <td style="max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${f.notas||'—'}</td>
-    </tr>`).join('')
-    : '<tr><td colspan="6" class="table-empty">Sin feedback aún</td></tr>';
-}
-
-// =====================
-// CALENDARIO
-// =====================
-async function cargarCalendario() {
-  const { data } = await db.from('eventos').select('*').gte('fecha_inicio', new Date().toISOString()).order('fecha_inicio').limit(20);
-  const TIPOS = { competicion:'Competición', control:'Control', actividad_padres:'Act. familias', evento_club:'Evento club', otro:'Evento' };
-  const tbody = document.getElementById('tbody-calendario');
-  tbody.innerHTML = data?.length ? data.map(e => `
-    <tr>
-      <td>${new Date(e.fecha_inicio).toLocaleDateString('es-ES', { day:'2-digit', month:'short', year:'numeric' })}</td>
-      <td><strong>${e.titulo}</strong></td>
-      <td><span class="tag">${TIPOS[e.tipo]||e.tipo}</span></td>
-      <td>${e.lugar||'—'}</td>
-    </tr>`).join('')
-    : '<tr><td colspan="4" class="table-empty">No hay eventos próximos</td></tr>';
-}
-
-// =====================
-// HELPERS
-// =====================
-function cerrarModal(id) { document.getElementById(id).classList.remove('v'); }
-document.querySelectorAll('.modal-overlay').forEach(el => {
-  el.addEventListener('click', function(e) { if (e.target === this) this.classList.remove('v'); });
+// ═══════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════
+document.addEventListener('keydown', e => { if (e.key === 'Enter' && document.activeElement.id === 'login-pass') doLogin(); });
+document.querySelectorAll('.modal-overlay').forEach(m => {
+  m.addEventListener('click', e => { if (e.target === m) m.classList.remove('v'); });
+});
+document.getElementById('at-perfil')?.addEventListener('change', function() {
+  const esVallista = this.value === 'vallista';
+  document.getElementById('campo-pierna').style.display = esVallista ? 'block' : 'none';
+  document.getElementById('campo-pasos').style.display = esVallista ? 'block' : 'none';
 });
 
-// Añadir columna archivo_url si no existe
-async function initDB() {
-  // Intentamos añadir la columna (si ya existe Postgres lo ignora con IF NOT EXISTS)
-}
+// Cargar ejercicios después e iniciar datalist
+const _cargarEjs = cargarEjercicios;
+cargarEjercicios = async function() {
+  await _cargarEjs();
+  crearDatalistEjercicios();
+};
 
 checkSession();
 </script>
