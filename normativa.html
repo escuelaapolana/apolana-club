@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Reglamento Interno | Club Atletismo Apolana</title>
-  <meta name="description" content="Reglamento interno del Club Atletismo Apolana: licencias, indumentaria, ayudas por desplazamiento, dietas y régimen sancionador.">
+  <title>Normativa de Régimen Interno | Club Atletismo Apolana</title>
+  <meta name="description" content="Normativa de Régimen Interno del Club Atletismo Apolana: órganos de gobierno, socios, atletas, alumnos, entrenadores, competiciones, equipación y régimen disciplinario.">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://escuelaapolana.github.io/apolana-club/normativa.html">
   <meta property="og:type" content="article">
-  <meta property="og:title" content="Reglamento Interno | Club Atletismo Apolana">
-  <meta property="og:description" content="Normativa que regula la actividad de socios y atletas del Club Atletismo Apolana.">
+  <meta property="og:title" content="Normativa de Régimen Interno | Club Atletismo Apolana">
+  <meta property="og:description" content="Normativa completa que regula el funcionamiento del Club Atletismo Apolana.">
   <meta property="og:image" content="https://icaxokjsvhlreuwpyxeb.supabase.co/storage/v1/object/public/imagenes-club/hero.jpg">
   <meta name="theme-color" content="#1a5f8f">
   <link rel="icon" type="image/png" href="https://icaxokjsvhlreuwpyxeb.supabase.co/storage/v1/object/public/imagenes-club/logo.png">
@@ -23,117 +23,143 @@
       --amarillo: #f59e0b; --amarillo-bg: #fffbeb;
       --naranja: #ea580c; --naranja-bg: #fff7ed;
       --rojo: #dc2626; --rojo-bg: #fef2f2;
+      --verde: #16a34a; --verde-bg: #f0fdf4;
     }
     html { scroll-behavior: smooth; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: white; color: var(--texto); line-height: 1.6; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: white; color: var(--texto); line-height: 1.65; }
 
-    /* HEADER */
-    .page-header { position: relative; background: var(--azul-oscuro); padding: 3rem 2rem 2.5rem; text-align: center; }
+    .page-header { background: var(--azul-oscuro); padding: 3rem 2rem 2.5rem; text-align: center; }
     .page-header-breadcrumb { color: rgba(255,255,255,0.55); font-size: 0.78rem; margin-bottom: 0.75rem; }
     .page-header-breadcrumb a { color: rgba(255,255,255,0.55); text-decoration: none; }
     .page-header-breadcrumb a:hover { color: white; }
-    .page-header h1 { color: white; font-size: 2.1rem; font-weight: 800; margin-bottom: 0.5rem; letter-spacing: -0.02em; }
-    .page-header p { color: rgba(255,255,255,0.7); font-size: 0.95rem; max-width: 620px; margin: 0 auto; }
-    .header-meta { display: inline-flex; align-items: center; gap: 7px; background: rgba(255,255,255,0.12); border-radius: 20px; padding: 5px 14px; font-size: 0.75rem; color: rgba(255,255,255,0.85); margin-top: 1rem; }
+    .page-header h1 { color: white; font-size: 2rem; font-weight: 800; margin-bottom: 0.5rem; letter-spacing: -0.02em; }
+    .page-header p { color: rgba(255,255,255,0.7); font-size: 0.95rem; max-width: 640px; margin: 0 auto; }
+    .header-meta { display: inline-flex; align-items: center; gap: 7px; background: rgba(255,255,255,0.12); border-radius: 20px; padding: 5px 14px; font-size: 0.74rem; color: rgba(255,255,255,0.85); margin-top: 1rem; }
 
-    /* LAYOUT */
-    .layout { max-width: 1120px; margin: 0 auto; padding: 2.5rem 2rem 4rem; display: grid; grid-template-columns: 240px 1fr; gap: 3rem; align-items: start; }
+    .layout { max-width: 1160px; margin: 0 auto; padding: 2.5rem 2rem 4rem; display: grid; grid-template-columns: 250px 1fr; gap: 3rem; align-items: start; }
 
     /* ÍNDICE */
-    .indice { position: sticky; top: 80px; }
-    .indice-titulo { font-size: 0.68rem; font-weight: 700; color: var(--texto-suave); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.875rem; }
+    .indice { position: sticky; top: 80px; max-height: calc(100vh - 100px); overflow-y: auto; }
+    .indice-titulo { font-size: 0.66rem; font-weight: 700; color: var(--texto-suave); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.875rem; }
     .indice-lista { list-style: none; border-left: 2px solid var(--gris-borde); }
-    .indice-lista a { display: block; padding: 7px 0 7px 14px; font-size: 0.83rem; color: var(--texto-suave); text-decoration: none; margin-left: -2px; border-left: 2px solid transparent; transition: all 0.15s; }
-    .indice-lista a:hover { color: var(--azul); }
-    .indice-lista a.activo { color: var(--azul); border-left-color: var(--azul); font-weight: 600; }
+    .indice-lista > li > a { display: block; padding: 6px 0 6px 14px; font-size: 0.82rem; color: var(--texto-suave); text-decoration: none; margin-left: -2px; border-left: 2px solid transparent; transition: all 0.15s; }
+    .indice-lista > li > a:hover { color: var(--azul); }
+    .indice-lista > li > a.activo { color: var(--azul); border-left-color: var(--azul); font-weight: 600; }
+    .indice-sub { list-style: none; margin-left: 14px; }
+    .indice-sub a { display: block; padding: 4px 0 4px 12px; font-size: 0.76rem; color: #9ca3af; text-decoration: none; }
+    .indice-sub a:hover { color: var(--azul); }
 
-    /* CONTENIDO */
     .contenido { min-width: 0; }
-    .aviso-destacado { background: var(--azul-bg); border-left: 4px solid var(--azul); border-radius: 0 10px 10px 0; padding: 1.25rem 1.5rem; margin-bottom: 2.5rem; }
-    .aviso-destacado strong { display: block; font-size: 0.92rem; margin-bottom: 0.35rem; color: var(--azul-oscuro); }
-    .aviso-destacado p { font-size: 0.87rem; color: var(--texto-suave); }
 
-    .seccion { margin-bottom: 3rem; scroll-margin-top: 80px; }
-    .seccion-num { display: inline-block; font-size: 0.68rem; font-weight: 700; color: var(--azul-claro); letter-spacing: 0.12em; margin-bottom: 0.4rem; }
-    .seccion h2 { font-size: 1.35rem; font-weight: 800; margin-bottom: 1rem; letter-spacing: -0.01em; }
-    .seccion h3 { font-size: 1rem; font-weight: 700; margin: 1.75rem 0 0.75rem; }
-    .seccion p { font-size: 0.92rem; color: var(--texto-suave); margin-bottom: 0.875rem; }
-    .seccion ul, .seccion ol { margin: 0 0 1rem 1.25rem; }
-    .seccion li { font-size: 0.92rem; color: var(--texto-suave); margin-bottom: 0.6rem; }
-    .seccion strong { color: var(--texto); font-weight: 600; }
+    /* RESUMEN DESTACADO */
+    .resumen { background: var(--azul-bg); border-radius: 14px; padding: 1.5rem 1.75rem; margin-bottom: 2.5rem; border: 1px solid #c8dff0; }
+    .resumen-titulo { display: flex; align-items: center; gap: 8px; font-size: 0.95rem; font-weight: 800; color: var(--azul-oscuro); margin-bottom: 0.875rem; }
+    .resumen-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 0.75rem; }
+    .resumen-item { background: white; border-radius: 10px; padding: 0.875rem 1rem; }
+    .resumen-item-num { font-size: 1.15rem; font-weight: 800; color: var(--azul); line-height: 1.2; }
+    .resumen-item-txt { font-size: 0.78rem; color: var(--texto-suave); line-height: 1.45; margin-top: 2px; }
+
+    .aviso-destacado { background: var(--amarillo-bg); border-left: 4px solid var(--amarillo); border-radius: 0 10px 10px 0; padding: 1.1rem 1.4rem; margin-bottom: 2.5rem; }
+    .aviso-destacado strong { display: block; font-size: 0.9rem; margin-bottom: 0.3rem; color: #92400e; }
+    .aviso-destacado p { font-size: 0.85rem; color: #92400e; }
+
+    /* CAPÍTULOS */
+    .capitulo { margin-bottom: 3.5rem; scroll-margin-top: 80px; }
+    .cap-header { border-bottom: 2px solid var(--gris-borde); padding-bottom: 0.875rem; margin-bottom: 1.5rem; }
+    .cap-num { display: inline-block; font-size: 0.66rem; font-weight: 700; color: var(--azul-claro); letter-spacing: 0.14em; margin-bottom: 0.3rem; }
+    .cap-header h2 { font-size: 1.4rem; font-weight: 800; letter-spacing: -0.01em; }
+
+    .subseccion { margin: 2rem 0; scroll-margin-top: 80px; }
+    .subseccion h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.875rem; display: flex; align-items: center; gap: 9px; }
+    .sub-icono { width: 28px; height: 28px; border-radius: 8px; background: var(--azul-bg); display: flex; align-items: center; justify-content: center; font-size: 0.9rem; flex-shrink: 0; }
+
+    /* ARTÍCULOS */
+    .articulo { margin-bottom: 1.5rem; }
+    .art-num { font-size: 0.7rem; font-weight: 700; color: var(--azul-claro); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.35rem; }
+    .articulo p { font-size: 0.9rem; color: var(--texto-suave); margin-bottom: 0.75rem; }
+    .articulo strong { color: var(--texto); font-weight: 600; }
+    .articulo ul, .articulo ol { margin: 0.6rem 0 0.875rem 1.3rem; }
+    .articulo li { font-size: 0.89rem; color: var(--texto-suave); margin-bottom: 0.5rem; }
+
+    /* LISTAS DE OBLIGACIONES */
+    .obligaciones { list-style: none; margin: 0.875rem 0; }
+    .obligaciones li { display: flex; gap: 10px; padding: 0.7rem 0; border-bottom: 1px solid var(--gris-borde); font-size: 0.88rem; color: var(--texto-suave); align-items: flex-start; }
+    .obligaciones li:last-child { border-bottom: none; }
+    .obligaciones li::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--azul-claro); flex-shrink: 0; margin-top: 8px; }
+    .obligaciones li strong { color: var(--texto); }
 
     /* CAJAS */
-    .caja-info { background: var(--gris); border-radius: 12px; padding: 1.25rem 1.5rem; margin: 1.25rem 0; }
-    .caja-alerta { background: var(--amarillo-bg); border: 1px solid #fde68a; border-radius: 12px; padding: 1.25rem 1.5rem; margin: 1.25rem 0; }
-    .caja-alerta-titulo { display: flex; align-items: center; gap: 8px; font-size: 0.88rem; font-weight: 700; color: #92400e; margin-bottom: 0.5rem; }
-    .caja-alerta p, .caja-alerta li { color: #92400e; font-size: 0.87rem; }
+    .caja-info { background: var(--gris); border-radius: 12px; padding: 1.1rem 1.35rem; margin: 1.1rem 0; }
+    .caja-info p { font-size: 0.86rem; color: var(--texto-suave); margin: 0; }
+    .caja-alerta { background: var(--amarillo-bg); border: 1px solid #fde68a; border-radius: 12px; padding: 1.1rem 1.35rem; margin: 1.1rem 0; }
+    .caja-alerta-titulo { display: flex; align-items: center; gap: 8px; font-size: 0.86rem; font-weight: 700; color: #92400e; margin-bottom: 0.4rem; }
+    .caja-alerta p { color: #92400e; font-size: 0.85rem; margin: 0; }
 
-    /* PLAZOS DESTACADOS */
-    .plazos-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.875rem; margin: 1.25rem 0; }
-    .plazo-card { background: white; border: 1.5px solid var(--gris-borde); border-radius: 12px; padding: 1.1rem 1.25rem; }
-    .plazo-num { font-size: 1.6rem; font-weight: 800; color: var(--azul); line-height: 1; margin-bottom: 0.2rem; }
-    .plazo-label { font-size: 0.78rem; color: var(--texto-suave); line-height: 1.4; }
+    /* ÓRGANOS */
+    .organos-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1.1rem 0; }
+    .organo-card { border: 1.5px solid var(--gris-borde); border-radius: 12px; overflow: hidden; }
+    .organo-head { background: var(--gris); padding: 0.75rem 1.1rem; font-size: 0.9rem; font-weight: 700; border-bottom: 1px solid var(--gris-borde); }
+    .organo-body { padding: 1rem 1.1rem; }
+    .organo-body ul { list-style: none; }
+    .organo-body li { font-size: 0.84rem; color: var(--texto-suave); padding: 0.3rem 0 0.3rem 1rem; position: relative; }
+    .organo-body li::before { content: '·'; position: absolute; left: 2px; color: var(--azul-claro); font-weight: 800; font-size: 1.1rem; line-height: 1; }
 
     /* IMPORTES */
-    .importes-tabla { width: 100%; border-collapse: collapse; margin: 1.25rem 0; border: 1px solid var(--gris-borde); border-radius: 12px; overflow: hidden; }
-    .importes-tabla th { background: var(--gris); font-size: 0.72rem; font-weight: 700; color: var(--texto-suave); text-transform: uppercase; letter-spacing: 0.05em; padding: 0.75rem 1rem; text-align: left; }
-    .importes-tabla td { padding: 0.75rem 1rem; font-size: 0.88rem; border-top: 1px solid var(--gris-borde); }
+    .importes-tabla { width: 100%; border-collapse: collapse; margin: 1.1rem 0; border: 1px solid var(--gris-borde); border-radius: 12px; overflow: hidden; }
+    .importes-tabla th { background: var(--gris); font-size: 0.7rem; font-weight: 700; color: var(--texto-suave); text-transform: uppercase; letter-spacing: 0.05em; padding: 0.7rem 1rem; text-align: left; }
+    .importes-tabla td { padding: 0.7rem 1rem; font-size: 0.87rem; border-top: 1px solid var(--gris-borde); color: var(--texto-suave); }
     .importes-tabla td:last-child { text-align: right; font-weight: 700; color: var(--azul); }
 
-    /* DATOS DEL CLUB */
-    .datos-club { background: var(--azul-oscuro); border-radius: 12px; padding: 1.25rem 1.5rem; margin: 1.25rem 0; color: white; }
-    .datos-club-label { font-size: 0.68rem; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.5rem; }
-    .datos-club-linea { font-size: 0.88rem; color: rgba(255,255,255,0.9); line-height: 1.7; }
+    /* PLAZOS */
+    .plazos-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(155px, 1fr)); gap: 0.75rem; margin: 1.1rem 0; }
+    .plazo-card { background: white; border: 1.5px solid var(--gris-borde); border-radius: 12px; padding: 1rem 1.1rem; }
+    .plazo-num { font-size: 1.4rem; font-weight: 800; color: var(--azul); line-height: 1; margin-bottom: 0.25rem; }
+    .plazo-label { font-size: 0.75rem; color: var(--texto-suave); line-height: 1.4; }
+
+    .datos-club { background: var(--azul-oscuro); border-radius: 12px; padding: 1.15rem 1.4rem; margin: 1.1rem 0; }
+    .datos-club-label { font-size: 0.66rem; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.45rem; }
+    .datos-club-linea { font-size: 0.86rem; color: rgba(255,255,255,0.88); line-height: 1.7; }
     .datos-club-linea strong { color: white; }
 
-    /* PROCEDIMIENTO */
-    .pasos { display: flex; flex-direction: column; gap: 0.875rem; margin: 1.25rem 0; }
-    .paso { display: flex; gap: 1rem; align-items: flex-start; }
-    .paso-num { width: 30px; height: 30px; border-radius: 50%; background: var(--azul); color: white; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 700; flex-shrink: 0; }
-    .paso-texto { font-size: 0.9rem; color: var(--texto-suave); padding-top: 4px; }
-    .paso-texto strong { color: var(--texto); }
-
-    /* FALTAS Y SANCIONES */
-    .faltas-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; margin: 1.25rem 0; }
+    /* FALTAS */
+    .faltas-grid { display: flex; flex-direction: column; gap: 1rem; margin: 1.1rem 0; }
     .falta-bloque { border-radius: 14px; overflow: hidden; border: 1.5px solid; }
     .falta-leve { border-color: #fde68a; }
     .falta-grave { border-color: #fed7aa; }
     .falta-muygrave { border-color: #fecaca; }
-    .falta-head { padding: 0.875rem 1.25rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+    .falta-head { padding: 0.85rem 1.25rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
     .falta-leve .falta-head { background: var(--amarillo-bg); }
     .falta-grave .falta-head { background: var(--naranja-bg); }
     .falta-muygrave .falta-head { background: var(--rojo-bg); }
-    .falta-titulo { font-size: 0.95rem; font-weight: 800; }
+    .falta-titulo { font-size: 0.93rem; font-weight: 800; }
     .falta-leve .falta-titulo { color: #92400e; }
     .falta-grave .falta-titulo { color: #9a3412; }
     .falta-muygrave .falta-titulo { color: #991b1b; }
-    .falta-badge { font-size: 0.68rem; font-weight: 700; padding: 3px 10px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.05em; white-space: nowrap; }
+    .falta-badge { font-size: 0.66rem; font-weight: 700; padding: 3px 10px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.05em; white-space: nowrap; }
     .falta-leve .falta-badge { background: #fef3c7; color: #92400e; }
     .falta-grave .falta-badge { background: #ffedd5; color: #9a3412; }
     .falta-muygrave .falta-badge { background: #fee2e2; color: #991b1b; }
-    .falta-cuerpo { padding: 1.1rem 1.25rem; background: white; }
-    .falta-sub { font-size: 0.7rem; font-weight: 700; color: var(--texto-suave); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.5rem; }
-    .falta-lista { list-style: none; margin: 0 0 1.1rem; }
-    .falta-lista li { font-size: 0.87rem; color: var(--texto-suave); padding-left: 1.25rem; position: relative; margin-bottom: 0.5rem; }
-    .falta-lista li::before { content: '·'; position: absolute; left: 5px; font-weight: 800; font-size: 1.1rem; line-height: 1; }
+    .falta-cuerpo { padding: 1.05rem 1.25rem; background: white; }
+    .falta-sub { font-size: 0.68rem; font-weight: 700; color: var(--texto-suave); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.5rem; }
+    .falta-lista { list-style: none; margin: 0 0 1rem; }
+    .falta-lista li { font-size: 0.86rem; color: var(--texto-suave); padding-left: 1.2rem; position: relative; margin-bottom: 0.45rem; }
+    .falta-lista li::before { content: '·'; position: absolute; left: 4px; font-weight: 800; font-size: 1.1rem; line-height: 1; }
     .falta-leve .falta-lista li::before { color: var(--amarillo); }
     .falta-grave .falta-lista li::before { color: var(--naranja); }
     .falta-muygrave .falta-lista li::before { color: var(--rojo); }
-    .sancion-box { border-top: 1px solid var(--gris-borde); padding-top: 1rem; }
+    .sancion-box { border-top: 1px solid var(--gris-borde); padding-top: 0.95rem; }
     .sancion-lista { list-style: none; }
-    .sancion-lista li { font-size: 0.87rem; padding-left: 1.4rem; position: relative; margin-bottom: 0.45rem; color: var(--texto); font-weight: 500; }
+    .sancion-lista li { font-size: 0.86rem; padding-left: 1.35rem; position: relative; margin-bottom: 0.4rem; color: var(--texto); font-weight: 500; }
     .sancion-lista li::before { content: '→'; position: absolute; left: 0; font-weight: 700; }
     .falta-leve .sancion-lista li::before { color: var(--amarillo); }
     .falta-grave .sancion-lista li::before { color: var(--naranja); }
     .falta-muygrave .sancion-lista li::before { color: var(--rojo); }
 
-    /* CTA FINAL */
-    .cta-normativa { background: var(--gris); border-radius: 14px; padding: 1.75rem; text-align: center; margin-top: 3rem; }
-    .cta-normativa h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.4rem; }
-    .cta-normativa p { font-size: 0.87rem; color: var(--texto-suave); margin-bottom: 1.25rem; }
-    .cta-btns { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; }
-    .btn-p { background: var(--azul); color: white; padding: 10px 22px; border-radius: 9px; text-decoration: none; font-weight: 600; font-size: 0.87rem; }
-    .btn-s { background: white; color: var(--azul); border: 1.5px solid var(--gris-borde); padding: 10px 22px; border-radius: 9px; text-decoration: none; font-weight: 600; font-size: 0.87rem; }
+    .cierre { background: var(--gris); border-radius: 14px; padding: 1.5rem; text-align: center; margin-top: 3rem; }
+    .cierre p { font-size: 0.85rem; color: var(--texto-suave); font-style: italic; margin-bottom: 1.1rem; }
+    .cta-btns { display: flex; gap: 0.7rem; justify-content: center; flex-wrap: wrap; }
+    .btn-p { background: var(--azul); color: white; padding: 10px 22px; border-radius: 9px; text-decoration: none; font-weight: 600; font-size: 0.86rem; }
+    .btn-s { background: white; color: var(--azul); border: 1.5px solid var(--gris-borde); padding: 10px 22px; border-radius: 9px; text-decoration: none; font-weight: 600; font-size: 0.86rem; }
 
     footer { background: #0f172a; padding: 2rem; }
     .footer-inner { max-width: 1040px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
@@ -146,11 +172,13 @@
 
     @media (max-width: 900px) {
       .layout { grid-template-columns: 1fr; gap: 1.5rem; padding: 1.75rem 1.25rem 3rem; }
-      .indice { position: static; background: var(--gris); border-radius: 12px; padding: 1.1rem 1.25rem; }
+      .indice { position: static; max-height: none; background: var(--gris); border-radius: 12px; padding: 1.1rem 1.25rem; }
       .indice-lista { border-left: none; display: flex; flex-wrap: wrap; gap: 0.4rem; }
-      .indice-lista a { padding: 5px 12px; background: white; border-radius: 20px; border: 1px solid var(--gris-borde); margin-left: 0; font-size: 0.78rem; }
-      .indice-lista a.activo { border-color: var(--azul); background: var(--azul-bg); }
-      .page-header h1 { font-size: 1.6rem; }
+      .indice-lista > li > a { padding: 5px 12px; background: white; border-radius: 20px; border: 1px solid var(--gris-borde); margin-left: 0; font-size: 0.76rem; }
+      .indice-lista > li > a.activo { border-color: var(--azul); background: var(--azul-bg); }
+      .indice-sub { display: none; }
+      .organos-grid { grid-template-columns: 1fr; }
+      .page-header h1 { font-size: 1.55rem; }
       .page-header { padding: 2rem 1.25rem 1.75rem; }
     }
   </style>
@@ -159,186 +187,435 @@
 
 <div class="page-header">
   <div class="page-header-breadcrumb"><a href="index.html">Club Apolana</a> / Normativa</div>
-  <h1>Reglamento Interno</h1>
-  <p>Normativa que regula la actividad de socios y atletas del Club Atletismo Apolana</p>
+  <h1>Normativa de Régimen Interno</h1>
+  <p>Documento que regula el funcionamiento del club y las obligaciones de todos sus estamentos</p>
   <div class="header-meta">
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
-    Vigente desde la temporada 2022/23
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+    Aprobada en Junta Directiva y ratificada en Asamblea
   </div>
 </div>
 
 <div class="layout">
 
-  <!-- ÍNDICE -->
   <aside class="indice">
-    <div class="indice-titulo">En esta página</div>
+    <div class="indice-titulo">Índice</div>
     <ul class="indice-lista" id="indice">
-      <li><a href="#licencias" class="activo">Licencias y altas</a></li>
-      <li><a href="#datos">Datos personales</a></li>
-      <li><a href="#indumentaria">Indumentaria</a></li>
-      <li><a href="#desplazamientos">Ayudas por desplazamiento</a></li>
-      <li><a href="#procedimiento">Cómo solicitar la ayuda</a></li>
-      <li><a href="#dietas">Dietas e importes</a></li>
-      <li><a href="#sanciones">Faltas y sanciones</a></li>
+      <li><a href="#cap1" class="activo">1 · Órganos de gobierno</a></li>
+      <li>
+        <a href="#cap2">2 · Estamentos del club</a>
+        <ul class="indice-sub">
+          <li><a href="#socios">Socios</a></li>
+          <li><a href="#atletas">Atletas</a></li>
+          <li><a href="#alumnos">Alumnos</a></li>
+          <li><a href="#entrenadores">Entrenadores</a></li>
+          <li><a href="#patrocinadores">Patrocinadores</a></li>
+        </ul>
+      </li>
+      <li><a href="#cap3">3 · Competiciones</a></li>
+      <li><a href="#cap4">4 · Aspecto económico</a></li>
+      <li><a href="#cap5">5 · Equipación</a></li>
+      <li><a href="#cap6">6 · Régimen disciplinario</a></li>
+      <li><a href="#cap7">7 · Escuela de atletismo</a></li>
+      <li><a href="#cap8">8 · Clubes asociados</a></li>
     </ul>
   </aside>
 
-  <!-- CONTENIDO -->
   <main class="contenido">
 
-    <div class="aviso-destacado">
-      <strong>Todos los atletas y miembros del club están obligados a conocer este reglamento</strong>
-      <p>Su desconocimiento no exime de su cumplimiento íntegro. Los casos no previstos serán estudiados por la Dirección Técnica o, en su caso, por la Junta Directiva.</p>
+    <!-- RESUMEN -->
+    <div class="resumen">
+      <div class="resumen-titulo">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+        Lo esencial que debes saber
+      </div>
+      <div class="resumen-grid">
+        <div class="resumen-item">
+          <div class="resumen-item-num">4 pruebas</div>
+          <div class="resumen-item-txt">Participación mínima anual, federadas o populares</div>
+        </div>
+        <div class="resumen-item">
+          <div class="resumen-item-num">2 eventos</div>
+          <div class="resumen-item-txt">Colaboración como voluntario al año</div>
+        </div>
+        <div class="resumen-item">
+          <div class="resumen-item-num">5 décimos</div>
+          <div class="resumen-item-txt">Lotería de Navidad o abonar el beneficio</div>
+        </div>
+        <div class="resumen-item">
+          <div class="resumen-item-num">2 meses</div>
+          <div class="resumen-item-txt">Antelación para comunicar renovación de licencia</div>
+        </div>
+        <div class="resumen-item">
+          <div class="resumen-item-num">6 días</div>
+          <div class="resumen-item-txt">Antelación mínima para inscripciones oficiales</div>
+        </div>
+        <div class="resumen-item">
+          <div class="resumen-item-num">Equipación</div>
+          <div class="resumen-item-txt">Obligatoria en competición y entrega de premios</div>
+        </div>
+      </div>
     </div>
 
-    <!-- LICENCIAS -->
-    <section class="seccion" id="licencias">
-      <div class="seccion-num">01</div>
-      <h2>Licencias, altas y renovaciones</h2>
+    <div class="aviso-destacado">
+      <strong>Todos los miembros del club están obligados a conocer esta normativa</strong>
+      <p>Su desconocimiento no exime de su cumplimiento íntegro. Los casos no previstos serán resueltos por la Dirección Técnica o la Junta Directiva.</p>
+    </div>
 
-      <ul>
-        <li>Todos los socios que deseen formalizar un <strong>alta nueva</strong> deberán abonar obligatoriamente el importe correspondiente a la cuota de alta, y solicitar previamente la autorización de la Junta Directiva.</li>
-        <li>Los atletas que deseen <strong>renovar su licencia federativa</strong> deberán abonar el importe completo que determine la Junta Directiva, en plazo y forma.</li>
-        <li>La Dirección Técnica tiene la potestad de decidir las renovaciones de licencias cada temporada.</li>
-      </ul>
+    <div class="caja-info" style="margin-bottom:2.5rem;">
+      <p>El <strong>Club Atletismo Apolana</strong> es una entidad deportiva sin ánimo de lucro, inscrita en el Registro de Entidades Deportivas con el nº <strong>1443</strong> y CIF <strong>G-03845500</strong>.</p>
+    </div>
 
-      <div class="caja-alerta">
-        <div class="caja-alerta-titulo">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-          Fecha límite improrrogable
+    <!-- CAPÍTULO 1 -->
+    <section class="capitulo" id="cap1">
+      <div class="cap-header">
+        <div class="cap-num">Capítulo 1</div>
+        <h2>Órganos directivos y de gobierno</h2>
+      </div>
+
+      <div class="articulo">
+        <div class="art-num">Artículo 1</div>
+        <p>El club precisa de diferentes órganos para su buen funcionamiento, sujetos a determinados derechos y obligaciones. Su función principal es <strong>establecer los objetivos del club</strong> y disponer de los medios necesarios para su realización. Sus funciones y forma de funcionamiento se especifican en los Estatutos.</p>
+      </div>
+
+      <div class="organos-grid">
+        <div class="organo-card">
+          <div class="organo-head">Asamblea General</div>
+          <div class="organo-body">
+            <ul>
+              <li>El Presidente del club</li>
+              <li>Los miembros de la Junta Directiva</li>
+              <li>La totalidad de los socios</li>
+            </ul>
+          </div>
         </div>
-        <p>Los socios-atletas deben comunicar su intención de renovar <strong>antes del 1 de noviembre</strong> de cada temporada, a través de la Oficina de Atención al Socio o del correo electrónico del club.</p>
+        <div class="organo-card">
+          <div class="organo-head">Junta Directiva</div>
+          <div class="organo-body">
+            <ul>
+              <li>Presidente, que la preside</li>
+              <li>Vicepresidente 1º y/o 2º</li>
+              <li>Secretario</li>
+              <li>Tesorero</li>
+              <li>Vocales</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="articulo">
+        <div class="art-num">Artículo 3</div>
+        <p>Cuando un miembro del club se dirija a un directivo sobre una cuestión que no sea de su competencia, este deberá <strong>redirigir la consulta a la persona responsable</strong> del tema concreto.</p>
       </div>
     </section>
 
-    <!-- DATOS -->
-    <section class="seccion" id="datos">
-      <div class="seccion-num">02</div>
-      <h2>Datos personales</h2>
-      <p>Todos los atletas deberán comunicar al club sus datos personales, incluyendo <strong>teléfono de contacto y correo electrónico</strong>. Esta comunicación es indispensable para la formalización de licencias, el seguro deportivo y la remisión de comunicaciones.</p>
-      <p>Asimismo, se comprometen a comunicar cualquier cambio para que los datos figuren correctamente actualizados en la base de datos del club.</p>
+    <!-- CAPÍTULO 2 -->
+    <section class="capitulo" id="cap2">
+      <div class="cap-header">
+        <div class="cap-num">Capítulo 2</div>
+        <h2>Otros estamentos del club</h2>
+      </div>
+
+      <div class="articulo">
+        <div class="art-num">Artículo 4</div>
+        <p>Además de los órganos directivos, el club cuenta con cinco estamentos indispensables para la consecución de sus fines: <strong>socios, atletas, alumnos, entrenadores y patrocinadores</strong>.</p>
+      </div>
+
+      <!-- SOCIOS -->
+      <div class="subseccion" id="socios">
+        <h3><span class="sub-icono">🤝</span> 2.1 · Los socios</h3>
+
+        <div class="articulo">
+          <div class="art-num">Artículos 5 y 6</div>
+          <p>El estamento de socios lo forman todas las personas <strong>mayores de 16 años</strong> que lo soliciten y abonen la cuota de alta. También podrán serlo los atletas menores de 16 años, si bien su derecho a voto en la Asamblea se regula en los Estatutos.</p>
+          <p>El número de socios es ilimitado, aunque la Junta Directiva podrá limitar la admisión por motivos razonados. La condición de socio se pierde por <strong>voluntad propia, impago de la cuota o acuerdo de la Junta Directiva</strong> tras expediente sancionador con audiencia del interesado.</p>
+        </div>
+
+        <div class="articulo">
+          <div class="art-num">Artículo 7 · Obligaciones</div>
+          <ul class="obligaciones">
+            <li>Aportar la <strong>cuota económica</strong> fijada por la Junta Directiva</li>
+            <li>Asistir a las reuniones y a la Asamblea General —ordinaria y extraordinarias—, siendo la <strong>asistencia obligatoria</strong> salvo fuerza mayor</li>
+            <li>Colaborar con la Junta Directiva en cuestiones puntuales y de apoyo a los atletas</li>
+            <li>Asumir las decisiones de la Junta Directiva, valorando la dificultad de las decisiones complicadas</li>
+            <li>Dar siempre una <strong>imagen del club fiel</strong> a la realidad deportiva y económica</li>
+            <li>Defender los intereses del club, evitando discrepancias fuera de las reuniones</li>
+            <li>Quedarse <strong>5 décimos de lotería de Navidad</strong> o abonar el valor del beneficio, que se cobrará a partir del 1 de diciembre en concepto de donativo</li>
+            <li>Participar como mínimo en <strong>4 pruebas</strong> al año, federadas o populares</li>
+            <li>Colaborar como voluntario en al menos <strong>2 eventos anuales</strong> propuestos por la Junta Directiva, siempre que no compita</li>
+          </ul>
+          <div class="caja-info">
+            <p>Previa autorización, y en ocasiones puntuales, los socios podrán equiparse con indumentaria distinta a la del club por un bien social o de interés comunitario.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ATLETAS -->
+      <div class="subseccion" id="atletas">
+        <h3><span class="sub-icono">🏃</span> 2.2 · Los atletas</h3>
+
+        <div class="articulo">
+          <div class="art-num">Artículo 8</div>
+          <p>El club cuenta con atletas en las categorías <strong>Benjamín, Alevín, Infantil, Cadete, Juvenil, Júnior, Promesa, Sénior y Veteranos</strong>, todos ellos obligatoriamente federados.</p>
+
+          <p style="margin-top:1rem;"><strong>Condiciones para ser atleta del club:</strong></p>
+          <ul>
+            <li>Ser alumno de la escuela</li>
+            <li>Ser atleta cualificado con marca mínima</li>
+            <li>Ser atleta profesional</li>
+            <li>Ser socio con licencia federada</li>
+          </ul>
+        </div>
+
+        <div class="articulo">
+          <div class="art-num">Obligaciones de los atletas</div>
+          <ul class="obligaciones">
+            <li>Estar <strong>al corriente de los pagos</strong>, salvo quienes sean beneficiarios de descuento o gratificación</li>
+            <li>Informar al club con <strong>2 meses de antelación</strong> sobre la renovación de licencias en atletismo, montaña y triatlón</li>
+            <li>Formalizar la <strong>cuota de actividad y las cuotas federativas</strong>, salvo atletas profesionales o cualificados</li>
+            <li>Vestir la <strong>equipación oficial</strong> en todas las competiciones oficiales federadas, en las populares del calendario del club y en las ceremonias de entrega de premios</li>
+            <li>Acudir al <strong>llamamiento del club</strong>, especialmente a competiciones por equipos y a las que determine el Director Técnico</li>
+            <li>Mantener actualizados sus <strong>datos personales</strong> y comunicar cualquier cambio</li>
+            <li>Llevar a las competiciones el <strong>DNI y la licencia federativa</strong> en vigor</li>
+            <li>Llevar visible la <strong>publicidad de los patrocinadores</strong>, siempre que organización y jueces lo permitan</li>
+            <li>Comunicar a la Junta Directiva o al Director Técnico cualquier <strong>problemática deportiva individual</strong></li>
+            <li>Someterse a las normas del responsable de expedición cuando haya que <strong>pernoctar fuera</strong></li>
+            <li>Avisar con <strong>mínimo 1 mes</strong> de antelación respecto a la fecha límite de la RFEA si dejan o cambian de club</li>
+          </ul>
+        </div>
+
+        <div class="caja-alerta">
+          <div class="caja-alerta-titulo">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            Renovación fuera de plazo
+          </div>
+          <p>Quienes no compitan durante una temporada, o no lo hagan en pruebas federadas, <strong>no serán renovados inicialmente</strong>. Quien desee renovar una vez finalizado el plazo deberá abonar el importe de la licencia más el recargo correspondiente.</p>
+        </div>
+
+        <div class="articulo">
+          <p><strong>Atletas profesionales o cualificados</strong> están obligados a presentar un plan de participación trimestral: octubre–diciembre, enero–marzo, abril–junio y julio–septiembre.</p>
+          <p><strong>Menores de edad:</strong> padres o tutores deben firmar al comienzo de cada temporada la autorización para viajar con el club a las competiciones.</p>
+          <p><strong>Inscripciones de pago:</strong> deben ingresarse en plazo y forma o el atleta no aparecerá en las listas de admitidos. Si se inscribe en una prueba federada gratuita y no se presenta, la sanción federativa que recaiga sobre el club será repercutida al atleta.</p>
+        </div>
+
+        <div class="caja-alerta">
+          <div class="caja-alerta-titulo">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            Pérdida del premio
+          </div>
+          <p>Los atletas que obtengan premio en pruebas oficiales o populares y <strong>no representen los intereses del club</strong> —por no usar la indumentaria adecuada o no quedarse a recoger el premio en la ceremonia— no podrán optar a él.</p>
+        </div>
+      </div>
+
+      <!-- ALUMNOS -->
+      <div class="subseccion" id="alumnos">
+        <h3><span class="sub-icono">🎒</span> 2.3 · Los alumnos</h3>
+
+        <div class="articulo">
+          <div class="art-num">Artículos 9 a 14</div>
+          <ul class="obligaciones">
+            <li>Los alumnos de la escuela <strong>no están obligados a ser socios</strong> del club</li>
+            <li>La edad para formar parte de la escuela es de <strong>4 a 17 años</strong></li>
+            <li>Deben estar siempre <strong>vinculados a un entrenador</strong>, y el acceso al estadio queda determinado por la presencia de este</li>
+            <li>Deben estar en posesión de la <strong>licencia federativa</strong>; de lo contrario no podrán ser miembros de la escuela ni entrenar en el estadio</li>
+            <li>Deben estar <strong>al corriente de las obligaciones de pago</strong></li>
+          </ul>
+
+          <div class="caja-alerta">
+            <div class="caja-alerta-titulo">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              Conducta
+            </div>
+            <p>Los alumnos con comportamiento inadecuado o antideportivo hacia compañeros, atletas o entrenadores podrán ser <strong>expulsados de la escuela</strong>, previa amonestación escrita a sus padres o tutores.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ENTRENADORES -->
+      <div class="subseccion" id="entrenadores">
+        <h3><span class="sub-icono">📋</span> 2.4 · Los entrenadores</h3>
+
+        <div class="articulo">
+          <div class="art-num">Artículo 15</div>
+          <p>Los entrenadores mantienen contacto directo con los atletas y coordinan las competiciones en las que participan. Deben estar en posesión del <strong>título adecuado emitido por la federación correspondiente</strong>.</p>
+
+          <p style="margin-top:1rem;"><strong>Funciones:</strong></p>
+          <ul class="obligaciones">
+            <li>Coordinar el entrenamiento de los atletas y sus fechas de competición, dedicando el tiempo posible al desarrollo de sus cualidades</li>
+            <li>Apoyar a los atletas en competiciones y entrenamientos para que no estén desprotegidos ante problemas técnicos y psicológicos</li>
+            <li>Aportar ideas a la Junta Directiva, por su experiencia y conocimientos, para resolver problemas e incrementar la economía del club</li>
+            <li>Dar una <strong>imagen positiva</strong> del trabajo que realiza el club, al ser uno de sus representantes más visibles</li>
+            <li>Llevar a cabo los acuerdos adquiridos en reuniones con la Junta Directiva</li>
+            <li>Asistir con los atletas a las competiciones siempre que sea posible, o delegar esta función</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- PATROCINADORES -->
+      <div class="subseccion" id="patrocinadores">
+        <h3><span class="sub-icono">🏢</span> 2.5 · Los patrocinadores</h3>
+
+        <div class="articulo">
+          <div class="art-num">Artículo 16</div>
+          <p>Son las empresas que deciden apoyar el sostenimiento del club a cambio de una contraprestación publicitaria. Todos los detalles de los acuerdos se plasmarán <strong>por escrito</strong> y serán ratificados por la Junta Directiva.</p>
+          <p>El club se compromete a mantener presente la imagen de sus patrocinadores en las competiciones y a procurar que ninguna decisión dañe dicha imagen.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CAPÍTULO 3 -->
+    <section class="capitulo" id="cap3">
+      <div class="cap-header">
+        <div class="cap-num">Capítulo 3</div>
+        <h2>Competiciones</h2>
+      </div>
+
+      <div class="articulo">
+        <div class="art-num">Artículos 17 a 21</div>
+        <p>El club agrupa las competiciones en cinco clases: <strong>campo a través, pista cubierta, pista al aire libre, ruta y otras</strong> (triatlón, duatlón, carreras de montaña).</p>
+        <p>Todo atleta que desee acudir a una competición federada deberá informar al club con antelación suficiente para formalizar la inscripción, salvo en federaciones que permitan la inscripción directa. <strong>Sin este trámite el atleta no será inscrito.</strong></p>
+        <p>En competiciones por equipos, el club selecciona e inscribe a los atletas en las pruebas y distancias más adecuadas para los resultados que se pretenden alcanzar. Todo atleta con licencia en vigor está en disposición de representar al club.</p>
+      </div>
+
       <div class="caja-info">
-        <p style="margin:0;">El club tratará los datos de conformidad con el <strong>Reglamento General de Protección de Datos (RGPD)</strong>.</p>
+        <p><strong>Pruebas en ruta consideradas:</strong> campeonatos autonómicos y de España en marcha, media maratón y maratón. Los atletas interesados deberán someterse a lo que el club estime oportuno, especialmente en competición por equipos.</p>
+      </div>
+
+      <div class="articulo">
+        <p><strong>Financiación parcial</strong> de competiciones oficiales —que deben aparecer en el calendario oficial de las federaciones— cuando se dé alguno de estos supuestos:</p>
+        <ul>
+          <li>Que se necesite marca mínima o condición deportiva especial para participar, o que sea requisito para acceder a competiciones nacionales o internacionales</li>
+          <li>Que la calidad de los atletas lo haga aconsejable por la participación del club</li>
+        </ul>
+      </div>
+
+      <!-- VIAJES Y DIETAS -->
+      <div class="subseccion" id="viajes">
+        <h3><span class="sub-icono">🚗</span> 3.1 · Viajes y dietas por desplazamiento</h3>
+
+        <div class="articulo">
+          <div class="art-num">Artículo 22</div>
+          <p>El club correrá con la totalidad o parte de los gastos de campeonatos oficiales según su situación económica. Cada temporada se consigna una partida presupuestaria para ello. Existe <strong>preferencia por los desplazamientos conjuntos</strong>.</p>
+        </div>
+
+        <table class="importes-tabla">
+          <thead>
+            <tr><th>Campeonatos nacionales de veteranos</th><th style="text-align:right;">Ayuda</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Distancia superior a 400 km</td><td>100 €</td></tr>
+            <tr><td>Distancia inferior a 400 km</td><td>50 €</td></tr>
+            <tr><td>Campeonatos internacionales</td><td>Según valoración</td></tr>
+          </tbody>
+        </table>
+
+        <p style="font-size:0.85rem;color:var(--texto-suave);">En campeonatos internacionales de veteranos, el club determinará la ayuda según la calidad y estado de forma del atleta, siempre que exista presupuesto, pero sin obligación.</p>
+
+        <div class="caja-alerta">
+          <div class="caja-alerta-titulo">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            Inscripciones y viajes individuales
+          </div>
+          <p>El club <strong>no paga ningún tipo de inscripción</strong>, salvo las señaladas en el calendario elegido en Asamblea General. Tampoco se autorizan viajes individuales a competiciones por equipos, salvo causas muy justificadas. El club se exime de responsabilidad cuando se viaje en medios propios.</p>
+        </div>
+
+        <div class="articulo">
+          <div class="art-num">Artículo 26 · Justificación de gastos</div>
+          <p>Para recibir gastos de viaje (dieta, alojamiento, kilometraje) es imprescindible acompañar la solicitud con <strong>todos los justificantes originales</strong>, indicando nombre del establecimiento, domicilio, NIF o CIF, número de factura e importe más IVA.</p>
+        </div>
+
+        <div class="datos-club">
+          <div class="datos-club-label">Emitir las facturas a nombre de</div>
+          <div class="datos-club-linea">
+            <strong>Club Atletismo Apolana</strong><br>
+            C/ Hondón de las Nieves, 4 (Estadio)<br>
+            03005 Alicante<br>
+            CIF: G-03845500
+          </div>
+        </div>
+      </div>
+
+      <!-- INSCRIPCIONES -->
+      <div class="subseccion" id="inscripciones">
+        <h3><span class="sub-icono">📝</span> 3.2 · Inscripciones y resultados</h3>
+
+        <div class="plazos-grid">
+          <div class="plazo-card">
+            <div class="plazo-num">6 días</div>
+            <div class="plazo-label">Antelación mínima para comunicar la inscripción en competiciones oficiales individuales</div>
+          </div>
+          <div class="plazo-card">
+            <div class="plazo-num">Obligatorio</div>
+            <div class="plazo-label">Indicar el nombre del club al inscribirse por cuenta propia</div>
+          </div>
+        </div>
+
+        <div class="articulo">
+          <p>En competiciones oficiales individuales, el atleta o su entrenador deben comunicar la inscripción con <strong>6 días de antelación</strong> a la fecha de cierre y, si procede, haber realizado el pago. Fuera de esta norma el atleta no será inscrito.</p>
+          <p>Cuando el atleta formalice la inscripción por sí mismo, deberá <strong>indicar claramente el nombre del club</strong> para la temporada presente. De no hacerlo, el club puede sancionarle por ese motivo.</p>
+          <p>El club podrá inscribir a un atleta en un Campeonato de España <strong>sin marca mínima</strong> a petición suya o de su entrenador, pero en caso de ser admitido los gastos correrán íntegramente por su cuenta. Solo en casos concretos el club podría estudiar una ayuda a posteriori según el resultado.</p>
+        </div>
       </div>
     </section>
 
-    <!-- INDUMENTARIA -->
-    <section class="seccion" id="indumentaria">
-      <div class="seccion-num">03</div>
-      <h2>Indumentaria oficial</h2>
-      <p>Los socios-atletas están <strong>obligados a vestir la indumentaria oficial del club</strong> en todas las competiciones a las que asistan, incluidas las carreras populares y, muy especialmente, en las ceremonias de entrega de premios.</p>
-      <p>Además, deberán dejar perfectamente visible el nombre del club, los patrocinios y la ciudad al colocar el dorsal, salvo imposibilidad manifiesta o autorización expresa para el evento en cuestión.</p>
+    <!-- CAPÍTULO 4 -->
+    <section class="capitulo" id="cap4">
+      <div class="cap-header">
+        <div class="cap-num">Capítulo 4</div>
+        <h2>Aspecto económico</h2>
+      </div>
+
+      <div class="articulo">
+        <div class="art-num">Artículo 30</div>
+        <p>Los presupuestos del club consignan partidas para la <strong>compensación económica de los entrenadores oficiales</strong>, gastos de secretaría —que pueden estar externalizados— y gastos de asesoría laboral y fiscal.</p>
+        <p>Los entrenadores adscritos recibirán una cantidad modificable según la situación económica del club y el número de atletas a entrenar. Cada remuneración se estudia por la Junta Directiva de acuerdo a su relación con el club.</p>
+      </div>
+
+      <div class="articulo">
+        <div class="art-num">Artículos 31 y 32</div>
+        <p>Todos los componentes del club —socios, atletas, alumnos y entrenadores— están obligados a <strong>colaborar en las actividades de recaudación de fondos</strong> y a abonar en plazo y forma las cuotas sociales y de servicios, salvo quienes queden exentos por decisión de la Junta Directiva.</p>
+      </div>
+
       <div class="caja-alerta">
         <div class="caja-alerta-titulo">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-          Incumplimiento
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+          Renovación fuera de plazo
         </div>
-        <p>No vestir la ropa del club en competición o en ceremonias de premiación está tipificado como <strong>falta grave</strong>.</p>
+        <p>Las renovaciones de cuota realizadas fuera del plazo estipulado —<strong>4 años</strong>— obligarán a pagar la cuota de alta como si se tratara de un socio nuevo.</p>
       </div>
     </section>
 
-    <!-- DESPLAZAMIENTOS -->
-    <section class="seccion" id="desplazamientos">
-      <div class="seccion-num">04</div>
-      <h2>Ayudas por desplazamiento a eventos federados</h2>
+    <!-- CAPÍTULO 5 -->
+    <section class="capitulo" id="cap5">
+      <div class="cap-header">
+        <div class="cap-num">Capítulo 5</div>
+        <h2>Equipación deportiva</h2>
+      </div>
 
-      <h3>Campeonatos de España individuales</h3>
-      <p>El club correrá con los gastos o concederá ayuda según dictamine la Junta Directiva, <strong>siempre previa consecución de la marca mínima exigida</strong>. El club no autorizará la inscripción de atletas que no demuestren un nivel o estado de forma mínimo para competir con garantías.</p>
-      <p>En pruebas donde no se exija marca mínima, o en campeonatos de ruta, será la Dirección Técnica quien valore la participación y la posibilidad de ayuda.</p>
-
-      <h3>Campeonatos por equipos</h3>
-      <p>En campeonatos de cross, pista, ruta o montaña por equipos —nacionales, autonómicos o provinciales— se priorizarán los <strong>desplazamientos conjuntos</strong> en la medida de lo posible.</p>
-      <p>Los desplazamientos particulares deberán autorizarse previamente y solicitarse con un mínimo de <strong>10 días de antelación</strong>, siguiendo las indicaciones del club para abaratar costes y reunir el mayor número de atletas en un solo desplazamiento.</p>
-
-      <h3>Resto de desplazamientos</h3>
-      <p>Serán <strong>por cuenta de los interesados</strong>, salvo casos puntuales en los que se podrá solicitar una ayuda que el club valorará a posteriori según la distancia, la importancia de la competición, los resultados logrados y el número de atletas desplazados. La ayuda concedida podrá ser total o parcial.</p>
+      <div class="articulo">
+        <div class="art-num">Artículos 33 y 34</div>
+        <p>El club dispone de una equipación oficial que los atletas <strong>deben llevar en todas las competiciones</strong> en las que lo representen, luciendo la propaganda correspondiente y siendo responsables de su buen uso.</p>
+        <p>Los atletas que demuestren <strong>participación masiva</strong> en pruebas oficiales o populares serán recompensados con una equipación extra —camiseta y/o pantalón.</p>
+      </div>
 
       <div class="caja-info">
-        <p style="margin:0;"><strong>Campeonatos nacionales de veteranos:</strong> los atletas podrán solicitar ayuda para alojamiento y manutención, valorada por la Dirección Técnica tras presentar la documentación de gastos.</p>
-      </div>
-
-      <div class="caja-alerta">
-        <div class="caja-alerta-titulo">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-          Inscripciones
-        </div>
-        <p>El club <strong>no abonará ningún tipo de inscripción</strong> para ninguna prueba, salvo las señaladas por calendario o los Campeonatos de España con marca mínima.</p>
+        <p>El club <strong>no se hace responsable</strong> de la pérdida, sustracción o deterioro de la equipación. En caso de necesitar una nueva, el atleta deberá abonar su importe íntegro o parcial. Si es por deterioro, presentando la prenda dañada se le entregará otra sin coste.</p>
       </div>
     </section>
 
-    <!-- PROCEDIMIENTO -->
-    <section class="seccion" id="procedimiento">
-      <div class="seccion-num">05</div>
-      <h2>Cómo solicitar la ayuda</h2>
-      <p>El procedimiento para el reembolso de gastos por desplazamiento sigue siempre estos tres pasos:</p>
-
-      <div class="pasos">
-        <div class="paso">
-          <div class="paso-num">1</div>
-          <div class="paso-texto"><strong>Solicitar autorización por escrito</strong> a través del correo del club o por correo postal, con al menos <strong>5 días de antelación</strong>.</div>
-        </div>
-        <div class="paso">
-          <div class="paso-num">2</div>
-          <div class="paso-texto">Remitir el <strong>Impreso de Justificación de Gastos</strong> en original, debidamente cumplimentado y con todos los justificantes, dentro de los <strong>10 días siguientes</strong> al desplazamiento.</div>
-        </div>
-        <div class="paso">
-          <div class="paso-num">3</div>
-          <div class="paso-texto">Tras verificar la documentación, el club analizará la concesión y, en caso afirmativo, autorizará el pago en cuanto sea posible.</div>
-        </div>
+    <!-- CAPÍTULO 6 -->
+    <section class="capitulo" id="cap6">
+      <div class="cap-header">
+        <div class="cap-num">Capítulo 6</div>
+        <h2>Régimen disciplinario</h2>
       </div>
 
-      <div class="caja-alerta">
-        <div class="caja-alerta-titulo">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-          Plazo estricto
-        </div>
-        <p>De no cumplirse el trámite en el plazo fijado, <strong>no se abonarán los desplazamientos</strong>. Si no se remiten los originales de los justificantes, la documentación no será tenida en cuenta.</p>
+      <div class="articulo">
+        <div class="art-num">Artículo 35 · Comisión Disciplinaria</div>
+        <p>Se establece una <strong>Comisión Disciplinaria formada por la Junta Directiva</strong> con potestad para sancionar a los distintos estamentos por incumplimiento de las normas. Cualquier miembro del club puede proponer una sanción. El procedimiento comienza con el aviso al interesado y, una vez escuchadas todas las partes, la Comisión decide.</p>
       </div>
-
-      <h3>Datos para las facturas</h3>
-      <p>Los justificantes deben incluir los datos del establecimiento (nombre, domicilio, DNI o NIF, número de factura, fecha e importe más IVA) y emitirse, a ser posible, a nombre del club:</p>
-
-      <div class="datos-club">
-        <div class="datos-club-label">Datos fiscales</div>
-        <div class="datos-club-linea">
-          <strong>Club Atletismo Apolana</strong><br>
-          C/ Hondón de las Nieves, nº 4 (Estadio)<br>
-          03005 Alicante<br>
-          CIF: G-03845500
-        </div>
-      </div>
-    </section>
-
-    <!-- DIETAS -->
-    <section class="seccion" id="dietas">
-      <div class="seccion-num">06</div>
-      <h2>Dietas e importes</h2>
-      <p>Cantidades establecidas para manutención y desplazamiento en campeonatos de pruebas federadas. Los importes de manutención solo son válidos si se presenta justificación mediante ticket o factura.</p>
-
-      <table class="importes-tabla">
-        <thead>
-          <tr><th>Concepto</th><th style="text-align:right;">Importe</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>Desayuno</td><td>5 €</td></tr>
-          <tr><td>Comida o cena</td><td>15 €</td></tr>
-          <tr><td>Desplazamiento en vehículo particular</td><td>0,19 €/km</td></tr>
-        </tbody>
-      </table>
-
-      <p style="font-size:0.85rem;">No se abonan peajes.</p>
-    </section>
-
-    <!-- SANCIONES -->
-    <section class="seccion" id="sanciones">
-      <div class="seccion-num">07</div>
-      <h2>Régimen sancionador</h2>
-      <p>Todos los socios-atletas se someten al régimen disciplinario establecido en la Normativa de Régimen Interno. Cualquier vulneración acarreará la sanción correspondiente.</p>
-      <p>Además, en las competiciones por equipos se aplica una <strong>Normativa de Conducta específica</strong>, cuya copia se proporciona a los atletas en los días previos si la solicitan.</p>
 
       <div class="faltas-grid">
 
-        <!-- LEVES -->
         <div class="falta-bloque falta-leve">
           <div class="falta-head">
             <span class="falta-titulo">Faltas leves</span>
@@ -347,46 +624,48 @@
           <div class="falta-cuerpo">
             <div class="falta-sub">Conductas</div>
             <ul class="falta-lista">
-              <li>No inscribirse en competición con el nombre del club</li>
-              <li>Asistir a competiciones oficiales sin DNI o licencia federativa</li>
+              <li>Faltas de puntualidad injustificadas o reiteradas en las salidas a competiciones oficiales</li>
+              <li>No inscribirse en competiciones con el nombre del club</li>
+              <li>Asistir a pruebas oficiales sin la debida documentación</li>
             </ul>
             <div class="sancion-box">
               <div class="falta-sub">Sanciones</div>
               <ul class="sancion-lista">
-                <li>Apercibimiento (llamada al orden)</li>
-                <li>No financiación de desplazamientos, en caso de autorización</li>
+                <li>Apercibimiento verbal o por escrito</li>
+                <li>No financiación de desplazamientos, total o parcial</li>
+                <li>No inscripción a determinados campeonatos oficiales</li>
               </ul>
             </div>
           </div>
         </div>
 
-        <!-- GRAVES -->
         <div class="falta-bloque falta-grave">
           <div class="falta-head">
             <span class="falta-titulo">Faltas graves</span>
-            <span class="falta-badge">Restricción</span>
+            <span class="falta-badge">Expulsión temporal</span>
           </div>
           <div class="falta-cuerpo">
             <div class="falta-sub">Conductas</div>
             <ul class="falta-lista">
-              <li>Comportamiento inadecuado en desplazamientos</li>
-              <li>Conducta indecorosa durante una competición</li>
-              <li>No acatar las normas de las instalaciones de entrenamiento</li>
-              <li>Dejar que el club pague una inscripción y no acudir sin motivo ni aviso previo</li>
-              <li>No vestir la ropa del club en competición o ceremonias de premiación</li>
+              <li>Comportamiento inadecuado en expediciones con pernocta, desobedeciendo las normas del responsable. La minoría de edad del atleta es factor agravante</li>
+              <li>No vestir la indumentaria oficial del club sin permiso</li>
+              <li>No vestir la indumentaria oficial en las ceremonias de entrega de premios</li>
+              <li>No asistir a la ceremonia de entrega de premios</li>
+              <li>No acudir a una competición una vez inscrito, sin causa justificada y demostrable</li>
+              <li>Conducta indecorosa en el día a día o en competición</li>
+              <li>Falta de respeto hacia otros atletas u otras personas</li>
             </ul>
             <div class="sancion-box">
               <div class="falta-sub">Sanciones</div>
               <ul class="sancion-lista">
-                <li>No autorización de inscripción en campeonatos oficiales</li>
-                <li>No autorización para viajar con el club a competiciones</li>
-                <li>Reducción de los premios obtenidos en el porcentaje que decida la Junta Directiva</li>
+                <li>No inscripción a determinados campeonatos oficiales</li>
+                <li>Expulsión temporal del club</li>
+                <li>Prohibición transitoria de entrada al estadio o recintos concertados</li>
               </ul>
             </div>
           </div>
         </div>
 
-        <!-- MUY GRAVES -->
         <div class="falta-bloque falta-muygrave">
           <div class="falta-head">
             <span class="falta-titulo">Faltas muy graves</span>
@@ -395,15 +674,17 @@
           <div class="falta-cuerpo">
             <div class="falta-sub">Conductas</div>
             <ul class="falta-lista">
-              <li>No acudir a un llamamiento para competiciones por equipos sin causa justificada</li>
-              <li>Conducta antideportiva</li>
-              <li>Desconsideración hacia cualquier miembro del club o personal de las instalaciones</li>
+              <li>Reiteración de faltas durante una temporada: 1 leve + 1 grave, o 2 graves</li>
+              <li>Cualquier conducta agresiva o violenta</li>
               <li>Apropiación indebida de objetos ajenos</li>
+              <li>Participar bajo el nombre de otro club sin autorización</li>
+              <li>Falta de respeto a los miembros de la Junta Directiva</li>
             </ul>
             <div class="sancion-box">
               <div class="falta-sub">Sanciones</div>
               <ul class="sancion-lista">
-                <li>Pérdida del derecho a recibir cualquier tipo de premio</li>
+                <li>Pérdida de la condición de socio</li>
+                <li>Baja transitoria del club</li>
                 <li>Baja definitiva del club</li>
               </ul>
             </div>
@@ -411,12 +692,60 @@
         </div>
 
       </div>
+
+      <div class="caja-info">
+        <p><strong>Artículo 38.</strong> El club, a través de su Junta Directiva, se reserva el derecho de no incorporar a ningún atleta, socio o entrenador por motivos de conducta antideportiva o cualquier otra razón que pudiera dañar la imagen del club.</p>
+      </div>
+
+      <div class="caja-alerta">
+        <div class="caja-alerta-titulo">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          Premios de equipo
+        </div>
+        <p>Quien no asista a la ceremonia de entrega de premios <strong>pierde toda posibilidad de participar en el premio</strong> si este es de carácter de equipo y económico.</p>
+      </div>
     </section>
 
-    <!-- CTA -->
-    <div class="cta-normativa">
-      <h3>¿Tienes alguna duda sobre el reglamento?</h3>
-      <p>Escríbenos y te lo aclaramos sin problema</p>
+    <!-- CAPÍTULO 7 -->
+    <section class="capitulo" id="cap7">
+      <div class="cap-header">
+        <div class="cap-num">Capítulo 7</div>
+        <h2>Escuela de atletismo</h2>
+      </div>
+
+      <div class="articulo">
+        <div class="art-num">Artículo 39</div>
+        <p>Las escuelas constituyen la <strong>base fundamental de la formación</strong> de los futuros atletas del club. Su misión es introducir a los deportistas más jóvenes en las distintas especialidades del atletismo, triatlón o carreras de montaña.</p>
+
+        <ul class="obligaciones">
+          <li>Edad de los alumnos: <strong>de 4 a 17 años</strong></li>
+          <li>Deben haber abonado todas las cantidades en concepto de <strong>formación mensual y fichas federativas</strong> o de rendimiento</li>
+          <li>Por ser menores, deben estar siempre con un <strong>entrenador responsable</strong> dentro del horario de entrenamiento</li>
+          <li>A ser posible, asistir a los entrenamientos con la <strong>ropa del club</strong> para poder ser identificados con claridad</li>
+        </ul>
+      </div>
+
+      <div class="articulo">
+        <div class="art-num">Artículo 40</div>
+        <p>El club pondrá a disposición de la escuela un <strong>monitor encargado de la gestión deportiva</strong>, que percibirá una cantidad a convenir por el trabajo realizado. Se encargará de programar las actividades de la escuela y de responsabilizarse de los deportistas durante las competiciones a las que asistan.</p>
+      </div>
+    </section>
+
+    <!-- CAPÍTULO 8 -->
+    <section class="capitulo" id="cap8">
+      <div class="cap-header">
+        <div class="cap-num">Capítulo 8</div>
+        <h2>Clubes asociados</h2>
+      </div>
+
+      <div class="articulo">
+        <p>El club podrá realizar <strong>acuerdos de asociación</strong> con otros clubes, ratificados por su Junta Directiva, cuando lo considere necesario para conseguir sus objetivos deportivos.</p>
+        <p>Los acuerdos contendrán las obligaciones de cada parte y deberán formalizarse en el plazo estipulado por las federaciones correspondientes.</p>
+      </div>
+    </section>
+
+    <div class="cierre">
+      <p>Esta Normativa de Régimen Interno fue aprobada en reunión de la Junta Directiva y ratificada en Asamblea General.</p>
       <div class="cta-btns">
         <a href="contacto.html" class="btn-p">Contactar con el club</a>
         <a href="https://wa.me/34625473830" target="_blank" rel="noopener" class="btn-s">WhatsApp administración</a>
@@ -442,21 +771,18 @@
 </footer>
 
 <script>
-// Resaltar sección activa en el índice al hacer scroll
 (function() {
-  const secciones = document.querySelectorAll('.seccion');
-  const enlaces = document.querySelectorAll('#indice a');
-  if (!secciones.length) return;
-
+  const caps = document.querySelectorAll('.capitulo');
+  const enlaces = document.querySelectorAll('#indice > li > a');
+  if (!caps.length) return;
   const obs = new IntersectionObserver(entradas => {
     entradas.forEach(e => {
       if (e.isIntersecting) {
         enlaces.forEach(a => a.classList.toggle('activo', a.getAttribute('href') === '#' + e.target.id));
       }
     });
-  }, { rootMargin: '-80px 0px -60% 0px' });
-
-  secciones.forEach(s => obs.observe(s));
+  }, { rootMargin: '-80px 0px -65% 0px' });
+  caps.forEach(c => obs.observe(c));
 })();
 </script>
 
