@@ -347,6 +347,18 @@
             <select id="filtro-grupo" onchange="cargarSemana()" style="padding:6px 10px;border:1.5px solid var(--borde);border-radius:8px;font-size:0.82rem;font-family:inherit;">
               <option value="">Todos los grupos</option>
             </select>
+            <button class="btn btn-g btn-sm" onclick="descargarPlantillaCSV()" title="Descargar plantilla CSV">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Plantilla CSV
+            </button>
+            <button class="btn btn-g btn-sm" onclick="abrirImportarCSV()" title="Importar CSV">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              Importar CSV
+            </button>
+            <button class="btn btn-s btn-sm" onclick="abrirPlanificarSemana()">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              Planificar semana
+            </button>
             <button class="btn btn-p" onclick="nuevaSesion()">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
               Nueva sesión
@@ -782,6 +794,62 @@
     <div class="modal-footer">
       <button class="btn btn-g" onclick="cerrarModal('modal-override')">Cerrar</button>
       <button class="btn btn-p" onclick="guardarOverrides()">Aplicar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL PLANIFICAR SEMANA -->
+<div class="modal-overlay" id="modal-planificar-semana">
+  <div class="modal" style="max-width:900px;">
+    <div class="modal-header">
+      <h3 id="modal-semana-titulo">Planificar semana</h3>
+      <button class="modal-close" onclick="cerrarModal('modal-planificar-semana')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem;">
+        <div class="mf">
+          <label>Grupo</label>
+          <select id="ps-grupo"></select>
+        </div>
+        <div class="mf">
+          <label>Objetivo de la semana</label>
+          <input type="text" id="ps-objetivo" placeholder="Ej: Consolidar ritmo de 400m, tápering para el sábado">
+        </div>
+      </div>
+      <div id="ps-dias-grid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:0.5rem;"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-g" onclick="cerrarModal('modal-planificar-semana')">Cancelar</button>
+      <button class="btn btn-s" onclick="guardarSemanaCompleta(false)">Guardar borradores</button>
+      <button class="btn btn-p" onclick="guardarSemanaCompleta(true)">Publicar todos</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL IMPORTAR CSV -->
+<div class="modal-overlay" id="modal-importar-csv">
+  <div class="modal" style="max-width:600px;">
+    <div class="modal-header">
+      <h3>Importar sesiones desde CSV</h3>
+      <button class="modal-close" onclick="cerrarModal('modal-importar-csv')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="alerta alerta-info" style="margin-bottom:1rem;">
+        El CSV debe seguir el formato de la plantilla descargable. Cada fila es un ejercicio. Los ejercicios del mismo día y bloque se agrupan automáticamente.
+      </div>
+      <div class="mf">
+        <label>Grupo destinatario</label>
+        <select id="csv-grupo"></select>
+      </div>
+      <div class="mf">
+        <label>Archivo CSV</label>
+        <input type="file" id="csv-file" accept=".csv" onchange="previsualizarCSV(this)" style="padding:8px;border:1.5px solid var(--borde);border-radius:8px;width:100%;">
+      </div>
+      <div id="csv-preview" style="margin-top:1rem;"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-g" onclick="cerrarModal('modal-importar-csv')">Cancelar</button>
+      <button class="btn btn-p" id="csv-importar-btn" onclick="importarCSV()" style="display:none;">Importar sesiones</button>
     </div>
   </div>
 </div>
@@ -1746,8 +1814,211 @@ async function cargarPlantillas() {
 function abrirModalPlantilla() { alert('Editor de plantillas próximamente'); }
 
 // ═══════════════════════════════════════════
-// DATALIST EJERCICIOS
+// PLANIFICAR SEMANA COMPLETA
 // ═══════════════════════════════════════════
+const DIAS_SEMANA = ['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
+const TIPOS_COLOR = {pista:'var(--naranja)',gym:'#7c3aed',continuo:'var(--success)',activacion:'#0891b2',descanso:'#94a3b8',competicion:'#dc2626'};
+
+function abrirPlanificarSemana() {
+  const lunes = getLunesDeSemana(semanaOffset);
+  document.getElementById('modal-semana-titulo').textContent = 
+    'Planificar semana ' + getNumeroSemana(lunes) + ' · ' + lunes.toLocaleDateString('es-ES',{day:'numeric',month:'short'});
+  
+  // Poblar select de grupo
+  const sel = document.getElementById('ps-grupo');
+  sel.innerHTML = '<option value="">Sin grupo específico</option>';
+  gruposData.forEach(g => { const o = document.createElement('option'); o.value = g.id; o.textContent = g.nombre; sel.appendChild(o); });
+
+  // Generar grid de 7 días
+  const grid = document.getElementById('ps-dias-grid');
+  grid.innerHTML = DIAS_SEMANA.map((dia, i) => {
+    const fecha = new Date(lunes); fecha.setDate(lunes.getDate() + i);
+    const fechaStr = fecha.toISOString().split('T')[0];
+    const sesionExistente = sesionesData.find(s => s.fecha === fechaStr);
+    return `<div style="background:var(--gris);border-radius:10px;padding:0.75rem;border:1px solid var(--borde);">
+      <div style="font-size:0.68rem;font-weight:700;color:var(--suave);text-transform:uppercase;margin-bottom:2px;">${dia}</div>
+      <div style="font-size:0.82rem;font-weight:700;margin-bottom:0.5rem;">${fecha.getDate()} ${fecha.toLocaleDateString('es-ES',{month:'short'})}</div>
+      <input type="hidden" class="ps-fecha" value="${fechaStr}">
+      <div class="mf" style="margin-bottom:0.4rem;">
+        <select class="ps-tipo" style="width:100%;padding:5px 6px;border:1.5px solid var(--borde);border-radius:6px;font-size:0.75rem;font-family:inherit;" onchange="actualizarColorDia(this)">
+          <option value="descanso">— Descanso —</option>
+          <option value="pista" ${sesionExistente?.tipo==='pista'?'selected':''}>Pista</option>
+          <option value="gym" ${sesionExistente?.tipo==='gym'?'selected':''}>Gimnasio</option>
+          <option value="continuo" ${sesionExistente?.tipo==='continuo'?'selected':''}>Continuo</option>
+          <option value="activacion" ${sesionExistente?.tipo==='activacion'?'selected':''}>Activación</option>
+          <option value="competicion" ${sesionExistente?.tipo==='competicion'?'selected':''}>Competición</option>
+        </select>
+      </div>
+      <div class="mf" style="margin-bottom:0.4rem;">
+        <select class="ps-rol" style="width:100%;padding:5px 6px;border:1.5px solid var(--borde);border-radius:6px;font-size:0.75rem;font-family:inherit;">
+          <option value="calidad_fuerte">Calidad fuerte</option>
+          <option value="secundaria">Secundaria</option>
+          <option value="activacion">Activación</option>
+          <option value="ultimo_toque_48h">Último toque 48h</option>
+          <option value="descarga">Descarga</option>
+          <option value="competicion">Competición</option>
+        </select>
+      </div>
+      <input class="ps-titulo" type="text" placeholder="Título..." style="width:100%;padding:5px 6px;border:1.5px solid var(--borde);border-radius:6px;font-size:0.75rem;font-family:inherit;" value="${sesionExistente?.titulo||''}">
+      ${sesionExistente ? '<div style="font-size:0.65rem;color:var(--suave);margin-top:4px;">⚠️ Ya existe sesión</div>' : ''}
+    </div>`;
+  }).join('');
+
+  document.getElementById('modal-planificar-semana').classList.add('v');
+}
+
+function actualizarColorDia(sel) {
+  const card = sel.closest('div[style]');
+  const tipo = sel.value;
+  card.style.borderColor = tipo === 'descanso' ? 'var(--borde)' : TIPOS_COLOR[tipo] || 'var(--borde)';
+}
+
+async function guardarSemanaCompleta(publicar) {
+  const grupoId = document.getElementById('ps-grupo').value || null;
+  const cards = document.querySelectorAll('#ps-dias-grid > div');
+  const inserts = [];
+
+  cards.forEach(card => {
+    const tipo = card.querySelector('.ps-tipo').value;
+    if (tipo === 'descanso') return;
+    const fecha = card.querySelector('.ps-fecha').value;
+    const titulo = card.querySelector('.ps-titulo').value.trim();
+    const rol = card.querySelector('.ps-rol').value;
+    inserts.push({ fecha, tipo, rol, titulo: titulo || tipo.charAt(0).toUpperCase()+tipo.slice(1), grupo_id: grupoId, bloques: [], publicada: publicar, creado_por: perfilActual.id });
+  });
+
+  if (!inserts.length) { alert('No hay sesiones que guardar (todos los días están en descanso)'); return; }
+
+  const { error } = await db.from('sesiones').insert(inserts);
+  if (error) { alert('Error: ' + error.message); return; }
+
+  cerrarModal('modal-planificar-semana');
+  await cargarSemana();
+  alert(`✅ ${inserts.length} sesiones creadas. Ahora puedes editarlas para añadir los ejercicios.`);
+}
+
+// ═══════════════════════════════════════════
+// CSV — PLANTILLA Y IMPORTACIÓN
+// ═══════════════════════════════════════════
+function descargarPlantillaCSV() {
+  const lunes = getLunesDeSemana(semanaOffset);
+  const ejemplos = [
+    ['fecha','dia','tipo','rol','bloque','ejercicio','series','recuperacion','calzado','observaciones'],
+    [formatFecha(lunes,0),'lunes','pista','calidad_fuerte','Calentamiento','Trote suave','15min','','Z',''],
+    [formatFecha(lunes,0),'lunes','pista','calidad_fuerte','Calentamiento','Técnica de carrera','4x60m','1\'','Z','skipping, talones, zancadas'],
+    [formatFecha(lunes,0),'lunes','pista','calidad_fuerte','Parte principal','Series a ritmo','3x400m','8\'','C','Ritmo 56\'\'. Progresivo'],
+    [formatFecha(lunes,0),'lunes','pista','calidad_fuerte','Parte principal','Progresivos','3x80m','3\'','C','Aceleración suave'],
+    [formatFecha(lunes,0),'lunes','pista','calidad_fuerte','Vuelta a la calma','Trote suave','10min','','Z',''],
+    [formatFecha(lunes,1),'martes','gym','secundaria','Potenciación neural','Sentadilla completa','4x4','3\'','','80% RM'],
+    [formatFecha(lunes,1),'martes','gym','secundaria','Potenciación neural','Cargada','4x3','3\'','','75% RM'],
+    [formatFecha(lunes,1),'martes','gym','secundaria','Transferencia','Saltos al cajón','4x5','2\'','','Máxima altura'],
+    [formatFecha(lunes,1),'martes','gym','secundaria','Core','Planchas','3x45s','1\'','',''],
+    [formatFecha(lunes,3),'jueves','pista','ultimo_toque_48h','Activación','Strides','4x60m','3\'','C','90% vel máx'],
+    [formatFecha(lunes,3),'jueves','gym','ultimo_toque_48h','Gym mínimo','Media sentadilla','3x5','3\'','','70% RM'],
+    [formatFecha(lunes,4),'viernes','continuo','activacion','Continuo','Trote suave','30min','','Z','FC < 140'],
+    [formatFecha(lunes,5),'sabado','competicion','competicion','Competición','Calentamiento de competición','20min','','C',''],
+  ];
+  
+  const csv = ejemplos.map(row => row.map(cell => `"${cell}"`).join(',')).join('\n');
+  const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'plantilla_apolana_semana.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function formatFecha(lunes, offset) {
+  const d = new Date(lunes);
+  d.setDate(lunes.getDate() + offset);
+  return d.toISOString().split('T')[0];
+}
+
+function abrirImportarCSV() {
+  const sel = document.getElementById('csv-grupo');
+  sel.innerHTML = '<option value="">Sin grupo específico</option>';
+  gruposData.forEach(g => { const o = document.createElement('option'); o.value = g.id; o.textContent = g.nombre; sel.appendChild(o); });
+  document.getElementById('csv-file').value = '';
+  document.getElementById('csv-preview').innerHTML = '';
+  document.getElementById('csv-importar-btn').style.display = 'none';
+  document.getElementById('modal-importar-csv').classList.add('v');
+}
+
+let csvSesionesParseadas = [];
+
+function previsualizarCSV(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const text = e.target.result.replace(/^\uFEFF/, ''); // quitar BOM
+    const lines = text.split('\n').filter(l => l.trim());
+    const headers = lines[0].split(',').map(h => h.replace(/"/g,'').trim().toLowerCase());
+    const rows = lines.slice(1).map(line => {
+      const vals = line.split(',').map(v => v.replace(/"/g,'').trim());
+      const obj = {};
+      headers.forEach((h,i) => obj[h] = vals[i] || '');
+      return obj;
+    }).filter(r => r.fecha);
+
+    // Agrupar por fecha y bloque
+    const sesionesMap = {};
+    rows.forEach(r => {
+      if (!sesionesMap[r.fecha]) {
+        sesionesMap[r.fecha] = { fecha: r.fecha, dia: r.dia, tipo: r.tipo||'pista', rol: r.rol||'secundaria', bloques: {} };
+      }
+      const nombreBloque = r.bloque || 'Principal';
+      if (!sesionesMap[r.fecha].bloques[nombreBloque]) sesionesMap[r.fecha].bloques[nombreBloque] = [];
+      if (r.ejercicio) {
+        sesionesMap[r.fecha].bloques[nombreBloque].push({ nombre: r.ejercicio, series: r.series, recuperacion: r.recuperacion, calzado: r.calzado, observaciones: r.observaciones });
+      }
+    });
+
+    csvSesionesParseadas = Object.values(sesionesMap).map(s => ({
+      ...s,
+      bloques: Object.entries(s.bloques).map(([etiqueta, filas]) => ({ etiqueta, filas }))
+    }));
+
+    // Preview
+    document.getElementById('csv-preview').innerHTML = `
+      <div style="font-size:0.82rem;font-weight:700;margin-bottom:0.5rem;">Vista previa — ${csvSesionesParseadas.length} sesiones encontradas:</div>
+      ${csvSesionesParseadas.map(s => `
+        <div style="display:flex;align-items:center;gap:0.75rem;padding:0.4rem 0;border-bottom:1px solid var(--borde);">
+          <span style="font-size:0.75rem;color:var(--suave);min-width:80px;">${s.fecha}</span>
+          <span class="badge badge-naranja" style="font-size:0.65rem;">${s.tipo}</span>
+          <span style="font-size:0.82rem;">${s.dia||''}</span>
+          <span style="font-size:0.75rem;color:var(--suave);">${s.bloques.length} bloques · ${s.bloques.reduce((a,b)=>a+b.filas.length,0)} ejercicios</span>
+        </div>`).join('')}
+    `;
+    document.getElementById('csv-importar-btn').style.display = 'inline-flex';
+  };
+  reader.readAsText(file, 'UTF-8');
+}
+
+async function importarCSV() {
+  if (!csvSesionesParseadas.length) return;
+  const grupoId = document.getElementById('csv-grupo').value || null;
+  const inserts = csvSesionesParseadas.map(s => ({
+    fecha: s.fecha,
+    tipo: s.tipo,
+    rol: s.rol,
+    titulo: s.dia ? s.dia.charAt(0).toUpperCase()+s.dia.slice(1)+' — '+s.tipo : s.tipo,
+    bloques: s.bloques,
+    grupo_id: grupoId,
+    publicada: false,
+    creado_por: perfilActual.id,
+  }));
+
+  const { error } = await db.from('sesiones').insert(inserts);
+  if (error) { alert('Error importando: ' + error.message); return; }
+
+  cerrarModal('modal-importar-csv');
+  await cargarSemana();
+  alert(`✅ ${inserts.length} sesiones importadas como borrador. Puedes editarlas antes de publicar.`);
+}
+
+
 function crearDatalistEjercicios() {
   let dl = document.getElementById('ejercicios-list');
   if (!dl) { dl = document.createElement('datalist'); dl.id = 'ejercicios-list'; document.body.appendChild(dl); }
