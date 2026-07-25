@@ -1456,13 +1456,26 @@ async function guardarSesion(publicar) {
     creado_por: perfilActual.id,
   };
   if (!datos.fecha) { alert('La fecha es obligatoria'); return; }
-  if (sesionEditando) {
-    await db.from('sesiones').update(datos).eq('id', sesionEditando.id);
-  } else {
-    await db.from('sesiones').insert([datos]);
+  try {
+    let error;
+    if (sesionEditando) {
+      const res = await db.from('sesiones').update(datos).eq('id', sesionEditando.id);
+      error = res.error;
+    } else {
+      const res = await db.from('sesiones').insert([datos]);
+      error = res.error;
+    }
+    if (error) {
+      console.error('Error guardando sesión:', error);
+      alert('Error al guardar: ' + error.message);
+      return;
+    }
+    cerrarModal('modal-sesion');
+    await cargarSemana();
+  } catch(e) {
+    console.error('Error inesperado:', e);
+    alert('Error inesperado: ' + e.message);
   }
-  cerrarModal('modal-sesion');
-  cargarSemana();
 }
 
 // ═══════════════════════════════════════════
