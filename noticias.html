@@ -161,48 +161,57 @@ const NOTICIAS_ESTATICAS = [
 
 async function cargarNoticias() {
   const contenedor = document.getElementById('noticias-contenido');
-  const noticias = NOTICIAS_ESTATICAS;
 
-  if (!noticias.length) {
+  // Cargar desde Supabase
+  const { data: noticias } = await db.from('noticias')
+    .select('*')
+    .eq('publicada', true)
+    .order('fecha_publicacion', { ascending: false });
+
+  if (!noticias?.length) {
     contenedor.innerHTML = '<div class="empty-state">No hay noticias publicadas</div>';
     return;
   }
 
+  noticiasCache = noticias;
+  const fmt = f => f ? new Date(f).toLocaleDateString('es-ES', {day:'numeric',month:'long',year:'numeric'}) : '';
   const [primera, ...resto] = noticias;
 
   // Noticia destacada
   let featuredHtml = `
-    <div class="noticia-featured">
+    <div class="noticia-featured" onclick="abrirNoticia('${primera.id}')" style="cursor:pointer;">
       <div class="noticia-featured-img" id="featured-img-${primera.id}">
         <div class="noticia-featured-img-ph">
           <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
         </div>
       </div>
       <div class="noticia-featured-body">
-        <div class="noticia-tag">${primera.tag}</div>
+        <div class="noticia-tag">${primera.categoria||'Club'}</div>
         <div class="noticia-titulo">${primera.titulo}</div>
-        <div class="noticia-excerpt">${primera.texto}</div>
+        <div class="noticia-excerpt">${primera.resumen||''}</div>
         <div class="noticia-fecha">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-          ${primera.fecha}
+          ${fmt(primera.fecha_publicacion)}
         </div>
+        <div style="margin-top:1rem;"><span style="color:var(--azul);font-size:0.82rem;font-weight:600;">Leer más →</span></div>
       </div>
     </div>`;
 
   // Grid resto
   let gridHtml = '<div class="noticias-grid">' + resto.map(n => `
-    <div class="noticia-card">
+    <div class="noticia-card" onclick="abrirNoticia('${n.id}')" style="cursor:pointer;">
       <div class="noticia-card-img" id="card-img-${n.id}">
         <div class="noticia-card-img-ph">
           <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
         </div>
       </div>
       <div class="noticia-card-body">
-        <div class="noticia-tag">${n.tag}</div>
+        <div class="noticia-tag">${n.categoria||'Club'}</div>
         <div class="noticia-card-titulo">${n.titulo}</div>
-        <div class="noticia-card-excerpt">${n.texto}</div>
+        <div class="noticia-card-excerpt">${n.resumen||''}</div>
         <div class="noticia-card-footer">
-          <span class="noticia-card-fecha">${n.fecha}</span>
+          <span class="noticia-card-fecha">${fmt(n.fecha_publicacion)}</span>
+          <span style="color:var(--azul);font-size:0.75rem;font-weight:600;">Leer →</span>
         </div>
       </div>
     </div>`).join('') + '</div>';
@@ -211,7 +220,8 @@ async function cargarNoticias() {
 
   // Cargar fotos
   noticias.forEach(n => {
-    const url = IMG + n.foto;
+    if (!n.foto_portada) return;
+    const url = IMG + n.foto_portada;
     const img = new Image();
     img.onload = () => {
       const slot = document.getElementById((n === primera ? 'featured-img-' : 'card-img-') + n.id);
@@ -219,6 +229,42 @@ async function cargarNoticias() {
     };
     img.src = url;
   });
+}
+
+let noticiasCache = [];
+
+function abrirNoticia(id) {
+  const n = noticiasCache.find(x => x.id === id);
+  if (!n) return;
+  const fmt = f => f ? new Date(f).toLocaleDateString('es-ES', {day:'numeric',month:'long',year:'numeric'}) : '';
+
+  // Crear modal si no existe
+  let modal = document.getElementById('modal-noticia');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'modal-noticia';
+    modal.style.cssText = 'display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:200;overflow-y:auto;padding:2rem 1rem;';
+    modal.onclick = e => { if (e.target === modal) modal.style.display = 'none'; };
+    document.body.appendChild(modal);
+  }
+
+  modal.innerHTML = `
+    <div style="background:white;border-radius:16px;max-width:700px;margin:0 auto;overflow:hidden;">
+      ${n.foto_portada ? `<img src="${IMG}${n.foto_portada}" style="width:100%;height:280px;object-fit:cover;">` :
+        `<div style="height:200px;background:linear-gradient(135deg,var(--azul-oscuro),var(--azul));"></div>`}
+      <div style="padding:2rem;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
+          <span style="background:var(--azul-bg);color:var(--azul);font-size:0.72rem;font-weight:700;padding:3px 10px;border-radius:20px;text-transform:uppercase;">${n.categoria||'Club'}</span>
+          <button onclick="document.getElementById('modal-noticia').style.display='none'" style="background:none;border:none;cursor:pointer;color:var(--texto-suave);font-size:1.3rem;line-height:1;">✕</button>
+        </div>
+        <h2 style="font-size:1.4rem;font-weight:800;margin-bottom:0.5rem;line-height:1.3;">${n.titulo}</h2>
+        <div style="font-size:0.78rem;color:var(--texto-suave);margin-bottom:1.5rem;">${fmt(n.fecha_publicacion)}</div>
+        ${n.resumen ? `<p style="font-size:0.95rem;color:var(--texto-suave);margin-bottom:1.25rem;line-height:1.7;font-style:italic;">${n.resumen}</p>` : ''}
+        <div style="font-size:0.92rem;line-height:1.8;color:var(--texto);">${(n.contenido||'').replace(/\n/g,'<br>')}</div>
+      </div>
+    </div>`;
+
+  modal.style.display = 'block';
 }
 
 cargarNoticias();
