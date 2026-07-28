@@ -159,7 +159,7 @@
       background: linear-gradient(180deg, #eaf1f8 0%, #dfeaf4 100%);
       margin-left: calc(-50vw + 50%);
       margin-right: calc(-50vw + 50%);
-      padding: 3rem calc(50vw - 50% + 2rem);
+      padding: 3rem max(2rem, calc(50vw - 520px));
       position: relative;
     }
     .wrap > .sec.banda { border-top: 1px solid #cfe0ee; border-bottom: 1px solid #cfe0ee; }
@@ -192,7 +192,7 @@
     nav { position: sticky; z-index: 500; }
 
     @media (max-width: 768px) {
-      .wrap > .sec.banda { padding: 2.25rem calc(50vw - 50% + 1.25rem); }
+      .wrap > .sec.banda { padding: 2.25rem max(1.25rem, calc(50vw - 520px)); }
     }
 
     /* GRUPOS DE ENTRENAMIENTO */
@@ -222,6 +222,11 @@
     .tarifa-mas { font-size: 0.78rem; color: var(--texto-suave); margin-top: 5px; }
     .tarifa-nota { font-size: 0.76rem; color: var(--texto-suave); margin-top: 0.7rem; padding-top: 0.7rem; border-top: 1px solid var(--gris-borde); }
 
+
+    .gc-precio { padding: 0.85rem 1.3rem; border-top: 1px solid var(--gris-borde); background: var(--azul-bg); display: flex; align-items: baseline; justify-content: space-between; gap: 0.5rem; }
+    .gc-precio-num { font-size: 1.3rem; font-weight: 800; color: var(--azul); line-height: 1; }
+    .gc-precio-num small { font-size: 0.78rem; font-weight: 400; color: var(--texto-suave); }
+    .gc-precio-lbl { font-size: 0.72rem; color: var(--texto-suave); text-align: right; line-height: 1.35; }
     .gc-entrenador { padding: 0.9rem 1.3rem; border-top: 1px solid var(--gris-borde); display: flex; align-items: center; gap: 0.75rem; background: white; }
     .gc-ent-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--azul-bg); border: 2px solid var(--azul); flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; font-weight: 800; color: var(--azul); background-size: cover; background-position: center; }
     .gc-ent-info { min-width: 0; }
@@ -313,6 +318,10 @@
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
           5 entrenamientos por semana
         </div>
+        <div class="gc-precio">
+          <div class="gc-precio-num">55 €<small>/mes</small></div>
+          <div class="gc-precio-lbl">socios · pago trimestral</div>
+        </div>
         <div class="gc-entrenador">
           <div class="gc-ent-avatar" id="foto-andres">AC</div>
           <div class="gc-ent-info">
@@ -339,6 +348,10 @@
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
           3 entrenamientos por semana
         </div>
+        <div class="gc-precio">
+          <div class="gc-precio-num">40 €<small>/mes</small></div>
+          <div class="gc-precio-lbl">socios · pago trimestral</div>
+        </div>
       </div>
 
       <div class="grupo-card">
@@ -357,6 +370,10 @@
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
           3 a 5 entrenamientos por semana
         </div>
+        <div class="gc-precio">
+          <div class="gc-precio-num">40 – 55 €<small>/mes</small></div>
+          <div class="gc-precio-lbl">según días · socios</div>
+        </div>
       </div>
 
       <div class="grupo-card">
@@ -374,9 +391,14 @@
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
           3 entrenamientos por semana
         </div>
+        <div class="gc-precio">
+          <div class="gc-precio-num">40 €<small>/mes</small></div>
+          <div class="gc-precio-lbl">socios · pago trimestral</div>
+        </div>
       </div>
 
     </div>
+    <p style="font-size:0.83rem;color:var(--texto-suave);margin-top:1rem;">Los precios indicados son para socios del club. Sin cuota de socio: <strong style="color:var(--texto);">70 €/mes</strong>, con la entrada al estadio por cuenta del atleta.</p>
   </div>
 
   <hr class="sec-divider">

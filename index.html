@@ -495,7 +495,7 @@ function egVolver() {
         <h3>Escuela de natación</h3><p>Desde 3 años</p>
       </a>
       <a href="escuela-municipal-atletismo.html" class="seccion-card">
-        <div class="seccion-foto-circ"><div class="seccion-foto-circ-ph"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M9 12h6M12 9v6"/></svg></div></div>
+        <div class="seccion-foto-circ" id="foto-mun-atletismo"><div class="seccion-foto-circ-ph"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M9 12h6M12 9v6"/></svg></div></div>
         <h3>Atletismo municipal</h3><p>Programa Deportes Alicante</p>
       </a>
     </div>
@@ -927,7 +927,17 @@ heroImg.onload = () => { document.getElementById('hero-bg').style.backgroundImag
 heroImg.src = IMG + 'hero.jpg';
 
 // FOTOS SECCIONES CIRCULARES
-const fotosSecciones = { escuela:'seccion-escuela.jpg', atletismo:'seccion-atletismo.jpg', running:'seccion-running.jpg', triatlon:'seccion-triatlon.jpg', natacion:'seccion-natacion.jpg', instalaciones:'seccion-instalaciones.jpg' };
+const fotosSecciones = {
+  escuela:          'seccion-escuela.jpg',
+  'esc-natacion':   'seccion-escuela-natacion.jpg',
+  'mun-atletismo':  'seccion-mun-atletismo.jpg',
+  atletismo:        'seccion-atletismo.jpg',
+  running:          'seccion-running.jpg',
+  natacion:         'seccion-natacion.jpg',
+  triatlon:         'seccion-triatlon.jpg',
+  montana:          'seccion-montana.jpg',
+  instalaciones:    'seccion-instalaciones.jpg'
+};
 Object.entries(fotosSecciones).forEach(([id, file]) => {
   const img = new Image();
   img.onload = () => {
@@ -937,17 +947,37 @@ Object.entries(fotosSecciones).forEach(([id, file]) => {
   img.src = IMG + file;
 });
 
-// AVISOS DESDE SUPABASE (eventos próximos marcados como destacados)
+// AVISO DESTACADO — se gestiona desde el panel de administración
 async function cargarAvisos() {
   try {
-    const { data } = await db.from('eventos').select('titulo,fecha_inicio').gte('fecha_inicio', new Date().toISOString()).order('fecha_inicio').limit(3);
+    const hoy = new Date().toISOString().split('T')[0];
+    const { data } = await db.from('avisos')
+      .select('*')
+      .eq('activo', true)
+      .order('created_at', { ascending: false })
+      .limit(1);
     if (!data?.length) return;
+    const a = data[0];
+    // Respetar fecha de caducidad si la tiene
+    if (a.fecha_fin && a.fecha_fin < hoy) return;
+
+    const COLORES = {
+      info:       { bg: 'rgba(255,255,255,0.14)', borde: 'rgba(255,255,255,0.25)' },
+      importante: { bg: 'rgba(234,88,12,0.9)',    borde: 'rgba(234,88,12,1)' },
+      urgente:    { bg: 'rgba(220,38,38,0.92)',   borde: 'rgba(220,38,38,1)' }
+    };
+    const c = COLORES[a.tipo] || COLORES.info;
+
     const bar = document.getElementById('avisos-bar');
-    bar.innerHTML = data.map(e => {
-      const f = new Date(e.fecha_inicio);
-      const fecha = f.toLocaleDateString('es-ES', { day:'numeric', month:'short' });
-      return `<a href="calendario.html" class="aviso-btn">${e.titulo} · ${fecha}</a>`;
-    }).join('');
+    const contenido = `
+      <div style="display:flex;align-items:center;gap:10px;background:${c.bg};border:1px solid ${c.borde};border-radius:10px;padding:9px 16px;backdrop-filter:blur(6px);">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" style="flex-shrink:0;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        <span style="color:white;font-size:0.87rem;font-weight:600;">${a.texto}</span>
+        ${a.enlace ? `<span style="color:rgba(255,255,255,0.65);">·</span><span style="color:white;font-size:0.84rem;text-decoration:underline;">${a.texto_enlace || 'Ver más'}</span>` : ''}
+      </div>`;
+    bar.innerHTML = a.enlace
+      ? `<a href="${a.enlace}" style="text-decoration:none;">${contenido}</a>`
+      : contenido;
   } catch(e) {}
 }
 cargarAvisos();

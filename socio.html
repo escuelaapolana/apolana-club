@@ -120,7 +120,7 @@
       background: linear-gradient(180deg, #eaf1f8 0%, #dfeaf4 100%);
       margin-left: calc(-50vw + 50%);
       margin-right: calc(-50vw + 50%);
-      padding: 3rem calc(50vw - 50% + 2rem);
+      padding: 3rem max(2rem, calc(50vw - 520px));
       position: relative;
     }
     .wrap > .sec.banda { border-top: 1px solid #cfe0ee; border-bottom: 1px solid #cfe0ee; }
@@ -153,7 +153,7 @@
     nav { position: sticky; z-index: 500; }
 
     @media (max-width: 768px) {
-      .wrap > .sec.banda { padding: 2.25rem calc(50vw - 50% + 1.25rem); }
+      .wrap > .sec.banda { padding: 2.25rem max(1.25rem, calc(50vw - 520px)); }
     }
 </style>
 <script src="nav.js"></script>

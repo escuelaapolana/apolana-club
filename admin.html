@@ -205,6 +205,27 @@
     .vista-tab-count { background: rgba(0,0,0,0.07); border-radius: 20px; padding: 1px 8px; font-size: 0.72rem; font-weight: 700; }
     .vista-tab.activa .vista-tab-count { background: rgba(255,255,255,0.22); }
     .vista-desc { font-size: 0.8rem; color: var(--texto-suave); margin-bottom: 1rem; padding: 0.6rem 0.9rem; background: var(--azul-bg); border-radius: 8px; border-left: 3px solid var(--azul-claro); }
+
+    /* Subidor múltiple de galerías */
+    .gal-bloque { background: white; border: 1px solid var(--gris-borde); border-radius: 12px; overflow: hidden; margin-bottom: 1rem; }
+    .gal-head { padding: 0.85rem 1.15rem; border-bottom: 1px solid var(--gris-borde); display: flex; align-items: center; justify-content: space-between; gap: 1rem; background: var(--gris); }
+    .gal-titulo { font-size: 0.9rem; font-weight: 700; }
+    .gal-sub { font-size: 0.74rem; color: var(--texto-suave); }
+    .gal-drop { padding: 1.1rem 1.15rem; }
+    .gal-zona { border: 2px dashed var(--gris-borde); border-radius: 10px; padding: 1.5rem 1rem; text-align: center; cursor: pointer; transition: all 0.15s; }
+    .gal-zona:hover, .gal-zona.over { border-color: var(--azul); background: var(--azul-bg); }
+    .gal-zona svg { color: var(--azul-claro); margin-bottom: 0.5rem; }
+    .gal-zona-txt { font-size: 0.85rem; font-weight: 600; color: var(--texto); }
+    .gal-zona-sub { font-size: 0.76rem; color: var(--texto-suave); margin-top: 3px; }
+    .gal-fotos { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 0.5rem; margin-top: 0.9rem; }
+    .gal-foto { position: relative; aspect-ratio: 4/3; border-radius: 8px; overflow: hidden; background: var(--gris); }
+    .gal-foto img { width: 100%; height: 100%; object-fit: cover; }
+    .gal-foto-num { position: absolute; top: 4px; left: 4px; background: rgba(0,0,0,0.6); color: white; font-size: 0.66rem; font-weight: 700; padding: 1px 6px; border-radius: 4px; }
+    .gal-foto-del { position: absolute; top: 4px; right: 4px; width: 20px; height: 20px; border-radius: 50%; background: rgba(220,38,38,0.9); color: white; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; opacity: 0; transition: opacity 0.15s; }
+    .gal-foto:hover .gal-foto-del { opacity: 1; }
+    .gal-vacio { grid-column: 1/-1; text-align: center; padding: 1rem; color: var(--texto-suave); font-size: 0.8rem; }
+    .gal-progreso { font-size: 0.8rem; color: var(--azul); font-weight: 600; margin-top: 0.6rem; display: none; }
+    .gal-progreso.v { display: block; }
 </style>
 </head>
 <body>
@@ -293,6 +314,11 @@
     <button class="sb-item" onclick="showPanel('tienda')">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/></svg>
       Tienda
+    </button>
+
+    <button class="sb-item" onclick="showPanel('avisos')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      Aviso de portada
     </button>
 
     <div class="sb-section">Historia del club</div>
@@ -884,6 +910,342 @@
           </label>
         </div>
 
+
+        <!-- GALERÍAS -->
+        <div style="font-size:0.78rem;font-weight:700;color:var(--azul);text-transform:uppercase;letter-spacing:0.08em;margin:2.5rem 0 0.5rem;padding-bottom:0.5rem;border-bottom:2px solid var(--azul-bg);">Galerías de las páginas</div>
+        <p style="font-size:0.8rem;color:var(--texto-suave);margin-bottom:1.25rem;">Arrastra varias fotos a la vez. Se numeran solas y aparecen en la galería de cada página. Máximo 8 por sección.</p>
+        <div class="gal-bloque">
+          <div class="gal-head">
+            <div>
+              <div class="gal-titulo">Escuela de atletismo</div>
+              <div class="gal-sub">escuela.html</div>
+            </div>
+            <span class="gal-sub" id="gal-count-escuela">—</span>
+          </div>
+          <div class="gal-drop">
+            <label class="gal-zona" id="gal-zona-escuela">
+              <input type="file" accept="image/jpeg,image/png,image/webp" multiple style="display:none;" onchange="subirGaleria(this,'escuela')">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              <div class="gal-zona-txt">Subir fotos de escuela de atletismo</div>
+              <div class="gal-zona-sub">Puedes seleccionar varias a la vez</div>
+            </label>
+            <div class="gal-progreso" id="gal-prog-escuela"></div>
+            <div class="gal-fotos" id="gal-fotos-escuela"><div class="gal-vacio">Cargando...</div></div>
+          </div>
+        </div>
+        <div class="gal-bloque">
+          <div class="gal-head">
+            <div>
+              <div class="gal-titulo">Running</div>
+              <div class="gal-sub">running.html</div>
+            </div>
+            <span class="gal-sub" id="gal-count-running">—</span>
+          </div>
+          <div class="gal-drop">
+            <label class="gal-zona" id="gal-zona-running">
+              <input type="file" accept="image/jpeg,image/png,image/webp" multiple style="display:none;" onchange="subirGaleria(this,'running')">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              <div class="gal-zona-txt">Subir fotos de running</div>
+              <div class="gal-zona-sub">Puedes seleccionar varias a la vez</div>
+            </label>
+            <div class="gal-progreso" id="gal-prog-running"></div>
+            <div class="gal-fotos" id="gal-fotos-running"><div class="gal-vacio">Cargando...</div></div>
+          </div>
+        </div>
+        <div class="gal-bloque">
+          <div class="gal-head">
+            <div>
+              <div class="gal-titulo">Atletismo pista</div>
+              <div class="gal-sub">competicion.html</div>
+            </div>
+            <span class="gal-sub" id="gal-count-competicion">—</span>
+          </div>
+          <div class="gal-drop">
+            <label class="gal-zona" id="gal-zona-competicion">
+              <input type="file" accept="image/jpeg,image/png,image/webp" multiple style="display:none;" onchange="subirGaleria(this,'competicion')">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              <div class="gal-zona-txt">Subir fotos de atletismo pista</div>
+              <div class="gal-zona-sub">Puedes seleccionar varias a la vez</div>
+            </label>
+            <div class="gal-progreso" id="gal-prog-competicion"></div>
+            <div class="gal-fotos" id="gal-fotos-competicion"><div class="gal-vacio">Cargando...</div></div>
+          </div>
+        </div>
+        <div class="gal-bloque">
+          <div class="gal-head">
+            <div>
+              <div class="gal-titulo">Natación</div>
+              <div class="gal-sub">natacion.html</div>
+            </div>
+            <span class="gal-sub" id="gal-count-natacion">—</span>
+          </div>
+          <div class="gal-drop">
+            <label class="gal-zona" id="gal-zona-natacion">
+              <input type="file" accept="image/jpeg,image/png,image/webp" multiple style="display:none;" onchange="subirGaleria(this,'natacion')">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              <div class="gal-zona-txt">Subir fotos de natación</div>
+              <div class="gal-zona-sub">Puedes seleccionar varias a la vez</div>
+            </label>
+            <div class="gal-progreso" id="gal-prog-natacion"></div>
+            <div class="gal-fotos" id="gal-fotos-natacion"><div class="gal-vacio">Cargando...</div></div>
+          </div>
+        </div>
+        <div class="gal-bloque">
+          <div class="gal-head">
+            <div>
+              <div class="gal-titulo">Triatlón</div>
+              <div class="gal-sub">triatlon.html</div>
+            </div>
+            <span class="gal-sub" id="gal-count-triatlon">—</span>
+          </div>
+          <div class="gal-drop">
+            <label class="gal-zona" id="gal-zona-triatlon">
+              <input type="file" accept="image/jpeg,image/png,image/webp" multiple style="display:none;" onchange="subirGaleria(this,'triatlon')">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              <div class="gal-zona-txt">Subir fotos de triatlón</div>
+              <div class="gal-zona-sub">Puedes seleccionar varias a la vez</div>
+            </label>
+            <div class="gal-progreso" id="gal-prog-triatlon"></div>
+            <div class="gal-fotos" id="gal-fotos-triatlon"><div class="gal-vacio">Cargando...</div></div>
+          </div>
+        </div>
+        <div class="gal-bloque">
+          <div class="gal-head">
+            <div>
+              <div class="gal-titulo">Montaña</div>
+              <div class="gal-sub">montana.html</div>
+            </div>
+            <span class="gal-sub" id="gal-count-montana">—</span>
+          </div>
+          <div class="gal-drop">
+            <label class="gal-zona" id="gal-zona-montana">
+              <input type="file" accept="image/jpeg,image/png,image/webp" multiple style="display:none;" onchange="subirGaleria(this,'montana')">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              <div class="gal-zona-txt">Subir fotos de montaña</div>
+              <div class="gal-zona-sub">Puedes seleccionar varias a la vez</div>
+            </label>
+            <div class="gal-progreso" id="gal-prog-montana"></div>
+            <div class="gal-fotos" id="gal-fotos-montana"><div class="gal-vacio">Cargando...</div></div>
+          </div>
+        </div>
+        <div class="gal-bloque">
+          <div class="gal-head">
+            <div>
+              <div class="gal-titulo">El Cubo</div>
+              <div class="gal-sub">cubo.html</div>
+            </div>
+            <span class="gal-sub" id="gal-count-cubo">—</span>
+          </div>
+          <div class="gal-drop">
+            <label class="gal-zona" id="gal-zona-cubo">
+              <input type="file" accept="image/jpeg,image/png,image/webp" multiple style="display:none;" onchange="subirGaleria(this,'cubo')">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              <div class="gal-zona-txt">Subir fotos de el cubo</div>
+              <div class="gal-zona-sub">Puedes seleccionar varias a la vez</div>
+            </label>
+            <div class="gal-progreso" id="gal-prog-cubo"></div>
+            <div class="gal-fotos" id="gal-fotos-cubo"><div class="gal-vacio">Cargando...</div></div>
+          </div>
+        </div>
+        <div class="gal-bloque">
+          <div class="gal-head">
+            <div>
+              <div class="gal-titulo">Instalaciones</div>
+              <div class="gal-sub">instalaciones.html</div>
+            </div>
+            <span class="gal-sub" id="gal-count-instalaciones">—</span>
+          </div>
+          <div class="gal-drop">
+            <label class="gal-zona" id="gal-zona-instalaciones">
+              <input type="file" accept="image/jpeg,image/png,image/webp" multiple style="display:none;" onchange="subirGaleria(this,'instalaciones')">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              <div class="gal-zona-txt">Subir fotos de instalaciones</div>
+              <div class="gal-zona-sub">Puedes seleccionar varias a la vez</div>
+            </label>
+            <div class="gal-progreso" id="gal-prog-instalaciones"></div>
+            <div class="gal-fotos" id="gal-fotos-instalaciones"><div class="gal-vacio">Cargando...</div></div>
+          </div>
+        </div>
+        <div style="font-size:0.78rem;font-weight:700;color:var(--azul);text-transform:uppercase;letter-spacing:0.08em;margin:2.5rem 0 0.5rem;padding-bottom:0.5rem;border-bottom:2px solid var(--azul-bg);">Entrenadores</div>
+        <p style="font-size:0.8rem;color:var(--texto-suave);margin-bottom:1rem;">Aparecen en las tarjetas de grupo de cada sección.</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:1rem;margin-bottom:1.5rem;">
+          <div style="background:var(--gris);border-radius:10px;padding:0.9rem;border:1px solid var(--gris-borde);">
+            <div style="margin-bottom:7px;">
+              <div style="font-size:0.82rem;font-weight:600;">Nicolás Tucci</div>
+              <div style="font-size:0.7rem;color:var(--texto-suave);">Running · La Tribu</div>
+            </div>
+            <label class="img-slot" id="slot-entrenador-nico" style="margin:0;">
+              <input type="file" accept="image/jpeg,image/png,image/webp" onchange="subirFoto(this,'imagenes-club','entrenador-nico.jpg','slot-entrenador-nico')">
+              <div class="img-slot-placeholder"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg><span>Subir</span></div>
+              <span class="img-slot-label">Cambiar</span>
+            </label>
+          </div>
+          <div style="background:var(--gris);border-radius:10px;padding:0.9rem;border:1px solid var(--gris-borde);">
+            <div style="margin-bottom:7px;">
+              <div style="font-size:0.82rem;font-weight:600;">Claudia Otero</div>
+              <div style="font-size:0.7rem;color:var(--texto-suave);">Running · Madre Tierra</div>
+            </div>
+            <label class="img-slot" id="slot-entrenador-claudia" style="margin:0;">
+              <input type="file" accept="image/jpeg,image/png,image/webp" onchange="subirFoto(this,'imagenes-club','entrenador-claudia.jpg','slot-entrenador-claudia')">
+              <div class="img-slot-placeholder"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg><span>Subir</span></div>
+              <span class="img-slot-label">Cambiar</span>
+            </label>
+          </div>
+          <div style="background:var(--gris);border-radius:10px;padding:0.9rem;border:1px solid var(--gris-borde);">
+            <div style="margin-bottom:7px;">
+              <div style="font-size:0.82rem;font-weight:600;">Andrés Clavero</div>
+              <div style="font-size:0.7rem;color:var(--texto-suave);">Atletismo pista</div>
+            </div>
+            <label class="img-slot" id="slot-entrenador-andres" style="margin:0;">
+              <input type="file" accept="image/jpeg,image/png,image/webp" onchange="subirFoto(this,'imagenes-club','entrenador-andres.jpg','slot-entrenador-andres')">
+              <div class="img-slot-placeholder"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg><span>Subir</span></div>
+              <span class="img-slot-label">Cambiar</span>
+            </label>
+          </div>
+          <div style="background:var(--gris);border-radius:10px;padding:0.9rem;border:1px solid var(--gris-borde);">
+            <div style="margin-bottom:7px;">
+              <div style="font-size:0.82rem;font-weight:600;">Mario Clavero</div>
+              <div style="font-size:0.7rem;color:var(--texto-suave);">Natación</div>
+            </div>
+            <label class="img-slot" id="slot-entrenador-mario" style="margin:0;">
+              <input type="file" accept="image/jpeg,image/png,image/webp" onchange="subirFoto(this,'imagenes-club','entrenador-mario.jpg','slot-entrenador-mario')">
+              <div class="img-slot-placeholder"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg><span>Subir</span></div>
+              <span class="img-slot-label">Cambiar</span>
+            </label>
+          </div>
+        </div>
+        <div style="font-size:0.78rem;font-weight:700;color:var(--azul);text-transform:uppercase;letter-spacing:0.08em;margin:2.5rem 0 0.5rem;padding-bottom:0.5rem;border-bottom:2px solid var(--azul-bg);">Junta directiva</div>
+        <p style="font-size:0.8rem;color:var(--texto-suave);margin-bottom:1rem;">Aparecen en la página de Junta Directiva.</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:1rem;margin-bottom:1.5rem;">
+          <div style="background:var(--gris);border-radius:10px;padding:0.9rem;border:1px solid var(--gris-borde);">
+            <div style="margin-bottom:7px;">
+              <div style="font-size:0.82rem;font-weight:600;">Adrián Onandía</div>
+              <div style="font-size:0.7rem;color:var(--texto-suave);">Presidente</div>
+            </div>
+            <label class="img-slot" id="slot-junta-adrian" style="margin:0;">
+              <input type="file" accept="image/jpeg,image/png,image/webp" onchange="subirFoto(this,'imagenes-club','junta-adrian.jpg','slot-junta-adrian')">
+              <div class="img-slot-placeholder"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg><span>Subir</span></div>
+              <span class="img-slot-label">Cambiar</span>
+            </label>
+          </div>
+          <div style="background:var(--gris);border-radius:10px;padding:0.9rem;border:1px solid var(--gris-borde);">
+            <div style="margin-bottom:7px;">
+              <div style="font-size:0.82rem;font-weight:600;">Miguel Á. Pellín</div>
+              <div style="font-size:0.7rem;color:var(--texto-suave);">Vicepresidente</div>
+            </div>
+            <label class="img-slot" id="slot-junta-miguel" style="margin:0;">
+              <input type="file" accept="image/jpeg,image/png,image/webp" onchange="subirFoto(this,'imagenes-club','junta-miguel.jpg','slot-junta-miguel')">
+              <div class="img-slot-placeholder"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg><span>Subir</span></div>
+              <span class="img-slot-label">Cambiar</span>
+            </label>
+          </div>
+          <div style="background:var(--gris);border-radius:10px;padding:0.9rem;border:1px solid var(--gris-borde);">
+            <div style="margin-bottom:7px;">
+              <div style="font-size:0.82rem;font-weight:600;">Mario Clavero</div>
+              <div style="font-size:0.7rem;color:var(--texto-suave);">Secretario</div>
+            </div>
+            <label class="img-slot" id="slot-junta-mario" style="margin:0;">
+              <input type="file" accept="image/jpeg,image/png,image/webp" onchange="subirFoto(this,'imagenes-club','junta-mario.jpg','slot-junta-mario')">
+              <div class="img-slot-placeholder"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg><span>Subir</span></div>
+              <span class="img-slot-label">Cambiar</span>
+            </label>
+          </div>
+          <div style="background:var(--gris);border-radius:10px;padding:0.9rem;border:1px solid var(--gris-borde);">
+            <div style="margin-bottom:7px;">
+              <div style="font-size:0.82rem;font-weight:600;">Andrés Clavero</div>
+              <div style="font-size:0.7rem;color:var(--texto-suave);">Tesorero</div>
+            </div>
+            <label class="img-slot" id="slot-junta-andres" style="margin:0;">
+              <input type="file" accept="image/jpeg,image/png,image/webp" onchange="subirFoto(this,'imagenes-club','junta-andres.jpg','slot-junta-andres')">
+              <div class="img-slot-placeholder"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg><span>Subir</span></div>
+              <span class="img-slot-label">Cambiar</span>
+            </label>
+          </div>
+          <div style="background:var(--gris);border-radius:10px;padding:0.9rem;border:1px solid var(--gris-borde);">
+            <div style="margin-bottom:7px;">
+              <div style="font-size:0.82rem;font-weight:600;">Irene Ferriz</div>
+              <div style="font-size:0.7rem;color:var(--texto-suave);">Vocal</div>
+            </div>
+            <label class="img-slot" id="slot-junta-irene" style="margin:0;">
+              <input type="file" accept="image/jpeg,image/png,image/webp" onchange="subirFoto(this,'imagenes-club','junta-irene.jpg','slot-junta-irene')">
+              <div class="img-slot-placeholder"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg><span>Subir</span></div>
+              <span class="img-slot-label">Cambiar</span>
+            </label>
+          </div>
+          <div style="background:var(--gris);border-radius:10px;padding:0.9rem;border:1px solid var(--gris-borde);">
+            <div style="margin-bottom:7px;">
+              <div style="font-size:0.82rem;font-weight:600;">Maribel García</div>
+              <div style="font-size:0.7rem;color:var(--texto-suave);">Vocal</div>
+            </div>
+            <label class="img-slot" id="slot-junta-maribel" style="margin:0;">
+              <input type="file" accept="image/jpeg,image/png,image/webp" onchange="subirFoto(this,'imagenes-club','junta-maribel.jpg','slot-junta-maribel')">
+              <div class="img-slot-placeholder"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg><span>Subir</span></div>
+              <span class="img-slot-label">Cambiar</span>
+            </label>
+          </div>
+          <div style="background:var(--gris);border-radius:10px;padding:0.9rem;border:1px solid var(--gris-borde);">
+            <div style="margin-bottom:7px;">
+              <div style="font-size:0.82rem;font-weight:600;">Mateo Brian</div>
+              <div style="font-size:0.7rem;color:var(--texto-suave);">Vocal</div>
+            </div>
+            <label class="img-slot" id="slot-junta-mateo" style="margin:0;">
+              <input type="file" accept="image/jpeg,image/png,image/webp" onchange="subirFoto(this,'imagenes-club','junta-mateo.jpg','slot-junta-mateo')">
+              <div class="img-slot-placeholder"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg><span>Subir</span></div>
+              <span class="img-slot-label">Cambiar</span>
+            </label>
+          </div>
+          <div style="background:var(--gris);border-radius:10px;padding:0.9rem;border:1px solid var(--gris-borde);">
+            <div style="margin-bottom:7px;">
+              <div style="font-size:0.82rem;font-weight:600;">Almudena Coral</div>
+              <div style="font-size:0.7rem;color:var(--texto-suave);">Vocal</div>
+            </div>
+            <label class="img-slot" id="slot-junta-almudena" style="margin:0;">
+              <input type="file" accept="image/jpeg,image/png,image/webp" onchange="subirFoto(this,'imagenes-club','junta-almudena.jpg','slot-junta-almudena')">
+              <div class="img-slot-placeholder"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg><span>Subir</span></div>
+              <span class="img-slot-label">Cambiar</span>
+            </label>
+          </div>
+          <div style="background:var(--gris);border-radius:10px;padding:0.9rem;border:1px solid var(--gris-borde);">
+            <div style="margin-bottom:7px;">
+              <div style="font-size:0.82rem;font-weight:600;">Enrique Gallego</div>
+              <div style="font-size:0.7rem;color:var(--texto-suave);">Dir. Montaña</div>
+            </div>
+            <label class="img-slot" id="slot-junta-enrique" style="margin:0;">
+              <input type="file" accept="image/jpeg,image/png,image/webp" onchange="subirFoto(this,'imagenes-club','junta-enrique.jpg','slot-junta-enrique')">
+              <div class="img-slot-placeholder"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg><span>Subir</span></div>
+              <span class="img-slot-label">Cambiar</span>
+            </label>
+          </div>
+          <div style="background:var(--gris);border-radius:10px;padding:0.9rem;border:1px solid var(--gris-borde);">
+            <div style="margin-bottom:7px;">
+              <div style="font-size:0.82rem;font-weight:600;">José Fernández</div>
+              <div style="font-size:0.7rem;color:var(--texto-suave);">Dir. Triatlón</div>
+            </div>
+            <label class="img-slot" id="slot-junta-jose" style="margin:0;">
+              <input type="file" accept="image/jpeg,image/png,image/webp" onchange="subirFoto(this,'imagenes-club','junta-jose.jpg','slot-junta-jose')">
+              <div class="img-slot-placeholder"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg><span>Subir</span></div>
+              <span class="img-slot-label">Cambiar</span>
+            </label>
+          </div>
+        </div>
+        <div style="font-size:0.78rem;font-weight:700;color:var(--azul);text-transform:uppercase;letter-spacing:0.08em;margin:2.5rem 0 0.5rem;padding-bottom:0.5rem;border-bottom:2px solid var(--azul-bg);">Archivo histórico</div>
+        <p style="font-size:0.8rem;color:var(--texto-suave);margin-bottom:1.25rem;">Fotos antiguas del club. Aparecen en la página "El club". Máximo 12.</p>
+        <div class="gal-bloque">
+          <div class="gal-head">
+            <div><div class="gal-titulo">Historia del club</div><div class="gal-sub">club.html</div></div>
+            <span class="gal-sub" id="gal-count-historia">—</span>
+          </div>
+          <div class="gal-drop">
+            <label class="gal-zona" id="gal-zona-historia">
+              <input type="file" accept="image/jpeg,image/png,image/webp" multiple style="display:none;" onchange="subirGaleria(this,'historia',12)">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              <div class="gal-zona-txt">Subir fotos históricas</div>
+              <div class="gal-zona-sub">Puedes seleccionar varias a la vez</div>
+            </label>
+            <div class="gal-progreso" id="gal-prog-historia"></div>
+            <div class="gal-fotos" id="gal-fotos-historia"><div class="gal-vacio">Cargando...</div></div>
+          </div>
+        </div>
       </div>
 
       <!-- PANEL EVENTOS -->
@@ -973,6 +1335,35 @@
         </div>
       </div>
 
+
+
+      <!-- AVISO DE PORTADA -->
+      <div class="panel" id="panel-avisos">
+        <div style="background:var(--azul-bg);border-left:4px solid var(--azul);border-radius:0 10px 10px 0;padding:1rem 1.25rem;margin-bottom:1.25rem;font-size:0.86rem;color:var(--azul-oscuro);line-height:1.6;">
+          El aviso aparece <strong>sobre la foto de portada</strong> de la página principal. Solo se muestra el más reciente que esté activo. Úsalo para inscripciones abiertas, cambios de horario, suspensiones por lluvia o cualquier cosa urgente.
+        </div>
+
+        <div class="tabla-wrap" style="margin-bottom:1.25rem;">
+          <div class="tabla-header">
+            <h3>Aviso actual</h3>
+            <button class="btn btn-p" onclick="abrirModalAviso()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Nuevo aviso
+            </button>
+          </div>
+          <div id="preview-aviso" style="padding:1.5rem;background:linear-gradient(135deg,#123f60,#1a5f8f);">
+            <div style="color:rgba(255,255,255,0.5);font-size:0.82rem;text-align:center;">Cargando...</div>
+          </div>
+        </div>
+
+        <div class="tabla-wrap">
+          <div class="tabla-header"><h3>Historial de avisos</h3></div>
+          <table>
+            <thead><tr><th>Estado</th><th>Texto</th><th>Tipo</th><th>Caduca</th><th>Creado</th><th></th></tr></thead>
+            <tbody id="tabla-avisos"><tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--texto-suave);">Cargando...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
 
       <!-- PALMARÉS -->
       <div class="panel" id="panel-palmares">
@@ -1418,6 +1809,57 @@
   </div>
 </div>
 
+
+<!-- MODAL AVISO -->
+<div class="modal-overlay" id="modal-aviso">
+  <div class="modal" style="max-width:560px;">
+    <div class="modal-header">
+      <h3 id="modal-aviso-titulo">Nuevo aviso</h3>
+      <button class="modal-close" onclick="cerrarModal('modal-aviso')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="mf">
+        <label>Texto del aviso *</label>
+        <input type="text" id="av-texto" placeholder="Inscripciones abiertas para la temporada 2026/27" maxlength="110">
+        <p style="font-size:0.76rem;color:var(--texto-suave);margin-top:4px;">Máximo 110 caracteres. Cuanto más corto, mejor se lee.</p>
+      </div>
+      <div class="form-grid">
+        <div class="mf">
+          <label>Tipo</label>
+          <select id="av-tipo">
+            <option value="info">Informativo — fondo translúcido</option>
+            <option value="importante">Importante — naranja</option>
+            <option value="urgente">Urgente — rojo</option>
+          </select>
+        </div>
+        <div class="mf">
+          <label>Caduca el (opcional)</label>
+          <input type="date" id="av-fecha-fin">
+        </div>
+        <div class="mf">
+          <label>Enlace (opcional)</label>
+          <input type="text" id="av-enlace" placeholder="inscripcion.html">
+        </div>
+        <div class="mf">
+          <label>Texto del enlace</label>
+          <input type="text" id="av-texto-enlace" placeholder="Ver más">
+        </div>
+      </div>
+      <div class="mf" style="margin-bottom:0;">
+        <label style="display:flex;align-items:center;gap:8px;cursor:pointer;text-transform:none;font-size:0.88rem;">
+          <input type="checkbox" id="av-activo" checked style="width:auto;margin:0;">
+          Mostrar este aviso en la portada
+        </label>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <input type="hidden" id="av-edit-id">
+      <button class="btn btn-g" onclick="cerrarModal('modal-aviso')">Cancelar</button>
+      <button class="btn btn-p" onclick="guardarAviso()">Guardar</button>
+    </div>
+  </div>
+</div>
+
 <script>
 const SB_URL = 'https://icaxokjsvhlreuwpyxeb.supabase.co';
 const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImljYXhva2pzdmhscmV1d3B5eGViIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEwNzE2NTgsImV4cCI6MjA5NjY0NzY1OH0.xn1ZY-otHY0-l7g64uutSVjiU8DbkHxxZmTvu77IaHA';
@@ -1503,7 +1945,7 @@ async function doLogout() {
 // =====================
 // NAVEGACIÓN
 // =====================
-const PANEL_TITLES = { inicio:'Inicio', atletas:'Inscritos', grupos:'Grupos', prueba:'En prueba', ropa:'Control de ropa', pagos:'Pagos', fotos:'Fotos del club', 'noticias-admin':'Noticias', eventos:'Eventos y calendario', tienda:'Tienda', usuarios:'Usuarios del sistema', contenido:'Contenido web', palmares:'Palmarés del club', records:'Récords del club' };
+const PANEL_TITLES = { inicio:'Inicio', atletas:'Inscritos', grupos:'Grupos', prueba:'En prueba', ropa:'Control de ropa', pagos:'Pagos', fotos:'Fotos del club', 'noticias-admin':'Noticias', eventos:'Eventos y calendario', tienda:'Tienda', usuarios:'Usuarios del sistema', contenido:'Contenido web', avisos:'Aviso de portada', palmares:'Palmarés del club', records:'Récords del club' };
 
 function showPanel(id) {
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('activo'));
@@ -1520,7 +1962,8 @@ function showPanel(id) {
   if (id === 'noticias-admin') cargarNoticiasAdmin();
   if (id === 'tienda') cargarTienda();
   if (id === 'usuarios') cargarUsuarios();
-  if (id === 'fotos') cargarFotosPanel();
+  if (id === 'fotos') { cargarFotosPanel(); cargarTodasGalerias(); }
+  if (id === 'avisos') cargarAvisos();
   if (id === 'palmares') cargarPalmares();
   if (id === 'records') cargarRecords();
 }
@@ -2689,6 +3132,217 @@ function cabeceraTabla() {
     ? '<th>Socio / contacto</th><th>Sección</th><th>Grupo</th><th>Estado</th><th>Cuota</th><th>Ropa</th><th></th>'
     : '<th>Nombre / contacto</th><th>Tipo</th><th>Sección</th><th>Estado</th><th>Cuota</th><th>Ropa</th><th></th>';
 }
+
+// ═══════════════════════════════════════════
+// AVISO DE PORTADA
+// ═══════════════════════════════════════════
+let avisosData = [];
+const AV_TIPO = { info:['Informativo','badge-azul'], importante:['Importante','badge-naranja'], urgente:['Urgente','badge-rojo'] };
+
+async function cargarAvisos() {
+  const { data } = await db.from('avisos').select('*').order('created_at', {ascending:false});
+  avisosData = data || [];
+  renderPreviewAviso();
+  renderTablaAvisos();
+}
+
+function renderPreviewAviso() {
+  const hoy = new Date().toISOString().split('T')[0];
+  const activo = avisosData.find(a => a.activo && (!a.fecha_fin || a.fecha_fin >= hoy));
+  const c = document.getElementById('preview-aviso');
+  if (!activo) {
+    c.innerHTML = '<div style="color:rgba(255,255,255,0.5);font-size:0.85rem;text-align:center;padding:0.5rem;">No hay ningún aviso visible ahora mismo en la portada</div>';
+    return;
+  }
+  const COL = { info:['rgba(255,255,255,0.14)','rgba(255,255,255,0.25)'], importante:['rgba(234,88,12,0.9)','rgba(234,88,12,1)'], urgente:['rgba(220,38,38,0.92)','rgba(220,38,38,1)'] };
+  const [bg, bd] = COL[activo.tipo] || COL.info;
+  c.innerHTML = `
+    <div style="font-size:0.68rem;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:0.09em;margin-bottom:0.6rem;">Así se ve en la portada</div>
+    <div style="display:inline-flex;align-items:center;gap:10px;background:${bg};border:1px solid ${bd};border-radius:10px;padding:9px 16px;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      <span style="color:white;font-size:0.87rem;font-weight:600;">${activo.texto}</span>
+      ${activo.enlace ? `<span style="color:rgba(255,255,255,0.65);">·</span><span style="color:white;font-size:0.84rem;text-decoration:underline;">${activo.texto_enlace || 'Ver más'}</span>` : ''}
+    </div>`;
+}
+
+function renderTablaAvisos() {
+  const hoy = new Date().toISOString().split('T')[0];
+  const tb = document.getElementById('tabla-avisos');
+  if (!avisosData.length) {
+    tb.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:2.5rem;color:var(--texto-suave);">Sin avisos. Crea el primero.</td></tr>';
+    return;
+  }
+  tb.innerHTML = avisosData.map(a => {
+    const caducado = a.fecha_fin && a.fecha_fin < hoy;
+    const visible = a.activo && !caducado;
+    const [tipoTxt, tipoCls] = AV_TIPO[a.tipo] || AV_TIPO.info;
+    return `<tr style="${visible ? '' : 'opacity:0.55;'}">
+      <td>${visible ? '<span class="badge badge-verde">Visible</span>' : caducado ? '<span class="badge badge-gris">Caducado</span>' : '<span class="badge badge-gris">Oculto</span>'}</td>
+      <td style="max-width:280px;">${a.texto || ''}</td>
+      <td><span class="badge ${tipoCls}">${tipoTxt}</span></td>
+      <td style="font-size:0.8rem;color:var(--texto-suave);">${a.fecha_fin || '—'}</td>
+      <td style="font-size:0.78rem;color:var(--texto-suave);">${a.created_at ? new Date(a.created_at).toLocaleDateString('es-ES') : ''}</td>
+      <td style="white-space:nowrap;">
+        <button class="btn btn-g" style="padding:4px 9px;font-size:0.72rem;" onclick="toggleAviso('${a.id}', ${a.activo})">${a.activo ? 'Ocultar' : 'Mostrar'}</button>
+        <button class="btn btn-g" style="padding:4px 9px;font-size:0.72rem;" onclick="editarAviso('${a.id}')">Editar</button>
+        <button class="btn btn-g" style="padding:4px 9px;font-size:0.72rem;color:#dc2626;" onclick="borrarAviso('${a.id}')">Borrar</button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function abrirModalAviso() {
+  ['av-texto','av-enlace','av-texto-enlace','av-fecha-fin'].forEach(i => document.getElementById(i).value = '');
+  document.getElementById('av-tipo').value = 'info';
+  document.getElementById('av-activo').checked = true;
+  document.getElementById('av-edit-id').value = '';
+  document.getElementById('modal-aviso-titulo').textContent = 'Nuevo aviso';
+  document.getElementById('modal-aviso').classList.add('v');
+}
+
+function editarAviso(id) {
+  const a = avisosData.find(x => x.id === id); if (!a) return;
+  document.getElementById('av-texto').value = a.texto || '';
+  document.getElementById('av-tipo').value = a.tipo || 'info';
+  document.getElementById('av-enlace').value = a.enlace || '';
+  document.getElementById('av-texto-enlace').value = a.texto_enlace || '';
+  document.getElementById('av-fecha-fin').value = a.fecha_fin || '';
+  document.getElementById('av-activo').checked = !!a.activo;
+  document.getElementById('av-edit-id').value = id;
+  document.getElementById('modal-aviso-titulo').textContent = 'Editar aviso';
+  document.getElementById('modal-aviso').classList.add('v');
+}
+
+async function guardarAviso() {
+  const texto = document.getElementById('av-texto').value.trim();
+  if (!texto) { alert('Escribe el texto del aviso'); return; }
+  const datos = {
+    texto,
+    tipo: document.getElementById('av-tipo').value,
+    enlace: document.getElementById('av-enlace').value.trim() || null,
+    texto_enlace: document.getElementById('av-texto-enlace').value.trim() || null,
+    fecha_fin: document.getElementById('av-fecha-fin').value || null,
+    activo: document.getElementById('av-activo').checked,
+  };
+  const editId = document.getElementById('av-edit-id').value;
+  // Si este se activa, desactivar los demás
+  if (datos.activo) await db.from('avisos').update({ activo: false }).neq('id', editId || '00000000-0000-0000-0000-000000000000');
+  const { error } = editId
+    ? await db.from('avisos').update(datos).eq('id', editId)
+    : await db.from('avisos').insert([datos]);
+  if (error) { alert('Error: ' + error.message); return; }
+  cerrarModal('modal-aviso');
+  cargarAvisos();
+}
+
+async function toggleAviso(id, activo) {
+  if (!activo) await db.from('avisos').update({ activo: false }).neq('id', id);
+  await db.from('avisos').update({ activo: !activo }).eq('id', id);
+  cargarAvisos();
+}
+
+async function borrarAviso(id) {
+  const a = avisosData.find(x => x.id === id);
+  if (!confirm(`¿Borrar el aviso "${(a?.texto || '').substring(0,50)}..."?`)) return;
+  await db.from('avisos').delete().eq('id', id);
+  cargarAvisos();
+}
+
+// ═══════════════════════════════════════════
+// GALERÍAS MULTI-FOTO
+// ═══════════════════════════════════════════
+const GAL_PREFIJO = { historia: 'historia' };
+
+function galNombre(slug, n) {
+  return slug === 'historia' ? `historia-${n}.jpg` : `galeria-${slug}-${n}.jpg`;
+}
+
+async function subirGaleria(input, slug, max = 8) {
+  const files = Array.from(input.files || []);
+  if (!files.length) return;
+  const heic = files.find(f => f.type === 'image/heic' || f.name.toLowerCase().endsWith('.heic'));
+  if (heic) { alert('Hay fotos en formato HEIC. Expórtalas como JPEG desde Vista Previa.'); input.value=''; return; }
+
+  const prog = document.getElementById('gal-prog-' + slug);
+  prog.classList.add('v');
+
+  // Buscar el primer hueco libre
+  const existentes = await galExistentes(slug, max);
+  let libres = [];
+  for (let n = 1; n <= max; n++) if (!existentes.includes(n)) libres.push(n);
+
+  if (!libres.length) { alert(`Ya hay ${max} fotos. Borra alguna antes de subir más.`); prog.classList.remove('v'); input.value=''; return; }
+
+  const aSubir = files.slice(0, libres.length);
+  if (files.length > libres.length) alert(`Solo quedan ${libres.length} huecos libres. Se subirán las ${libres.length} primeras.`);
+
+  for (let i = 0; i < aSubir.length; i++) {
+    prog.textContent = `Subiendo ${i+1} de ${aSubir.length}...`;
+    const nombre = galNombre(slug, libres[i]);
+    const { error } = await db.storage.from('imagenes-club').upload(nombre, aSubir[i], { upsert: true, contentType: aSubir[i].type });
+    if (error) { alert('Error subiendo ' + aSubir[i].name + ': ' + error.message); break; }
+  }
+  prog.textContent = '✓ Listo';
+  setTimeout(() => prog.classList.remove('v'), 1800);
+  input.value = '';
+  cargarGaleria(slug, max);
+}
+
+function galExistentes(slug, max = 8) {
+  return new Promise(res => {
+    const found = []; let pend = max;
+    for (let n = 1; n <= max; n++) {
+      const img = new Image();
+      img.onload = () => { found.push(n); if (--pend === 0) res(found.sort((a,b)=>a-b)); };
+      img.onerror = () => { if (--pend === 0) res(found.sort((a,b)=>a-b)); };
+      img.src = SB_URL + '/storage/v1/object/public/imagenes-club/' + galNombre(slug, n) + '?t=' + Date.now();
+    }
+  });
+}
+
+async function cargarGaleria(slug, max = 8) {
+  const cont = document.getElementById('gal-fotos-' + slug);
+  const cnt = document.getElementById('gal-count-' + slug);
+  if (!cont) return;
+  const nums = await galExistentes(slug, max);
+  if (cnt) cnt.textContent = `${nums.length} de ${max}`;
+  if (!nums.length) { cont.innerHTML = '<div class="gal-vacio">Sin fotos todavía</div>'; return; }
+  const base = SB_URL + '/storage/v1/object/public/imagenes-club/';
+  cont.innerHTML = nums.map(n => `
+    <div class="gal-foto">
+      <img src="${base}${galNombre(slug,n)}?t=${Date.now()}" alt="">
+      <span class="gal-foto-num">${n}</span>
+      <button class="gal-foto-del" onclick="borrarFotoGaleria('${slug}',${n},${max})" title="Borrar">✕</button>
+    </div>`).join('');
+}
+
+async function borrarFotoGaleria(slug, n, max) {
+  if (!confirm('¿Borrar esta foto?')) return;
+  const { error } = await db.storage.from('imagenes-club').remove([galNombre(slug, n)]);
+  if (error) { alert('Error: ' + error.message); return; }
+  cargarGaleria(slug, max);
+}
+
+const GAL_SECCIONES = ['escuela','running','competicion','natacion','triatlon','montana','cubo','instalaciones'];
+function cargarTodasGalerias() {
+  GAL_SECCIONES.forEach(s => cargarGaleria(s, 8));
+  cargarGaleria('historia', 12);
+}
+
+// Arrastrar y soltar
+document.addEventListener('DOMContentLoaded', () => {
+  [...GAL_SECCIONES, 'historia'].forEach(slug => {
+    const z = document.getElementById('gal-zona-' + slug);
+    if (!z) return;
+    ['dragenter','dragover'].forEach(e => z.addEventListener(e, ev => { ev.preventDefault(); z.classList.add('over'); }));
+    ['dragleave','drop'].forEach(e => z.addEventListener(e, ev => { ev.preventDefault(); z.classList.remove('over'); }));
+    z.addEventListener('drop', ev => {
+      const inp = z.querySelector('input[type=file]');
+      inp.files = ev.dataTransfer.files;
+      inp.dispatchEvent(new Event('change'));
+    });
+  });
+});
 </script>
 </body>
 </html>
