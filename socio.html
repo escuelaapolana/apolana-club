@@ -120,7 +120,7 @@
       background: linear-gradient(180deg, #eaf1f8 0%, #dfeaf4 100%);
       margin-left: calc(-50vw + 50%);
       margin-right: calc(-50vw + 50%);
-      padding: 3rem max(2rem, calc(50vw - 520px));
+      padding: 3rem max(2rem, calc(50vw - 488px));
       position: relative;
     }
     .wrap > .sec.banda { border-top: 1px solid #cfe0ee; border-bottom: 1px solid #cfe0ee; }
@@ -129,9 +129,8 @@
     .sec.banda .horario-card,
     .sec.banda .cuotas-grid,
     .sec.banda details { background: white; box-shadow: 0 1px 3px rgba(18,63,96,0.06); }
-    /* Ocultar separadores donde hay banda */
-    .sec.banda + .sec-divider,
-    .sec-divider + .sec.banda { display: none; }
+    /* Ocultar los separadores pegados a una banda (el JS también lo hace) */
+    .sec.banda + .sec-divider { display: none; }
     .sec-divider:has(+ .sec.banda) { display: none; }
 
     /* Formas decorativas de fondo */
@@ -153,7 +152,7 @@
     nav { position: sticky; z-index: 500; }
 
     @media (max-width: 768px) {
-      .wrap > .sec.banda { padding: 2.25rem max(1.25rem, calc(50vw - 520px)); }
+      .wrap > .sec.banda { padding: 2.25rem max(1.25rem, calc(50vw - 500px)); }
     }
 </style>
 <script src="nav.js"></script>
