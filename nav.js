@@ -127,6 +127,7 @@
           <a href="triatlon.html" class="nav-dropdown-item">Triatlón</a>
           <a href="natacion.html" class="nav-dropdown-item">Natación</a>
           <a href="montana.html" class="nav-dropdown-item">Montaña</a>
+          <a href="cubo.html" class="nav-dropdown-item">El Cubo · Funcional</a>
           <a href="instalaciones.html" class="nav-dropdown-item">Instalaciones</a>
         </div>
       </div>

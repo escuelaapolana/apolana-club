@@ -145,7 +145,8 @@
       background: radial-gradient(circle, rgba(26,95,143,0.10) 0%, transparent 68%);
       pointer-events: none; z-index: 0;
     }
-    .wrap, nav, .cta, footer, .hero, .page-header { position: relative; z-index: 1; }
+    .wrap, .cta, footer, .hero, .page-header { position: relative; z-index: 1; }
+    nav { position: sticky; z-index: 500; }
 
     @media (max-width: 768px) {
       .wrap > .sec.banda { padding: 2.25rem calc(50vw - 50% + 1.25rem); }

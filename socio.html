@@ -149,7 +149,8 @@
       background: radial-gradient(circle, rgba(26,95,143,0.10) 0%, transparent 68%);
       pointer-events: none; z-index: 0;
     }
-    .wrap, nav, .cta, footer, .hero, .page-header { position: relative; z-index: 1; }
+    .wrap, .cta, footer, .hero, .page-header { position: relative; z-index: 1; }
+    nav { position: sticky; z-index: 500; }
 
     @media (max-width: 768px) {
       .wrap > .sec.banda { padding: 2.25rem calc(50vw - 50% + 1.25rem); }
@@ -204,18 +205,19 @@
   <!-- BENEFICIOS -->
   <div class="sec" id="beneficios">
     <h2 class="sec-title">¿Qué incluye ser socio?</h2>
+    <p class="sec-sub" style="margin-bottom:1.25rem;">Por 120 € al año tienes acceso a todo esto. El entrenamiento de cada sección se paga aparte.</p>
     <div class="beneficios-grid">
       <div class="beneficio-item">
         <div class="ben-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
-        <span class="ben-text">Camiseta técnica del club</span>
+        <span class="ben-text">Equipación oficial del club</span>
       </div>
       <div class="beneficio-item">
         <div class="ben-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
-        <span class="ben-text">Sudadera del club</span>
+        <span class="ben-text">Seguro deportivo</span>
       </div>
       <div class="beneficio-item">
         <div class="ben-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
-        <span class="ben-text">3 entradas/semana a la pista de atletismo</span>
+        <span class="ben-text">3 entradas semanales a la pista de atletismo</span>
       </div>
       <div class="beneficio-item">
         <div class="ben-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
@@ -223,7 +225,19 @@
       </div>
       <div class="beneficio-item">
         <div class="ben-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
-        <span class="ben-text">Descuentos en actividades del club</span>
+        <span class="ben-text">Descuentos en campus de verano</span>
+      </div>
+      <div class="beneficio-item">
+        <div class="ben-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <span class="ben-text">Descuentos en entrenamientos de natación y atletismo</span>
+      </div>
+      <div class="beneficio-item">
+        <div class="ben-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <span class="ben-text">Precio reducido en el Cubo, nuestro gimnasio funcional</span>
+      </div>
+      <div class="beneficio-item">
+        <div class="ben-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <span class="ben-text">Acceso a los grupos de WhatsApp del club</span>
       </div>
       <div class="beneficio-item">
         <div class="ben-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>

@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>El Cubo | Entrenamiento Funcional · Club Atletismo Apolana</title>
+  <meta name="description" content="El Cubo es el container de entrenamiento funcional del Club Apolana en el Estadio Joaquín Villar de Alicante. Grupos para padres, socios, escuela y alquiler a grupos externos.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://escuelaapolana.github.io/apolana-club/cubo.html">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="El Cubo | Entrenamiento funcional en Alicante">
+  <meta property="og:description" content="Entrenamiento funcional en el Estadio Joaquín Villar. Desde 30 €/mes.">
+  <meta property="og:image" content="https://icaxokjsvhlreuwpyxeb.supabase.co/storage/v1/object/public/imagenes-club/hero.jpg">
+  <meta name="theme-color" content="#1a5f8f">
+  <link rel="icon" type="image/png" href="https://icaxokjsvhlreuwpyxeb.supabase.co/storage/v1/object/public/imagenes-club/logo.png">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="nav.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --azul: #1a5f8f; --azul-oscuro: #123f60; --azul-claro: #4a90c4; --azul-bg: #e8f2fa;
+      --gris: #f5f6f8; --gris-borde: #dde2e8; --texto: #1a1d23; --texto-suave: #6b7280;
+      --naranja: #ea580c; --naranja-bg: #fff7ed;
+      --verde: #16a34a; --verde-bg: #f0fdf4;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #fcfdfe; color: var(--texto); line-height: 1.65; position: relative; }
+    body::before { content:''; position:fixed; top:10%; right:-240px; width:620px; height:620px; border-radius:50%; background:radial-gradient(circle, rgba(74,144,196,0.13) 0%, transparent 70%); pointer-events:none; z-index:0; }
+    body::after { content:''; position:fixed; bottom:5%; left:-280px; width:680px; height:680px; border-radius:50%; background:radial-gradient(circle, rgba(26,95,143,0.10) 0%, transparent 70%); pointer-events:none; z-index:0; }
+    .hero, .wrap, .cta, footer, .banda-full { position: relative; z-index: 1; }
+    nav { position: sticky; z-index: 500; }
+
+    /* HERO */
+    .hero { position: relative; height: 420px; background: var(--azul-oscuro); display: flex; align-items: flex-end; overflow: hidden; }
+    .hero-bg { position: absolute; inset: 0; background-size: cover; background-position: center; opacity: 0.32; }
+    .hero-content { position: relative; max-width: 1040px; width: 100%; margin: 0 auto; padding: 2.5rem 2rem; }
+    .hero-breadcrumb { color: rgba(255,255,255,0.55); font-size: 0.78rem; margin-bottom: 0.7rem; }
+    .hero-breadcrumb a { color: rgba(255,255,255,0.55); text-decoration: none; }
+    .hero-breadcrumb a:hover { color: white; }
+    .hero h1 { color: white; font-size: 3rem; font-weight: 800; letter-spacing: -0.03em; line-height: 1; margin-bottom: 0.6rem; }
+    .hero-sub { color: rgba(255,255,255,0.8); font-size: 1.05rem; max-width: 520px; line-height: 1.55; }
+    .hero-tag { display: inline-block; background: rgba(255,255,255,0.16); color: white; font-size: 0.76rem; font-weight: 600; padding: 5px 14px; border-radius: 20px; margin-top: 1rem; }
+
+    /* INFO STRIP */
+    .info-strip { background: white; border-bottom: 1px solid var(--gris-borde); }
+    .info-inner { max-width: 1040px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); }
+    .info-item { padding: 1.1rem 1.5rem; border-right: 1px solid var(--gris-borde); }
+    .info-item:last-child { border-right: none; }
+    .info-label { font-size: 0.66rem; font-weight: 700; color: var(--azul-claro); text-transform: uppercase; letter-spacing: 0.09em; margin-bottom: 4px; }
+    .info-valor { font-size: 0.95rem; font-weight: 700; line-height: 1.35; }
+    .info-extra { font-size: 0.76rem; color: var(--texto-suave); margin-top: 2px; }
+
+    .wrap { max-width: 1040px; margin: 0 auto; padding: 3.5rem 2rem; }
+    .sec { margin-bottom: 3.5rem; }
+    .sec-label { font-size: 0.68rem; font-weight: 700; color: var(--azul-claro); text-transform: uppercase; letter-spacing: 0.13em; margin-bottom: 0.4rem; }
+    .sec h2 { font-size: 1.6rem; font-weight: 800; margin-bottom: 0.5rem; letter-spacing: -0.02em; }
+    .sec-sub { font-size: 0.95rem; color: var(--texto-suave); margin-bottom: 1.75rem; max-width: 640px; }
+    .sec p { font-size: 0.97rem; color: var(--texto-suave); margin-bottom: 1rem; }
+    .sec p strong { color: var(--texto); font-weight: 600; }
+
+    /* BANDA */
+    .banda-full { background: linear-gradient(180deg,#eaf1f8 0%,#dfeaf4 100%); border-top: 1px solid #cfe0ee; border-bottom: 1px solid #cfe0ee; padding: 3.5rem 2rem; }
+    .banda-inner { max-width: 1040px; margin: 0 auto; }
+
+    /* USOS */
+    .usos-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 1.25rem; }
+    .uso { background: white; border: 1px solid var(--gris-borde); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; transition: all 0.18s; }
+    .uso:hover { border-color: var(--azul-claro); box-shadow: 0 6px 22px rgba(26,95,143,0.09); transform: translateY(-2px); }
+    .uso-head { padding: 1.2rem 1.4rem; border-bottom: 1px solid var(--gris-borde); }
+    .uso-num { font-size: 0.66rem; font-weight: 700; color: var(--azul-claro); letter-spacing: 0.12em; margin-bottom: 5px; }
+    .uso-titulo { font-size: 1.08rem; font-weight: 800; line-height: 1.25; margin-bottom: 4px; }
+    .uso-para { font-size: 0.82rem; color: var(--texto-suave); }
+    .uso-body { padding: 1.15rem 1.4rem; flex: 1; }
+    .uso-fila { display: flex; gap: 10px; padding: 0.5rem 0; border-bottom: 1px solid var(--gris-borde); align-items: flex-start; font-size: 0.85rem; }
+    .uso-fila:last-of-type { border-bottom: none; }
+    .uso-fila svg { flex-shrink: 0; margin-top: 3px; color: var(--azul-claro); }
+    .uso-fila-lbl { font-size: 0.68rem; color: var(--texto-suave); text-transform: uppercase; letter-spacing: 0.06em; font-weight: 700; }
+    .uso-fila-val { font-weight: 600; }
+    .uso-precio { background: var(--gris); border-top: 1px solid var(--gris-borde); padding: 1rem 1.4rem; display: flex; align-items: baseline; justify-content: space-between; gap: 0.75rem; flex-wrap: wrap; }
+    .precio-num { font-size: 1.6rem; font-weight: 800; color: var(--azul); line-height: 1; }
+    .precio-lbl { font-size: 0.78rem; color: var(--texto-suave); }
+    .precio-nota { font-size: 0.76rem; color: var(--verde); font-weight: 600; background: var(--verde-bg); padding: 3px 9px; border-radius: 6px; }
+    .precio-consultar { font-size: 1rem; font-weight: 700; color: var(--azul); }
+
+    /* HORARIOS TABLA */
+    .horarios-tabla { background: white; border: 1px solid var(--gris-borde); border-radius: 14px; overflow: hidden; }
+    .ht-head { display: grid; grid-template-columns: 1.4fr 1fr 1fr; background: var(--azul-oscuro); }
+    .ht-head div { padding: 0.75rem 1.1rem; font-size: 0.68rem; font-weight: 700; color: rgba(255,255,255,0.75); text-transform: uppercase; letter-spacing: 0.08em; }
+    .ht-fila { display: grid; grid-template-columns: 1.4fr 1fr 1fr; border-bottom: 1px solid var(--gris-borde); }
+    .ht-fila:last-child { border-bottom: none; }
+    .ht-fila:hover { background: #fbfcfe; }
+    .ht-fila > div { padding: 0.9rem 1.1rem; font-size: 0.87rem; display: flex; align-items: center; }
+    .ht-quien { font-weight: 700; }
+    .ht-dias { color: var(--texto-suave); }
+    .ht-hora { font-weight: 700; color: var(--azul); font-variant-numeric: tabular-nums; }
+
+    /* EQUIPAMIENTO */
+    .equip-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.75rem; }
+    .equip { display: flex; align-items: center; gap: 10px; background: white; border: 1px solid var(--gris-borde); border-radius: 10px; padding: 0.85rem 1rem; font-size: 0.87rem; }
+    .equip svg { flex-shrink: 0; color: var(--verde); }
+
+    /* CTA */
+    .cta { background: var(--azul-oscuro); padding: 3rem 2rem; text-align: center; }
+    .cta h2 { color: white; font-size: 1.5rem; font-weight: 800; margin-bottom: 0.5rem; }
+    .cta p { color: rgba(255,255,255,0.7); font-size: 0.93rem; margin-bottom: 1.5rem; }
+    .cta-btns { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; }
+    .btn-w { background: white; color: var(--azul); padding: 12px 28px; border-radius: 9px; text-decoration: none; font-weight: 700; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 8px; }
+    .btn-o { background: transparent; color: white; border: 1.5px solid rgba(255,255,255,0.4); padding: 12px 28px; border-radius: 9px; text-decoration: none; font-weight: 600; font-size: 0.9rem; }
+
+    footer { background: #0f172a; padding: 2rem; }
+    .footer-inner { max-width: 1040px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+    .footer-logo { display: flex; align-items: center; gap: 10px; }
+    .footer-logo img { width: 32px; height: 32px; border-radius: 50%; }
+    .footer-logo span { color: white; font-size: 0.85rem; font-weight: 600; }
+    .footer-links { display: flex; gap: 1.25rem; flex-wrap: wrap; }
+    .footer-links a { color: rgba(255,255,255,0.5); font-size: 0.82rem; text-decoration: none; }
+    .footer-links a:hover { color: white; }
+
+    @media (max-width: 768px) {
+      .hero { height: 320px; }
+      .hero h1 { font-size: 2.1rem; }
+      .hero-content { padding: 1.75rem 1.25rem; }
+      .wrap { padding: 2.5rem 1.25rem; }
+      .banda-full { padding: 2.5rem 1.25rem; }
+      .info-item { border-right: none; border-bottom: 1px solid var(--gris-borde); }
+      .ht-head { display: none; }
+      .ht-fila { grid-template-columns: 1fr; gap: 0; padding: 0.6rem 0; }
+      .ht-fila > div { padding: 0.25rem 1.1rem; }
+      .ht-hora { font-size: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-bg" id="hero-bg"></div>
+  <div class="hero-content">
+    <div class="hero-breadcrumb"><a href="index.html">Club Apolana</a> / <a href="instalaciones.html">Instalaciones</a> / El Cubo</div>
+    <h1>El Cubo</h1>
+    <p class="hero-sub">Nuestro container de entrenamiento funcional en el Estadio Joaquín Villar. Fuerza, movilidad y prevención de lesiones a dos pasos de la pista.</p>
+    <span class="hero-tag">Desde 30 €/mes</span>
+  </div>
+</div>
+
+<div class="info-strip">
+  <div class="info-inner">
+    <div class="info-item">
+      <div class="info-label">Dónde</div>
+      <div class="info-valor">Estadio Joaquín Villar</div>
+      <div class="info-extra">Junto a la pista de atletismo</div>
+    </div>
+    <div class="info-item">
+      <div class="info-label">Para quién</div>
+      <div class="info-valor">Padres, socios y atletas</div>
+      <div class="info-extra">También alquiler a grupos</div>
+    </div>
+    <div class="info-item">
+      <div class="info-label">Grupos</div>
+      <div class="info-valor">Reducidos</div>
+      <div class="info-extra">Entrenamiento dirigido</div>
+    </div>
+    <div class="info-item">
+      <div class="info-label">Contacto</div>
+      <div class="info-valor">636 06 17 00</div>
+      <div class="info-extra">WhatsApp disponible</div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="sec" style="margin-bottom:0;">
+    <div class="sec-label">Qué es</div>
+    <h2>Un gimnasio funcional dentro del estadio</h2>
+    <p>El Cubo es un container completamente equipado que instalamos junto a la pista de atletismo. Dentro hay material para trabajar fuerza, potencia, movilidad y prevención de lesiones: barras, discos, kettlebells, cajones, gomas, esterillas y todo lo necesario para una sesión completa.</p>
+    <p>Nació para que los atletas del club pudieran hacer el trabajo de gimnasio sin salir del estadio, pero hoy lo usan también <strong>padres que entrenan mientras sus hijos están en la escuela</strong>, socios del club en horario de mañana y grupos externos que lo alquilan.</p>
+  </div>
+</div>
+
+<!-- USOS -->
+<div class="banda-full">
+  <div class="banda-inner">
+    <div class="sec-label">Modalidades</div>
+    <h2 style="font-size:1.6rem;font-weight:800;margin-bottom:0.5rem;letter-spacing:-0.02em;">Cuatro formas de usarlo</h2>
+    <p class="sec-sub">Cada perfil tiene su horario y su tarifa.</p>
+
+    <div class="usos-grid">
+
+      <!-- PADRES -->
+      <div class="uso">
+        <div class="uso-head">
+          <div class="uso-num">01</div>
+          <div class="uso-titulo">Padres y madres</div>
+          <div class="uso-para">Entrena mientras tu hijo está en la escuela</div>
+        </div>
+        <div class="uso-body">
+          <div class="uso-fila">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            <div>
+              <div class="uso-fila-lbl">Horarios</div>
+              <div class="uso-fila-val">Lunes a jueves · 17:30–18:30 h</div>
+              <div class="uso-fila-val">Lunes y miércoles · 18:30–20:00 h</div>
+            </div>
+          </div>
+          <div class="uso-fila">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <div>
+              <div class="uso-fila-lbl">Frecuencia</div>
+              <div class="uso-fila-val">3 sesiones por semana</div>
+            </div>
+          </div>
+        </div>
+        <div class="uso-precio">
+          <div>
+            <div class="precio-num">40 €<span style="font-size:0.9rem;font-weight:400;color:var(--texto-suave);">/mes</span></div>
+            <div class="precio-lbl">tarifa general</div>
+          </div>
+          <span class="precio-nota">30 €/mes si tu hijo/a está en la escuela</span>
+        </div>
+      </div>
+
+      <!-- SOCIOS -->
+      <div class="uso">
+        <div class="uso-head">
+          <div class="uso-num">02</div>
+          <div class="uso-titulo">Socios del club</div>
+          <div class="uso-para">Horario de mañana asignado</div>
+        </div>
+        <div class="uso-body">
+          <div class="uso-fila">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.2" y1="4.2" x2="5.6" y2="5.6"/><line x1="18.4" y1="18.4" x2="19.8" y2="19.8"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/></svg>
+            <div>
+              <div class="uso-fila-lbl">Horarios</div>
+              <div class="uso-fila-val">Mañanas, en franjas asignadas</div>
+            </div>
+          </div>
+          <div class="uso-fila">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
+            <div>
+              <div class="uso-fila-lbl">Requisito</div>
+              <div class="uso-fila-val">Ser socio del club</div>
+            </div>
+          </div>
+        </div>
+        <div class="uso-precio">
+          <div>
+            <div class="precio-consultar">Consultar disponibilidad</div>
+            <div class="precio-lbl">las franjas se asignan por orden</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ESCUELA -->
+      <div class="uso">
+        <div class="uso-head">
+          <div class="uso-num">03</div>
+          <div class="uso-titulo">Atletas de la escuela</div>
+          <div class="uso-para">Trabajo de fuerza dentro del entrenamiento</div>
+        </div>
+        <div class="uso-body">
+          <div class="uso-fila">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            <div>
+              <div class="uso-fila-lbl">Horarios</div>
+              <div class="uso-fila-val">Martes y jueves · 18:30–20:00 h</div>
+            </div>
+          </div>
+          <div class="uso-fila">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
+            <div>
+              <div class="uso-fila-lbl">Quién</div>
+              <div class="uso-fila-val">Alumnos de la escuela de atletismo</div>
+            </div>
+          </div>
+        </div>
+        <div class="uso-precio">
+          <div>
+            <div class="precio-consultar">Incluido</div>
+            <div class="precio-lbl">dentro de la cuota de la escuela</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ALQUILER -->
+      <div class="uso">
+        <div class="uso-head">
+          <div class="uso-num">04</div>
+          <div class="uso-titulo">Alquiler a grupos</div>
+          <div class="uso-para">Para entidades y grupos de entrenamiento</div>
+        </div>
+        <div class="uso-body">
+          <div class="uso-fila">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg>
+            <div>
+              <div class="uso-fila-lbl">Quién</div>
+              <div class="uso-fila-val">Grupos de entrenamiento externos</div>
+            </div>
+          </div>
+          <div class="uso-fila">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <div>
+              <div class="uso-fila-lbl">Horarios</div>
+              <div class="uso-fila-val">Según disponibilidad</div>
+            </div>
+          </div>
+        </div>
+        <div class="uso-precio">
+          <div>
+            <div class="precio-consultar">Precio a consultar</div>
+            <div class="precio-lbl">depende del grupo y la frecuencia</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- HORARIOS RESUMEN -->
+  <div class="sec">
+    <div class="sec-label">De un vistazo</div>
+    <h2>Horarios del Cubo</h2>
+    <p class="sec-sub">Todos los turnos de la semana en una tabla.</p>
+
+    <div class="horarios-tabla">
+      <div class="ht-head">
+        <div>Quién</div><div>Días</div><div>Hora</div>
+      </div>
+      <div class="ht-fila">
+        <div class="ht-quien">Padres y madres</div>
+        <div class="ht-dias">Lunes a jueves</div>
+        <div class="ht-hora">17:30 – 18:30 h</div>
+      </div>
+      <div class="ht-fila">
+        <div class="ht-quien">Padres y madres</div>
+        <div class="ht-dias">Lunes y miércoles</div>
+        <div class="ht-hora">18:30 – 20:00 h</div>
+      </div>
+      <div class="ht-fila">
+        <div class="ht-quien">Atletas de la escuela</div>
+        <div class="ht-dias">Martes y jueves</div>
+        <div class="ht-hora">18:30 – 20:00 h</div>
+      </div>
+      <div class="ht-fila">
+        <div class="ht-quien">Socios del club</div>
+        <div class="ht-dias">Franjas asignadas</div>
+        <div class="ht-hora">Mañanas</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EQUIPAMIENTO -->
+  <div class="sec" style="margin-bottom:0;">
+    <div class="sec-label">Material</div>
+    <h2>Qué hay dentro</h2>
+    <p class="sec-sub">Equipamiento completo para trabajo de fuerza y acondicionamiento.</p>
+    <div class="equip-grid">
+      <div class="equip"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Barras y discos olímpicos</div>
+      <div class="equip"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Kettlebells y mancuernas</div>
+      <div class="equip"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Cajones pliométricos</div>
+      <div class="equip"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Gomas y bandas elásticas</div>
+      <div class="equip"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Balones medicinales</div>
+      <div class="equip"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Esterillas y material de movilidad</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- GALERÍA -->
+<div class="banda-full">
+  <div class="banda-inner">
+    <div class="sec-label">Galería</div>
+    <h2 style="font-size:1.6rem;font-weight:800;margin-bottom:0.5rem;letter-spacing:-0.02em;">El Cubo por dentro</h2>
+    <p class="sec-sub">Imágenes de las instalaciones y de los entrenamientos.</p>
+    <div id="galeria-cubo" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:0.75rem;">
+      <div style="aspect-ratio:4/3;border-radius:12px;background:linear-gradient(135deg,var(--azul-oscuro),var(--azul));display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.25);"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+      <div style="aspect-ratio:4/3;border-radius:12px;background:linear-gradient(135deg,var(--azul-oscuro),var(--azul));display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.25);"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+      <div style="aspect-ratio:4/3;border-radius:12px;background:linear-gradient(135deg,var(--azul-oscuro),var(--azul));display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.25);"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+      <div style="aspect-ratio:4/3;border-radius:12px;background:linear-gradient(135deg,var(--azul-oscuro),var(--azul));display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.25);"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+    </div>
+  </div>
+</div>
+
+<div class="cta">
+  <h2>¿Te interesa entrenar en el Cubo?</h2>
+  <p>Escríbenos y te contamos las plazas disponibles en cada franja</p>
+  <div class="cta-btns">
+    <a href="https://wa.me/34636061700?text=Hola!%20Me%20interesa%20entrenar%20en%20el%20Cubo" target="_blank" rel="noopener" class="btn-w">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12c0 2.126.554 4.122 1.523 5.854L.057 23.03a.75.75 0 0 0 .915.917l5.228-1.473A11.955 11.955 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.9 0-3.68-.523-5.2-1.43l-.374-.22-3.856 1.086 1.104-3.74-.245-.387A9.96 9.96 0 0 1 2 12c0-5.514 4.486-10 10-10s10 4.486 10 10-4.486 10-10 10z"/></svg>
+      Preguntar por WhatsApp
+    </a>
+    <a href="contacto.html" class="btn-o">Ver todos los contactos</a>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">
+      <img src="https://icaxokjsvhlreuwpyxeb.supabase.co/storage/v1/object/public/imagenes-club/logo.png" alt="Club Apolana" onerror="this.style.display='none'">
+      <span>Club Atletismo Apolana · Alicante</span>
+    </div>
+    <div class="footer-links">
+      <a href="index.html">Inicio</a>
+      <a href="instalaciones.html">Instalaciones</a>
+      <a href="socio.html">Hazte socio</a>
+      <a href="contacto.html">Contacto</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+const IMG = 'https://icaxokjsvhlreuwpyxeb.supabase.co/storage/v1/object/public/imagenes-club/';
+
+// Hero
+const heroImg = new Image();
+heroImg.onload = () => { document.getElementById('hero-bg').style.backgroundImage = 'url(' + IMG + 'cubo-hero.jpg)'; };
+heroImg.src = IMG + 'cubo-hero.jpg';
+
+// Galería
+(function() {
+  const encontradas = []; let pend = 8;
+  for (let n = 1; n <= 8; n++) {
+    const url = IMG + 'galeria-cubo-' + n + '.jpg';
+    const img = new Image();
+    img.onload = () => { encontradas.push({n, url}); if (--pend === 0) pintar(); };
+    img.onerror = () => { if (--pend === 0) pintar(); };
+    img.src = url;
+  }
+  function pintar() {
+    if (!encontradas.length) return;
+    document.getElementById('galeria-cubo').innerHTML = encontradas.sort((a,b)=>a.n-b.n)
+      .map(f => `<div style="aspect-ratio:4/3;border-radius:12px;overflow:hidden;"><img src="${f.url}" alt="El Cubo ${f.n}" loading="lazy" style="width:100%;height:100%;object-fit:cover;"></div>`).join('');
+  }
+})();
+</script>
+
+</body>
+</html>
