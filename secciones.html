@@ -134,7 +134,7 @@
       </div>
     </a>
     <a href="escuela-natacion.html" class="seccion-card fade-in">
-      <div class="seccion-foto" style="background-color: var(--azul-bg)">
+      <div class="seccion-foto" id="foto-esc-natacion-sec" style="background-color: var(--azul-bg)">
         <div class="seccion-foto-ph"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 12c1.5-2 3-2 4.5 0s3 2 4.5 0 3-2 4.5 0 3 2 4.5 0"/><path d="M2 17c1.5-2 3-2 4.5 0s3 2 4.5 0 3-2 4.5 0 3 2 4.5 0"/><circle cx="12" cy="6" r="2"/></svg></div>
       </div>
       <div class="seccion-body">
@@ -145,13 +145,35 @@
       </div>
     </a>
     <a href="escuela-municipal-atletismo.html" class="seccion-card fade-in">
-      <div class="seccion-foto" style="background-color: var(--azul-bg)">
+      <div class="seccion-foto" id="foto-mun-atletismo-sec" style="background-color: var(--azul-bg)">
         <div class="seccion-foto-ph"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M9 12h6M12 9v6"/></svg></div>
       </div>
       <div class="seccion-body">
         <div class="seccion-tag">Municipal</div>
         <h3>Atletismo municipal</h3>
         <p>Programa municipal de atletismo en colaboración con Deportes Alicante.</p>
+        <div class="seccion-arrow">Ver sección <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+      </div>
+    </a>
+    <a href="escuela-municipal-triatlon.html" class="seccion-card fade-in">
+      <div class="seccion-foto" id="foto-mun-triatlon-sec" style="background-color: var(--azul-bg)">
+        <div class="seccion-foto-ph"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="5" cy="17" r="3"/><circle cx="19" cy="17" r="3"/><path d="M12 3v8l4 3"/></svg></div>
+      </div>
+      <div class="seccion-body">
+        <div class="seccion-tag">Municipal</div>
+        <h3>Triatlón municipal</h3>
+        <p>Programa municipal de triatlón con Deportes Alicante.</p>
+        <div class="seccion-arrow">Ver sección <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+      </div>
+    </a>
+    <a href="escuela-deporte-adaptado.html" class="seccion-card fade-in">
+      <div class="seccion-foto" id="foto-deporte-adaptado-sec" style="background-color: var(--azul-bg)">
+        <div class="seccion-foto-ph"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="5" r="2"/><path d="M9 9h6l-1 5 3 5"/><path d="M9 9l-2 5h4"/></svg></div>
+      </div>
+      <div class="seccion-body">
+        <div class="seccion-tag">Inclusivo</div>
+        <h3>Deporte adaptado</h3>
+        <p>Programas específicos para personas con diversidad funcional.</p>
         <div class="seccion-arrow">Ver sección <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
       </div>
     </a>
@@ -229,6 +251,17 @@
         <div class="seccion-arrow">Ver sección <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
       </div>
     </a>
+    <a href="cubo.html" class="seccion-card fade-in">
+      <div class="seccion-foto" id="foto-cubo-sec" style="background-color: var(--azul-bg)">
+        <div class="seccion-foto-ph"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></div>
+      </div>
+      <div class="seccion-body">
+        <div class="seccion-tag">Funcional</div>
+        <h3>El Cubo</h3>
+        <p>Entrenamiento funcional para padres, socios y atletas del club.</p>
+        <div class="seccion-arrow">Ver sección <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+      </div>
+    </a>
   </div>
 
 </div>
@@ -244,6 +277,11 @@ const fotos = {
   'foto-natacion-sec': 'seccion-natacion.jpg',
   'foto-montana-sec': 'seccion-montana.jpg',
   'foto-instalaciones-sec': 'seccion-instalaciones.jpg',
+  'foto-esc-natacion-sec': 'seccion-escuela-natacion.jpg',
+  'foto-mun-atletismo-sec': 'seccion-mun-atletismo.jpg',
+  'foto-mun-triatlon-sec': 'seccion-mun-triatlon.jpg',
+  'foto-deporte-adaptado-sec': 'seccion-deporte-adaptado.jpg',
+  'foto-cubo-sec': 'seccion-cubo.jpg',
 };
 Object.entries(fotos).forEach(([id, file]) => {
   const el = document.getElementById(id);
