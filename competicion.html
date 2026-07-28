@@ -193,6 +193,40 @@
     @media (max-width: 768px) {
       .wrap > .sec.banda { padding: 2.25rem calc(50vw - 50% + 1.25rem); }
     }
+
+    /* GRUPOS DE ENTRENAMIENTO */
+    .grupos-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.1rem; margin: 1.5rem 0; }
+    .grupo-card { background: white; border: 1.5px solid var(--gris-borde); border-radius: 16px; overflow: hidden; transition: all 0.18s; display: flex; flex-direction: column; }
+    .grupo-card:hover { border-color: var(--azul-claro); box-shadow: 0 6px 22px rgba(26,95,143,0.09); transform: translateY(-2px); }
+    .gc-head { padding: 1.1rem 1.3rem; color: white; }
+    .gc-nivel { font-size: 0.64rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; opacity: 0.7; margin-bottom: 4px; }
+    .gc-nombre { font-size: 1.15rem; font-weight: 800; letter-spacing: -0.01em; }
+    .gc-body { padding: 1.1rem 1.3rem; flex: 1; }
+    .gc-desc { font-size: 0.86rem; color: var(--texto-suave); line-height: 1.55; margin-bottom: 0.9rem; }
+    .gc-pruebas { display: flex; flex-wrap: wrap; gap: 5px; }
+    .gc-prueba { font-size: 0.72rem; font-weight: 600; background: var(--gris); color: var(--texto-suave); padding: 3px 9px; border-radius: 6px; }
+    .gc-foot { padding: 0.8rem 1.3rem; border-top: 1px solid var(--gris-borde); background: var(--gris); font-size: 0.8rem; color: var(--texto-suave); display: flex; align-items: center; gap: 7px; }
+    .gc-foot svg { flex-shrink: 0; color: var(--azul-claro); }
+
+    /* TARIFAS */
+    .tarifas-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 1rem; margin: 1.25rem 0; }
+    .tarifa { border: 1.5px solid var(--gris-borde); border-radius: 14px; overflow: hidden; background: white; }
+    .tarifa.destacada { border-color: var(--azul); border-width: 2px; }
+    .tarifa-head { padding: 0.85rem 1.2rem; border-bottom: 1px solid var(--gris-borde); background: var(--gris); }
+    .tarifa-tipo { font-size: 0.64rem; font-weight: 700; color: var(--azul-claro); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 3px; }
+    .tarifa-nombre { font-size: 0.95rem; font-weight: 800; }
+    .tarifa-body { padding: 1.15rem 1.2rem; }
+    .tarifa-precio { font-size: 1.9rem; font-weight: 800; color: var(--azul); line-height: 1; }
+    .tarifa-precio small { font-size: 0.85rem; font-weight: 400; color: var(--texto-suave); }
+    .tarifa-mas { font-size: 0.78rem; color: var(--texto-suave); margin-top: 5px; }
+    .tarifa-nota { font-size: 0.76rem; color: var(--texto-suave); margin-top: 0.7rem; padding-top: 0.7rem; border-top: 1px solid var(--gris-borde); }
+
+    .gc-entrenador { padding: 0.9rem 1.3rem; border-top: 1px solid var(--gris-borde); display: flex; align-items: center; gap: 0.75rem; background: white; }
+    .gc-ent-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--azul-bg); border: 2px solid var(--azul); flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; font-weight: 800; color: var(--azul); background-size: cover; background-position: center; }
+    .gc-ent-info { min-width: 0; }
+    .gc-ent-rol { font-size: 0.62rem; font-weight: 700; color: var(--texto-suave); text-transform: uppercase; letter-spacing: 0.08em; }
+    .gc-ent-nombre { font-size: 0.88rem; font-weight: 700; color: var(--azul); line-height: 1.3; }
+    .gc-ent-cred { font-size: 0.72rem; color: var(--texto-suave); }
 </style>
   <script src="nav.js"></script>
 </head>
@@ -207,7 +241,7 @@
     <div class="hero-breadcrumb"><a href="index.html">Club Apolana</a> / <a href="secciones.html">Secciones</a></div>
     <h1>Atletismo pista</h1>
     <p class="hero-sub">Atletismo federado y popular. Desde categoría benjamín hasta absoluto.</p>
-    <span class="hero-tag">Federado y popular · Temporada 2025/26</span>
+    <span class="hero-tag">Adultos · Federado y popular</span>
   </div>
 </div>
 
@@ -216,7 +250,7 @@
   <div class="info-strip">
     <div class="info-item">
       <div class="info-label">Edad</div>
-      <div class="info-val">3 a 18 años</div>
+      <div class="info-val">3 a 17 años</div>
     </div>
     <div class="info-item">
       <div class="info-label">Horario</div>
@@ -257,6 +291,96 @@
   <hr class="sec-divider">
 
   <div class="sec">
+    <h2 class="sec-title">Nuestros grupos</h2>
+    <p class="sec-sub">Cuatro grupos según especialidad y objetivo. El entrenador te ayuda a elegir el que mejor encaja contigo.</p>
+
+    <div class="grupos-grid">
+
+      <div class="grupo-card">
+        <div class="gc-head" style="background:var(--azul-oscuro);">
+          <div class="gc-nivel">Grupo A</div>
+          <div class="gc-nombre">Velocidad A</div>
+        </div>
+        <div class="gc-body">
+          <p class="gc-desc">Grupo de rendimiento para velocistas con nivel competitivo. Trabajo técnico específico, alta intensidad y planificación individualizada por prueba.</p>
+          <div class="gc-pruebas">
+            <span class="gc-prueba">60 m</span><span class="gc-prueba">100 m</span><span class="gc-prueba">200 m</span>
+            <span class="gc-prueba">400 m</span><span class="gc-prueba">Vallas</span>
+          </div>
+        </div>
+        <div class="gc-foot">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          5 entrenamientos por semana
+        </div>
+        <div class="gc-entrenador">
+          <div class="gc-ent-avatar" id="foto-andres">AC</div>
+          <div class="gc-ent-info">
+            <div class="gc-ent-rol">Entrenador</div>
+            <div class="gc-ent-nombre">Andrés Clavero Giménez</div>
+            <div class="gc-ent-cred">Graduado en CAFD · TAFAD · 10 años como entrenador</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grupo-card">
+        <div class="gc-head" style="background:var(--azul);">
+          <div class="gc-nivel">Grupo B</div>
+          <div class="gc-nombre">Velocidad B</div>
+        </div>
+        <div class="gc-body">
+          <p class="gc-desc">Iniciación y desarrollo en pruebas de velocidad. Para quien empieza a competir o quiere consolidar la técnica antes de dar el salto al grupo A.</p>
+          <div class="gc-pruebas">
+            <span class="gc-prueba">60 m</span><span class="gc-prueba">100 m</span><span class="gc-prueba">200 m</span>
+            <span class="gc-prueba">400 m</span>
+          </div>
+        </div>
+        <div class="gc-foot">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          3 entrenamientos por semana
+        </div>
+      </div>
+
+      <div class="grupo-card">
+        <div class="gc-head" style="background:#2d5a27;">
+          <div class="gc-nivel">Resistencia</div>
+          <div class="gc-nombre">Fondo y medio fondo</div>
+        </div>
+        <div class="gc-body">
+          <p class="gc-desc">Pruebas de resistencia en pista, cross y ruta. Trabajo aeróbico, umbral y series específicas según el calendario de competición.</p>
+          <div class="gc-pruebas">
+            <span class="gc-prueba">800 m</span><span class="gc-prueba">1.500 m</span><span class="gc-prueba">3.000 m</span>
+            <span class="gc-prueba">5.000 m</span><span class="gc-prueba">Cross</span>
+          </div>
+        </div>
+        <div class="gc-foot">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          3 a 5 entrenamientos por semana
+        </div>
+      </div>
+
+      <div class="grupo-card">
+        <div class="gc-head" style="background:#0891b2;">
+          <div class="gc-nivel">Sin competición</div>
+          <div class="gc-nombre">Grupo recreativo</div>
+        </div>
+        <div class="gc-body">
+          <p class="gc-desc">Para quien quiere entrenar atletismo en pista sin la exigencia de competir. Mismo trabajo técnico, ritmo adaptado y ambiente distendido.</p>
+          <div class="gc-pruebas">
+            <span class="gc-prueba">Técnica</span><span class="gc-prueba">Forma física</span><span class="gc-prueba">Sin federar</span>
+          </div>
+        </div>
+        <div class="gc-foot">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          3 entrenamientos por semana
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <hr class="sec-divider">
+
+  <div class="sec">
     <h2 class="sec-title">¿Qué incluye?</h2>
     <p class="sec-sub">Lo que obtienes al formar parte de esta sección.</p>
     <div class="incluye-grid">
@@ -291,24 +415,88 @@
 
 <!-- CUOTAS -->
   <div class="sec">
-    <h2 class="sec-title">Precio del entrenamiento</h2>
-    <p class="sec-sub">El entrenamiento de atletismo pista requiere ser socio del club. El precio de entrenador se paga aparte.</p>
+    <h2 class="sec-title">Tarifas</h2>
+    <p class="sec-sub">Tarifas para adultos. El entrenamiento se paga por trimestres y ser socio del club abarata bastante la cuota mensual.<br><span style="font-size:0.88rem;">¿Buscas la escuela de 3 a 17 años? <a href="escuela.html" style="color:var(--azul);font-weight:600;">Ver tarifas de la escuela →</a></span></p>
 
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-bottom:1.25rem;">
-      <div style="border:1.5px solid var(--gris-borde);border-radius:12px;padding:1.5rem;text-align:center;">
-        <div style="font-size:0.72rem;font-weight:700;color:var(--texto-suave);text-transform:uppercase;margin-bottom:6px;">Cuota socio</div>
-        <div style="font-size:2rem;font-weight:800;color:var(--azul);">120€</div>
-        <div style="font-size:0.78rem;color:var(--texto-suave);">al año · acceso a instalaciones</div>
+    <div class="tarifas-grid">
+      <div class="tarifa destacada">
+        <div class="tarifa-head">
+          <div class="tarifa-tipo">Socio</div>
+          <div class="tarifa-nombre">5 días por semana</div>
+        </div>
+        <div class="tarifa-body">
+          <div class="tarifa-precio">55 €<small>/mes</small></div>
+          <div class="tarifa-mas">+ cuota de socio 120 €/año</div>
+          <div class="tarifa-nota">Pago trimestral · Acceso al estadio incluido</div>
+        </div>
       </div>
-      <div style="border:2px solid var(--azul);border-radius:12px;padding:1.5rem;text-align:center;">
-        <div style="font-size:0.72rem;font-weight:700;color:var(--azul);text-transform:uppercase;margin-bottom:6px;">Entrenador atletismo pista</div>
-        <div style="font-size:2rem;font-weight:800;color:var(--azul);">45€</div>
-        <div style="font-size:0.78rem;color:var(--texto-suave);">al mes · entrenamiento en grupo</div>
+      <div class="tarifa destacada">
+        <div class="tarifa-head">
+          <div class="tarifa-tipo">Socio</div>
+          <div class="tarifa-nombre">3 días por semana</div>
+        </div>
+        <div class="tarifa-body">
+          <div class="tarifa-precio">40 €<small>/mes</small></div>
+          <div class="tarifa-mas">+ cuota de socio 120 €/año</div>
+          <div class="tarifa-nota">Pago trimestral · Acceso al estadio incluido</div>
+        </div>
+      </div>
+      <div class="tarifa">
+        <div class="tarifa-head">
+          <div class="tarifa-tipo">No socio</div>
+          <div class="tarifa-nombre">3 o 5 días por semana</div>
+        </div>
+        <div class="tarifa-body">
+          <div class="tarifa-precio">70 €<small>/mes</small></div>
+          <div class="tarifa-mas">sin cuota anual</div>
+          <div class="tarifa-nota" style="color:#9a3412;">La entrada al estadio no está incluida y corre por cuenta del atleta</div>
+        </div>
       </div>
     </div>
 
-    <div class="cuota-nota">
-      <strong>¿Cómo funciona?</strong> Primero <a href="socio.html" style="color:var(--azul);">hazte socio</a> (120€/año). Después te apuntas al grupo de atletismo pista con tu entrenador (45€/mes adicionales). Los primeros 4 entrenamientos son gratuitos para que lo pruebes sin compromiso.
+    <div class="cuota-nota" style="margin-top:1.5rem;">
+      <strong>¿Cómo empiezo?</strong> Ven a probar 4 entrenamientos gratis, sin compromiso. Si te encaja, te apuntas: primero <a href="socio.html" style="color:var(--azul);">te haces socio</a> y luego eliges el grupo y la frecuencia que mejor te venga.
+    </div>
+  </div>
+
+
+  <hr class="sec-divider">
+
+  <div class="sec">
+    <h2 class="sec-title">Responsable de la sección</h2>
+    <p class="sec-sub">Para cualquier duda sobre grupos, horarios o inscripciones.</p>
+    <div style="border:1px solid var(--gris-borde);border-radius:16px;overflow:hidden;max-width:520px;box-shadow:0 2px 12px rgba(0,0,0,0.05);">
+      <div style="background:var(--azul-oscuro);padding:1.25rem 1.5rem;color:white;display:flex;align-items:center;gap:1rem;">
+        <div style="width:56px;height:56px;border-radius:50%;background:rgba(255,255,255,0.15);border:2px solid rgba(255,255,255,0.3);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.25rem;font-weight:800;background-size:cover;background-position:center;" id="foto-andres-resp">AC</div>
+        <div>
+          <div style="font-size:0.66rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.6);margin-bottom:2px;">Responsable de atletismo pista</div>
+          <div style="font-size:1.1rem;font-weight:800;">Andrés Clavero Giménez</div>
+        </div>
+      </div>
+      <div style="padding:1.25rem 1.5rem;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;margin-bottom:1.1rem;">
+          <div style="background:var(--gris);border-radius:8px;padding:0.7rem 0.85rem;text-align:center;">
+            <div style="font-size:0.85rem;font-weight:800;">CAFD</div>
+            <div style="font-size:0.66rem;color:var(--texto-suave);">Graduado</div>
+          </div>
+          <div style="background:var(--gris);border-radius:8px;padding:0.7rem 0.85rem;text-align:center;">
+            <div style="font-size:0.85rem;font-weight:800;">TAFAD</div>
+            <div style="font-size:0.66rem;color:var(--texto-suave);">Técnico Superior</div>
+          </div>
+          <div style="background:var(--gris);border-radius:8px;padding:0.7rem 0.85rem;text-align:center;">
+            <div style="font-size:1rem;font-weight:800;">10</div>
+            <div style="font-size:0.66rem;color:var(--texto-suave);">Años como entrenador</div>
+          </div>
+          <div style="background:var(--gris);border-radius:8px;padding:0.7rem 0.85rem;text-align:center;">
+            <div style="font-size:0.85rem;font-weight:800;">Velocidad A</div>
+            <div style="font-size:0.66rem;color:var(--texto-suave);">Grupo que dirige</div>
+          </div>
+        </div>
+        <a href="https://wa.me/34681968563?text=Hola%20Andr%C3%A9s!%20Me%20interesa%20el%20grupo%20de%20atletismo%20en%20pista" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:space-between;background:#25d366;color:white;padding:11px 18px;border-radius:10px;text-decoration:none;font-weight:700;font-size:0.88rem;">
+          <span>Escribir a Andrés · 681 968 563</span>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M12 0C5.373 0 0 5.373 0 12c0 2.126.554 4.122 1.523 5.854L.057 23.03a.75.75 0 0 0 .915.917l5.228-1.473A11.955 11.955 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.9 0-3.68-.523-5.2-1.43l-.374-.22-3.856 1.086 1.104-3.74-.245-.387A9.96 9.96 0 0 1 2 12c0-5.514 4.486-10 10-10s10 4.486 10 10-4.486 10-10 10z"/></svg>
+        </a>
+      </div>
     </div>
   </div>
 
@@ -335,11 +523,11 @@
 <!-- CONTACTO -->
 <div class="contacto">
   <div class="contacto-grid">
-    <a href="https://wa.me/34636061700" target="_blank" rel="noopener" class="contacto-item">
+    <a href="https://wa.me/34681968563" target="_blank" rel="noopener" class="contacto-item">
       <div class="c-icon" style="background:rgba(255,255,255,0.1);">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.79 19.79 0 0 1 11.63 19 19.5 19.5 0 0 1 4.5 12 19.79 19.79 0 0 1 1.12 3.18 2 2 0 0 1 3.1 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
       </div>
-      <div><span>Atletismo · Miguel Á. Pellín</span><strong>636 06 17 00</strong></div>
+      <div><span>Responsable · Andrés Clavero</span><strong>681 968 563</strong></div>
     </a>
     <a href="https://wa.me/34636061700" target="_blank" class="contacto-item">
       <div class="c-icon" style="background:#25d366;">
@@ -430,6 +618,19 @@ cargarGaleria();
       hr.style.display = 'none';
     }
   });
+})();
+
+// Foto del entrenador
+(function() {
+  const el = document.getElementById('foto-andres');
+  if (!el) return;
+  const img = new Image();
+  img.onload = () => {
+    el.textContent = ''; el.style.backgroundImage = 'url(' + IMG + 'entrenador-andres.jpg)';
+    const el2 = document.getElementById('foto-andres-resp');
+    if (el2) { el2.textContent = ''; el2.style.backgroundImage = 'url(' + IMG + 'entrenador-andres.jpg)'; }
+  };
+  img.src = IMG + 'entrenador-andres.jpg';
 })();
 </script>
 </body>

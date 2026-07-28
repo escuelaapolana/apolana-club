@@ -196,7 +196,16 @@
       .sidebar { display: none; }
       .metrics { grid-template-columns: 1fr 1fr; }
     }
-  </style>
+  
+    /* Pestañas de inscritos */
+    .vistas-tabs { display: flex; gap: 0.4rem; margin-bottom: 1rem; flex-wrap: wrap; }
+    .vista-tab { display: flex; align-items: center; gap: 8px; padding: 9px 16px; border-radius: 10px; border: 1.5px solid var(--gris-borde); background: white; font-size: 0.85rem; font-weight: 600; color: var(--texto-suave); cursor: pointer; font-family: inherit; transition: all 0.15s; }
+    .vista-tab:hover { border-color: var(--azul-claro); color: var(--azul); }
+    .vista-tab.activa { background: var(--azul); border-color: var(--azul); color: white; }
+    .vista-tab-count { background: rgba(0,0,0,0.07); border-radius: 20px; padding: 1px 8px; font-size: 0.72rem; font-weight: 700; }
+    .vista-tab.activa .vista-tab-count { background: rgba(255,255,255,0.22); }
+    .vista-desc { font-size: 0.8rem; color: var(--texto-suave); margin-bottom: 1rem; padding: 0.6rem 0.9rem; background: var(--azul-bg); border-radius: 8px; border-left: 3px solid var(--azul-claro); }
+</style>
 </head>
 <body>
 
@@ -411,19 +420,29 @@
 
       <!-- PANEL ATLETAS -->
       <div class="panel" id="panel-atletas">
+        <div class="vistas-tabs">
+          <button class="vista-tab activa" onclick="setVista('escuela',this)">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 21h18"/><path d="M5 21V8l7-5 7 5v13"/><path d="M9 21v-6h6v6"/></svg>
+            Escuela
+            <span class="vista-tab-count" id="cnt-escuela">0</span>
+          </button>
+          <button class="vista-tab" onclick="setVista('club',this)">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="15.5" cy="4" r="1.6"/><path d="M13 21l1.5-6.5L11 12l1-5 3.5 2.5L19 10"/><path d="M11 12L8 14l-2 7"/></svg>
+            Club · Socios
+            <span class="vista-tab-count" id="cnt-club">0</span>
+          </button>
+          <button class="vista-tab" onclick="setVista('todos',this)">
+            Todos
+            <span class="vista-tab-count" id="cnt-todos">0</span>
+          </button>
+        </div>
+        <div class="vista-desc" id="vista-desc"></div>
         <div class="table-wrap">
           <div class="table-header">
             <span class="table-title">Inscritos</span>
             <div class="table-filters">
               <input class="search-input" placeholder="Buscar nombre..." oninput="filtrarAtletas()" id="search-atletas">
-              <select class="filter-select" onchange="filtrarAtletas()" id="filter-seccion">
-                <option value="">Todas las secciones</option>
-                <option value="escuela">Escuela</option>
-                <option value="competicion">Atletismo pista</option>
-                <option value="running">Running</option>
-                <option value="triatlon">Triatlón</option>
-                <option value="natacion">Natación</option>
-              </select>
+              <select class="filter-select" onchange="filtrarAtletas()" id="filter-seccion"></select>
               <select class="filter-select" onchange="filtrarAtletas()" id="filter-estado">
                 <option value="">Todos los estados</option>
                 <option value="prueba">En prueba</option>
@@ -438,10 +457,7 @@
           </div>
           <div style="overflow-x:auto;">
             <table id="tabla-atletas">
-              <thead><tr>
-                <th>Nombre</th><th>Sección</th><th>Grupo</th>
-                <th>Estado</th><th>Pago</th><th>Ropa</th><th>Acciones</th>
-              </tr></thead>
+              <thead><tr id="thead-atletas"></tr></thead>
               <tbody id="tbody-atletas"><tr><td colspan="7" class="table-empty">Cargando...</td></tr></tbody>
             </table>
           </div>
@@ -1607,39 +1623,59 @@ async function cargarDatos() {
 async function cargarAtletas() {
   const { data } = await db.from('atletas').select('*').order('apellidos');
   atletasData = data || [];
-  renderAtletas(atletasData);
+  actualizarContadores();
+  actualizarFiltroSeccion();
+  actualizarDescVista();
+  filtrarAtletas();
 }
 
 function renderAtletas(lista) {
-  const sec = { escuela:'Escuela', competicion:'Pista', running:'Running', triatlon:'Triatlón', natacion:'Natación' };
+  const NOMBRES = { ...SECCIONES_ESCUELA, ...SECCIONES_CLUB };
+  cabeceraTabla();
   const tbody = document.getElementById('tbody-atletas');
-  if (!lista.length) { tbody.innerHTML = '<tr><td colspan="7" class="table-empty">No hay inscritos</td></tr>'; return; }
-  tbody.innerHTML = lista.map(a => `
-    <tr>
-      <td><strong>${a.apellidos}, ${a.nombre}</strong><br><small style="color:var(--texto-suave)">${a.email_contacto}</small></td>
-      <td><span class="tag">${sec[a.seccion]||a.seccion}</span></td>
-      <td>${a.grupo_id ? '<span class="tag">Asignado</span>' : '<span style="color:var(--texto-suave);font-size:0.78rem;">Sin grupo</span>'}</td>
-      <td><span class="badge badge-${a.estado}">${a.estado}</span></td>
-      <td><span class="badge badge-${a.estado_pago}">${a.estado_pago?.replace('_',' ')}</span></td>
-      <td><span class="badge ${a.ropa_entregada ? 'badge-entregada' : 'badge-no-entregada'}">${a.ropa_entregada ? 'Entregada' : 'Pendiente'}</span></td>
-      <td>
+  if (!lista.length) {
+    const msg = vistaInscritos === 'escuela' ? 'No hay alumnos inscritos en las escuelas'
+              : vistaInscritos === 'club' ? 'No hay socios inscritos en secciones de adultos'
+              : 'No hay inscritos';
+    tbody.innerHTML = `<tr><td colspan="7" class="table-empty">${msg}</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = lista.map(a => {
+    const escuela = esDeEscuela(a);
+    const nombre = `<td><strong>${a.apellidos || ''}, ${a.nombre || ''}</strong><br><small style="color:var(--texto-suave)">${a.email_contacto || '—'}</small></td>`;
+    const seccion = `<td><span class="tag">${NOMBRES[a.seccion] || a.seccion || '—'}</span></td>`;
+    const tipo = `<td><span class="tag" style="background:${escuela ? '#e0f2fe' : '#fef3c7'};color:${escuela ? '#0369a1' : '#92400e'};">${escuela ? 'Escuela' : 'Club'}</span></td>`;
+    const grupo = `<td>${a.grupo_id ? '<span class="tag">Asignado</span>' : '<span style="color:var(--texto-suave);font-size:0.78rem;">Sin grupo</span>'}</td>`;
+    const estado = `<td><span class="badge badge-${a.estado}">${a.estado || '—'}</span></td>`;
+    const pago = `<td><span class="badge badge-${a.estado_pago}">${(a.estado_pago || '—').replace('_',' ')}</span>${a.importe_pendiente ? `<br><small style="color:#dc2626;font-weight:600;">${a.importe_pendiente} €</small>` : ''}</td>`;
+    const ropa = `<td><span class="badge ${a.ropa_entregada ? 'badge-entregada' : 'badge-no-entregada'}">${a.ropa_entregada ? 'Entregada' : 'Pendiente'}</span></td>`;
+    const acciones = `<td>
         <button class="action-btn" onclick="editarAtleta('${a.id}')" title="Editar">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
         </button>
-      </td>
-    </tr>`).join('');
+      </td>`;
+    const cols = vistaInscritos === 'todos'
+      ? nombre + tipo + seccion + estado + pago + ropa + acciones
+      : nombre + seccion + grupo + estado + pago + ropa + acciones;
+    return `<tr>${cols}</tr>`;
+  }).join('');
 }
 
 function filtrarAtletas() {
-  const q = document.getElementById('search-atletas').value.toLowerCase();
-  const sec = document.getElementById('filter-seccion').value;
-  const est = document.getElementById('filter-estado').value;
-  renderAtletas(atletasData.filter(a =>
-    (a.nombre+' '+a.apellidos).toLowerCase().includes(q) &&
+  const q = (document.getElementById('search-atletas')?.value || '').toLowerCase();
+  const sec = document.getElementById('filter-seccion')?.value || '';
+  const est = document.getElementById('filter-estado')?.value || '';
+  let base = vistaInscritos === 'escuela' ? atletasData.filter(esDeEscuela)
+           : vistaInscritos === 'club' ? atletasData.filter(a => !esDeEscuela(a))
+           : atletasData;
+  renderAtletas(base.filter(a =>
+    (!q || `${a.nombre} ${a.apellidos} ${a.email_contacto || ''}`.toLowerCase().includes(q)) &&
     (!sec || a.seccion === sec) &&
     (!est || a.estado === est)
   ));
 }
+
+
 
 async function editarAtleta(id) {
   const a = atletasData.find(x => x.id === id);
@@ -2372,7 +2408,7 @@ async function selSeccionContenido(seccion, btn) {
     <div style="font-size:0.95rem;font-weight:600;margin-bottom:1.25rem;color:var(--azul);">Editando: ${btn.textContent}</div>
     <div class="mf2">
       <div class="mf"><label>Título de la sección</label><input type="text" id="cs-titulo" value="${d.titulo||''}" placeholder="Ej: Escuela de atletismo"></div>
-      <div class="mf"><label>Dirigido a</label><input type="text" id="cs-dirigido" value="${d.dirigido_a||''}" placeholder="Ej: De 3 a 18 años"></div>
+      <div class="mf"><label>Dirigido a</label><input type="text" id="cs-dirigido" value="${d.dirigido_a||''}" placeholder="Ej: De 3 a 17 años"></div>
     </div>
     <div class="mf"><label>Descripción</label><textarea id="cs-desc" style="width:100%;padding:8px 10px;border:1px solid var(--gris-borde);border-radius:7px;font-size:0.87px;min-height:90px;resize:vertical;">${d.descripcion||''}</textarea></div>
     <div class="mf2">
@@ -2590,6 +2626,68 @@ async function borrarRecord(id) {
   if (!confirm(`¿Borrar el récord de ${r?.prueba} (${r?.marca})?`)) return;
   await db.from('records_club').delete().eq('id', id);
   cargarRecords();
+}
+
+// ═══════════════════════════════════════════
+// VISTAS DE INSCRITOS: Escuela / Club
+// ═══════════════════════════════════════════
+let vistaInscritos = 'escuela';
+
+const SECCIONES_CLUB = { competicion:'Atletismo pista', running:'Running', triatlon:'Triatlón', natacion:'Natación', montana:'Montaña' };
+const SECCIONES_ESCUELA = { escuela:'Escuela atletismo', 'escuela-natacion':'Escuela natación', 'mun-atletismo':'Atletismo municipal', 'mun-triatlon':'Triatlón municipal', 'deporte-adaptado':'Deporte adaptado' };
+
+function esDeEscuela(a) {
+  return (a.seccion || '').startsWith('escuela') || (a.seccion || '').startsWith('mun-') || a.seccion === 'deporte-adaptado';
+}
+
+function setVista(v, btn) {
+  vistaInscritos = v;
+  document.querySelectorAll('.vista-tab').forEach(t => t.classList.remove('activa'));
+  if (btn) btn.classList.add('activa');
+  actualizarFiltroSeccion();
+  actualizarDescVista();
+  filtrarAtletas();
+}
+
+function actualizarDescVista() {
+  const d = document.getElementById('vista-desc');
+  if (!d) return;
+  const textos = {
+    escuela: 'Alumnos de 3 a 17 años de las escuelas deportivas. Pagan cuota de temporada en dos plazos y no necesitan ser socios del club.',
+    club: 'Socios adultos del club. Abonan la cuota anual de socio (120 €) y, si entrenan, la mensualidad de su sección aparte.',
+    todos: 'Vista completa de todas las personas inscritas en el club, tanto de escuela como de secciones de adultos.'
+  };
+  d.textContent = textos[vistaInscritos] || '';
+}
+
+function actualizarFiltroSeccion() {
+  const sel = document.getElementById('filter-seccion');
+  if (!sel) return;
+  const prev = sel.value;
+  let opts = '<option value="">Todas las secciones</option>';
+  const fuente = vistaInscritos === 'escuela' ? SECCIONES_ESCUELA
+               : vistaInscritos === 'club' ? SECCIONES_CLUB
+               : { ...SECCIONES_ESCUELA, ...SECCIONES_CLUB };
+  Object.entries(fuente).forEach(([k,v]) => { opts += `<option value="${k}">${v}</option>`; });
+  sel.innerHTML = opts;
+  if ([...sel.options].some(o => o.value === prev)) sel.value = prev;
+}
+
+function actualizarContadores() {
+  const esc = atletasData.filter(esDeEscuela).length;
+  const clu = atletasData.length - esc;
+  const set = (id, n) => { const e = document.getElementById(id); if (e) e.textContent = n; };
+  set('cnt-escuela', esc); set('cnt-club', clu); set('cnt-todos', atletasData.length);
+}
+
+function cabeceraTabla() {
+  const th = document.getElementById('thead-atletas');
+  if (!th) return;
+  th.innerHTML = vistaInscritos === 'escuela'
+    ? '<th>Alumno / contacto</th><th>Escuela</th><th>Grupo</th><th>Estado</th><th>Cuota</th><th>Ropa</th><th></th>'
+    : vistaInscritos === 'club'
+    ? '<th>Socio / contacto</th><th>Sección</th><th>Grupo</th><th>Estado</th><th>Cuota</th><th>Ropa</th><th></th>'
+    : '<th>Nombre / contacto</th><th>Tipo</th><th>Sección</th><th>Estado</th><th>Cuota</th><th>Ropa</th><th></th>';
 }
 </script>
 </body>
